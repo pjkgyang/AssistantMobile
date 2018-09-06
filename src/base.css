@@ -1,0 +1,92 @@
+*{
+    box-sizing: border-box;
+}
+html{
+    height: 100%;
+}
+body{
+    margin: 0;
+    height: 100%;
+    background: #F7F7F7;
+}
+p,h1,h2,h3,h4,h5,h6{
+    margin: 0;
+}
+ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* pop 日期选择 */
+.taskLog-search-pop .weui-cell_access .weui-cell__ft:after{
+    display: none;
+}
+.taskLog-search-pop  .vux-cell-value{
+    color: #000;
+}
+.taskLog-search-pop  .weui-cell__ft{
+    text-align: left;
+}
+.taskLog-search-pop .weui-cells:before,.taskLog-search-pop .weui-cells:after{
+    border: none;
+}
+.vux-confirm .weui-mask{
+    z-index: 2000;
+}
+
+/* add task log */
+.assisant-tasklog-addtaskLog  .weui-cell.addtaskLog-content-cell{
+  display: flex;
+  align-items: flex-start;
+}
+.assisant-tasklog-addtaskLog .weui-cells{
+    background: none;
+    margin: 0;
+}
+.assisant-tasklog-addtaskLog .weui-cell:before,.assisant-tasklog-addtaskLog .weui-cells:after{
+    border: none !important;
+}
+.assisant-tasklog-addtaskLog  .weui-cell{
+ margin-bottom: 5px;
+ background: #fff;
+}
+.assisant-tasklog-addtaskLog  .vux-label{
+    width:23vw;
+    font-size: 0.95rem;
+}
+.assisant-tasklog-addtaskLog .weui-cell__ft{
+    font-size: 1rem;
+    color: #999;
+    width: 70vw;
+    text-align: left;
+}
+.assisant-tasklog-addtaskLog .vux-datetime {
+    padding: 0;
+    height: 30px;
+}
+.addtaskLog-pop-itemlist .vux-label{
+    font-size: 0.8rem;
+    width:86vw;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+ }
+ .addtaskLog-pop-itemlist .weui-cells{
+     margin-top: 8px;
+ }
+ .addtaskLog-pop-itemlist .vux-tab-item.vux-tab-selected{
+   border-style: initial !important;
+}
+ /* login  tab */
+ .assisant-login .vux-tab{
+    background: none !important;
+}
+.weui-textarea::placeholder{
+    color: #999;
+    font-size: 1rem;
+}
+/* scroller 上拉加载 */
+.xs-plugin-pullup-up,.xs-plugin-pullup-down,.xs-plugin-pullup-loading{
+    font-size:0.8rem;
+}
