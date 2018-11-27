@@ -1,5 +1,8 @@
 @text-color:#4376FF;
-@fontSize:0.7rem;
+@fontSize12:0.6rem;
+@fontSize14:0.8rem;
+@fontSize16:1rem;
+@fontSize20:1.25rem;
 @bg-active-wy:#F19000;
 @bg-active-yy:rgb(123, 202, 109);
 @bg-active-wd:rgb(87, 168, 140);
@@ -10,3 +13,51 @@
 @color:#909090;
 @border:1px solid #ccc;
 @border-ef:1px solid #efefef;
+
+
+.data_loading{
+    height: 100vh;
+   .flex(@row:center,@col:center);
+}
+.flex(@row:flex-start,@col:flex-start,@column:row){
+    display: flex;
+    justify-content: @row;
+    align-items: @col;
+    flex-direction: @column;
+}
+.textalign(@type:center){
+    text-align: @type
+}
+.assistant-back{
+    position: fixed;
+    bottom: 6vh;
+    right: 1vw;
+    button{
+        font-size: @fontSize14;
+    }
+    hr{
+        border: none;
+        border-bottom:1px solid #fff;
+        margin: 4px 0;
+    }
+}
+.commitButton {
+    background: #4ABADB;
+}
+.operate-btn{
+    display: @flex;
+    justify-content: space-around;
+    margin-top: 4.333333vh;
+    div {
+      width: 48%;
+      button {
+        width: 100%;
+        border: none;
+      }
+    }
+}
+.text-ellipsis{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

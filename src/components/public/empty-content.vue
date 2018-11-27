@@ -1,14 +1,14 @@
 <template>
     <div class="assisant-empty" :style="{top:top}">
-        <img :src="emptyImg" alt="">
-        <p>暂无内容</p>
+        <img :src="emptyImg" alt="暂无内容">
+        <!-- <p>暂无内容</p> -->
     </div>
 </template>
 <script>
 export default {
     data(){
         return{
-            emptyImg:require("../../../static/img/empty.png")
+            emptyImg:require("../../../static/img/empty1.png")
         }
     },
     props:{
@@ -21,10 +21,14 @@ export default {
 </script>
 <style scoped lang='less'>
   .assisant-empty{
-      position: absolute;
-      width: 100%;
-      text-align: center;
-      font-size:0.9rem;
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        font-size:0.9rem;
+      img{
+          width: 50vw;
+          height: 50vw
+      }
   }
 </style>
 

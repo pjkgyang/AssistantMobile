@@ -7,7 +7,7 @@ html{
 body{
     margin: 0;
     height: 100%;
-    background: #F7F7F7;
+    background: #F2F3F5;
 }
 p,h1,h2,h3,h4,h5,h6{
     margin: 0;
@@ -17,76 +17,64 @@ ul{
     margin: 0;
     padding: 0;
 }
-
-/* pop 日期选择 */
-.taskLog-search-pop .weui-cell_access .weui-cell__ft:after{
-    display: none;
-}
-.taskLog-search-pop  .vux-cell-value{
-    color: #000;
-}
-.taskLog-search-pop  .weui-cell__ft{
-    text-align: left;
-}
-.taskLog-search-pop .weui-cells:before,.taskLog-search-pop .weui-cells:after{
-    border: none;
-}
-.vux-confirm .weui-mask{
-    z-index: 2000;
-}
-
-/* add task log */
-.assisant-tasklog-addtaskLog  .weui-cell.addtaskLog-content-cell{
-  display: flex;
-  align-items: flex-start;
-}
-.assisant-tasklog-addtaskLog .weui-cells{
-    background: none;
-    margin: 0;
-}
-.assisant-tasklog-addtaskLog .weui-cell:before,.assisant-tasklog-addtaskLog .weui-cells:after{
+.btnBlue{
+    background: #4ABADB !important;
     border: none !important;
 }
-.assisant-tasklog-addtaskLog  .weui-cell{
- margin-bottom: 5px;
- background: #fff;
+/*  */
+.van-search{
+    padding: 5px 10px !important;
 }
-.assisant-tasklog-addtaskLog  .vux-label{
-    width:23vw;
-    font-size: 0.95rem;
+.van-search input::placeholder{
+    font-size: 0.7rem;
 }
-.assisant-tasklog-addtaskLog .weui-cell__ft{
-    font-size: 1rem;
-    color: #999;
-    width: 70vw;
-    text-align: left;
+.van-search .van-cell{
+    background: #F0F0F0 !important;
 }
-.assisant-tasklog-addtaskLog .vux-datetime {
-    padding: 0;
-    height: 30px;
+.mu-bottom-nav{
+    height: 48px;
+    font-size: 0.5rem;
 }
-.addtaskLog-pop-itemlist .vux-label{
-    font-size: 0.8rem;
-    width:86vw;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+.mu-bottom-nav-shift-wrapper{
+    display: flex;
+    justify-content: space-between;
+    width: 100vw;
+}
+.mu-bottom-item{
+    min-width: 20% !important; 
+    padding: 3px 6px;
+}
+.van-popup{
     overflow: hidden;
- }
- .addtaskLog-pop-itemlist .weui-cells{
-     margin-top: 8px;
- }
- .addtaskLog-pop-itemlist .vux-tab-item.vux-tab-selected{
-   border-style: initial !important;
 }
- /* login  tab */
- .assisant-login .vux-tab{
-    background: none !important;
+.datePop .van-popup{
+    z-index: 5500 !important;
 }
-.weui-textarea::placeholder{
-    color: #999;
-    font-size: 1rem;
+.datePop .van-modal{
+    z-index: 5000 !important;
 }
-/* scroller 上拉加载 */
-.xs-plugin-pullup-up,.xs-plugin-pullup-down,.xs-plugin-pullup-loading{
-    font-size:0.8rem;
+.weekadd_card .container .van-cell,.weekadd_card .van-panel__footer{
+    padding: 2px 15px;
+    font-weight: 700;
+}
+/****/
+.van-tab--active{
+    color: #4ABADB !important;
+}
+.van-tabs__nav--card .van-tab,.van-tabs__nav--card{
+    border-color: rgba(74, 186, 219,0.5) !important;
+    color: #333 !important;
+}
+.van-tabs__nav--card .van-tab.van-tab--active,.van-tabs__line{
+    background: #4ABADB !important;
+    color: #fff !important;
+}
+.van-tag{
+    padding: 0.1em 0.5em !important;
+    color: #fff !important;
+}
+
+/*  */
+.mu-picker{
+    width: 85vw;
 }

@@ -1,7 +1,7 @@
-<template>  
-      <div class="tasklog-detail-pzlist-out">
+<template>
+       <div class="tasklog-detail-pzlist-out">
+         <div v-if="list.length">
             <span class="tasklog-pzpop-lastdot"></span>
-            
             <p v-for="(pz,index) in list" :key="index" class="tasklog-detail-p"> 
                 <span class="tasklog-pzpop-dot"></span>
                 <span class="tasklog-pzpop-top">
@@ -11,11 +11,15 @@
                     <span>批注内容 : </span>{{pz.bz==""?'无':pz.bz}}
                 </span>
             </p>
+          </div>
+           <div v-else class="empty">
+             <emptyContent></emptyContent>
+           </div>
         </div>
 </template>
 <script>
+ import emptyContent from  '@/components/public/empty-content.vue'
 export default {
-
  props:{
      list:{
         type:Array,
@@ -39,7 +43,8 @@ export default {
       ]
         }
      }  
-  }
+  },
+  components:{emptyContent}
 };
 </script>
 <style scoped lang="less">
@@ -58,6 +63,9 @@ export default {
     background: rgb(156, 132, 132);
     z-index: 2;
   }
+  .empty{
+    height: 100vh;
+  }
 }
 p.tasklog-detail-p {
   padding-left: 20px;
@@ -68,14 +76,14 @@ p.tasklog-detail-p {
     height: 10px;
     display: inline-block;
     position: absolute;
-    top: 3px;
+    top: 2px;
     left: 4px;
     border-radius: 50%;
     background: rgb(156, 132, 132);
     z-index: 2;
   }
   .tasklog-pzpop-top {
-    font-size: @fontSize;
+    font-size: @fontSize12;
     span {
       color: #999;
     }

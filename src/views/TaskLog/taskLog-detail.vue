@@ -1,52 +1,65 @@
 <template>
-    <div class="assisant-tasklog-detail">
-        <div class="tasklog-detail-content">
-            <h5>日报内容</h5>
-            <div class="tasklog-detail-content-info">
-               <p><span>填报人</span> {{logDetail.cjrxm}}</p>
-               <p><span>日报日期</span> {{logDetail.gcrq}}</p>
-               <p><span>填写时间</span> {{logDetail.cjsj}}</p>
-               <p><span>项目名称</span> {{logDetail.xmmc==''?'无':logDetail.xmmc}}</p>
-               <p><span>产品名称</span> {{logDetail.cpmc==''?'无':logDetail.cpmc}}</p>
-               <p><span>任务名称</span> {{logDetail.rwmc==''?'无':logDetail.rwmc}}</p>
-               <p><span>工时</span> {{logDetail.gs}}</p>
-               <p><span>工作内容</span> {{logDetail.gcms}}</p>
-            </div>
-        </div>
-        <!-- <div>
+  <div class="assisant-tasklog-detail">
+    <div class="tasklog-detail-content">
+      <h5>日报内容</h5>
+      <div class="tasklog-detail-content-info">
+        <p>
+          <span>填报人</span> {{logDetail.cjrxm}}</p>
+        <p>
+          <span>日报日期</span> {{logDetail.gcrq}}</p>
+        <p>
+          <span>填写时间</span> {{logDetail.cjsj}}</p>
+        <p>
+          <span>项目名称</span> {{logDetail.xmmc==''?'无':logDetail.xmmc}}</p>
+        <p>
+          <span>产品名称</span> {{logDetail.cpmc==''?'无':logDetail.cpmc}}</p>
+        <p>
+          <span>任务名称</span> {{logDetail.rwmc==''?'无':logDetail.rwmc}}</p>
+        <p>
+          <span>工时</span> {{logDetail.gs}}</p>
+        <p>
+          <span>工作内容</span> {{logDetail.gcms}}</p>
+      </div>
+    </div>
+    <!-- <div>
             <h5>附件</h5>
         </div> -->
-        <div class="tasklog-detail-approval">
-            <h5>审批意见<span v-if="sfJzUser == 0&&logDetail.ydzt != 2" @click="handleCheckPZ">查看批注列表</span></h5>
-            <div v-if="logDetail.ydzt != 2">
-                <x-textarea placeholder="请填写审批意见" :rows='8' v-model="SPvalue" :show-counter="true" :max="200"></x-textarea>
-            </div>
-             <div class="tasklog-detail-pzlist" v-if="logDetail.ydzt == 2">
-                 <time-line :list="pzList" v-if="pzList.length != 0"></time-line>
-                 <p v-if="pzList.length == 0" class="tasklog-detail-nopz">暂无审批意见</p>
-            </div>  
-        </div>
-        <div class="tasklog-detail-btn">
-            <div>
-               <Cbutton :width="'100%'" :height="'36px'" :text="'返回'" :background="'#eee'"  @handleClick="handleCancel"></Cbutton>
-             </div>
-            <div v-if="logDetail.ydzt != 2">
-               <Cbutton :width="'100%'"  :height="'36px'" :showLoading="showLoading" :text="commitText" :background="'#4376FF'" :color="'#fff'" @handleClick="handleCommit"></Cbutton>
-            </div>
-        </div>
-
-     <popup v-model="pzListVisible" position="right" style="background:#fff">
-         <div class="tasklog-detail-pzpop">
-            <div class="tasklog-pzpop-pz "> 
-                 <time-line :list="pzList" v-if="pzList.length != 0"></time-line>
-                 <emptyContent v-if="pzList.length == 0"></emptyContent>
-            </div>
-            <div style="margin-top:5px;position:fixed;bottom:0;width:100%">
-                  <Cbutton :text="'返回'"  :width="'100%'"  :height="'36px'" @handleClick="handleBack"></Cbutton>
-            </div>
-        </div>
-      </popup>
+    <div class="tasklog-detail-approval">
+      <h5>审批意见
+        <span v-if="sfJzUser == 0&&logDetail.ydzt != 2" @click="handleCheckPZ">查看批注列表</span>
+      </h5>
+      <div v-if="logDetail.ydzt != 2">
+        <!-- <x-textarea placeholder="请填写审批意见" :rows='8' v-model="SPvalue" :show-counter="true" :max="200"></x-textarea> -->
+        <van-field v-model="SPvalue" type="textarea" placeholder="请填写审批意见" rows="4" autosize />
+      </div>
+      <div class="tasklog-detail-pzlist" v-if="logDetail.ydzt == 2">
+        <time-line :list="pzList" v-if="pzList.length != 0"></time-line>
+        <p v-if="pzList.length == 0" class="tasklog-detail-nopz">暂无审批意见</p>
+      </div>
     </div>
+    <div class="tasklog-detail-btn">
+      <div>
+        <van-button type="default" @click="handleCancel">取消</van-button>
+      </div>
+      <div v-if="logDetail.ydzt != 2">
+        <van-button class="commitButton" :loading="commitloanind" type="primary" @click="handleCommit">提交</van-button>
+      </div>
+    </div>
+    
+    <van-popup v-model="pzListVisible" position="right" :overlay="true" :close-on-click-overlay="true">
+      <div class="tasklog-detail-pzpop">
+        <div class="tasklog-pzpop-pz ">
+          <time-line :list="pzList" v-if="pzList.length != 0"></time-line>
+          <emptyContent v-if="pzList.length == 0"></emptyContent>
+        </div>
+        <div class="assistant-back">
+          <mu-button fab small color="red" @click="handleBack">
+            <span>返回<br>上级</span>
+          </mu-button>
+        </div>
+      </div>
+    </van-popup>
+  </div>
 </template>
 <script>
 import Cbutton from "@/components/public/Button.vue";
@@ -57,6 +70,7 @@ export default {
   data() {
     return {
       pzListVisible: false,
+      commitloanind:false,
       logDetail: {},
       pzList: [
         {
@@ -77,8 +91,6 @@ export default {
       ],
       SPvalue: "",
       sfJzUser: "",
-      commitText:'保存',
-      showLoading:false
     };
   },
   mounted() {},
@@ -92,19 +104,18 @@ export default {
     },
     handleCommit() {
       // 保存批注
-      this.showLoading = true
-      this.commitText = '保存中...'
+      this.commitloanind = true;
       this.$post(this.API.commentLog, {
         wid: this.logDetail.wid,
         bz: this.SPvalue
       }).then(res => {
         if (res.state == "success") {
-          this.$vux.toast.text("提交成功~", "center");
+          this.$toast.success('提交成功~');
+          this.commitloanind = false;
           this.$router.go(-1);
         } else {
-          this.showLoading = false
-          this.commitText = '保存'
-          this.$vux.toast.text(res.msg, "center");
+          this.commitloanind = false;
+          this.$toast.fail(res.msg);
         }
       });
     },
@@ -128,8 +139,6 @@ export default {
     }
   },
   activated() {
-    this.showLoading = false
-    this.commitText = '保存'
     this.sfJzUser = sessionStorage.getItem("jzUser");
     this.logDetail = this.$route.params.data;
     if (this.logDetail.ydzt != 2) {
@@ -143,9 +152,8 @@ export default {
     } else if (this.logDetail.ydzt == 2) {
       this.getLogComments(this.logDetail.wid);
     }
-    document.title = "日报详情";
   },
-  components: { Cbutton, XTable, emptyContent,timeLine }
+  components: { Cbutton, XTable, emptyContent, timeLine }
 };
 </script>
 <style scoped lang="less">
@@ -184,11 +192,11 @@ export default {
       }
     }
     .tasklog-detail-pzlist {
-      min-height:15vh;
+      min-height: 15vh;
       max-height: 35vh;
       overflow-y: auto;
       padding: 5px 20px;
-      .tasklog-detail-nopz{
+      .tasklog-detail-nopz {
         font-size: 0.9rem;
         text-align: center;
         line-height: 15vh;
@@ -196,20 +204,14 @@ export default {
     }
   }
   .tasklog-detail-btn {
-    display: @flex;
-    justify-content: space-around;
-    padding-left: 10px;
-    div {
-      width: 100%;
-      margin-right: 10px;
-    }
+   .operate-btn();
   }
 }
 
 .tasklog-detail-pzpop {
-  width: 90vw;
+  width: 85vw;
   .tasklog-pzpop-pz {
-    height: 92vh;
+    height: 100vh;
     overflow-y: auto;
     padding: 5px;
   }
