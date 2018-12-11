@@ -46,7 +46,6 @@ export default {
       if (!this.userInfo.username || !this.userInfo.password) {
         if (!this.userInfo.username) {
           this.errNamShow = true;
-          console.log('====')
         }
         if (!this.userInfo.password) {
           this.errPswShow = true;

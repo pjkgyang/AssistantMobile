@@ -7,24 +7,24 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
+    // {
+    //   path: '/',
+    //   name: 'Tabbar',
+    //   redirect: '/more',
+    //   component: resolve => require(['@/components/public/tabbar.vue'], resolve),
+    //   children: [
+    //     {
+    //       path: '/more',
+    //       name: 'More',
+    //       meta:{
+    //         title:'工作台'
+    //       },
+    //       component: resolve => require(['@/views/More/more.vue'], resolve),
+    //     }
+    //   ]
+    // },
     {
       path: '/',
-      name: 'Tabbar',
-      redirect: '/more',
-      component: resolve => require(['@/components/public/tabbar.vue'], resolve),
-      children: [
-        {
-          path: '/more',
-          name: 'More',
-          meta:{
-            title:'工作台'
-          },
-          component: resolve => require(['@/views/More/more.vue'], resolve),
-        }
-      ]
-    },
-    {
-      path: '/tasklog',
       name: 'TaskLog',
       meta:{
         title:'日报'

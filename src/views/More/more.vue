@@ -30,7 +30,7 @@
         moreList:[
           {title:'工作汇报',list:[
             {icon:'today',name:'日报',route:'/tasklog',color:'indigo',bgcolor:'rgba(242, 159, 23,0.8)'},
-            {icon:'event_note',name:'周报',route:'/weekreport',color:'blue',bgcolor:'rgba(82, 192, 214,0.8)'}
+            // {icon:'event_note',name:'周报',route:'/weekreport',color:'blue',bgcolor:'rgba(82, 192, 214,0.8)'}
             ]
           }
         ]

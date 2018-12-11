@@ -272,6 +272,10 @@ export default {
           this.dataLoading = false;
           this.$toast(res.msg);
         }
+      }).catch(error=>{
+          this.$toast.clear();
+          this.dataLoading = false;
+          this.$toast('系统繁忙，请稍后再试~');
       });
     }
   },
