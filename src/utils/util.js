@@ -17,6 +17,8 @@ export function  getQueryStringByName(name) {  // 获取QueryString
     }
     return result[1];
 }
+
+
 //获取DayCount天后的日期 
 export function GetNextDate(newDate,DayCount){ 
     var dd = new Date(newDate); 

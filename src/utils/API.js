@@ -25,6 +25,7 @@ export default {
     getMilestoneCatalog:WINDOW_CONFIG__BASEURL +'milestone/getMilestoneCatalog.do',//  获取里程碑任务
 
     // 周报
+    pageWeekPlanPerson:WINDOW_CONFIG__BASEURL +'plan/pageWeekPlanPerson.do',//获取周报人员列表
     mapLcbxxForWeekPlan:WINDOW_CONFIG__BASEURL +'plan/mapLcbxxForWeekPlan.do',// 获取周报里程碑列表(新增)
     pageQuestionForWeekPlan:WINDOW_CONFIG__BASEURL +'plan/pageQuestionForWeekPlan.do',// 获取周报问题列表(新增)
     addWeekQuestionPlan:WINDOW_CONFIG__BASEURL +'plan/addWeekQuestionPlan.do',//新增问题（确定）

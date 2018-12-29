@@ -1,5 +1,6 @@
 <template>
     <div>
+      <lazy-component>
         <swipeout v-for="(list,index) in Datalist" :key="index" :disabled="!list.editable">
         <swipeout-item :threshold=".5" underlay-color="#ccc">
             <div slot="right-menu" >
@@ -10,7 +11,13 @@
               <card :class="{'assiant-tasklog-list':true}">
                   <section slot="avatar">
                       <div class="assiant-tasklog_avatar">
-                         <img  src="../../../static/img/user.png" :onerror="errorImg">
+                        <span v-if="list.headimg">
+                            <img :src="list.headimg" alt="" v-lazy="img">
+                        </span>
+                        <span v-else class="no-headImg">
+                           {{list.cjrxm.length==2?list.cjrxm:list.cjrxm.length == 3?list.cjrxm.slice(1,3):list.cjrxm.slice(2,4)}}
+                        </span>
+                        <!-- <img  src="../../../static/img/user.png" :onerror="errorImg"> -->
                       </div>
                   </section>
                   <section slot="info">
@@ -53,6 +60,7 @@
             </div>
         </swipeout-item>
       </swipeout>
+      </lazy-component>
     </div>
 </template>
 
@@ -81,7 +89,6 @@ export default {
       this.$emit("handleSeeDetails", data);
     },
     handleSetyy(param, e) {
-      //设置为已阅
       e.stopPropagation();
       //   this.$vux.toast.text('设置成功~', 'default')
       if (param.ydzt == 0) {
@@ -113,16 +120,30 @@ export default {
       width: 30%;
       font-size:0.9rem;
       color: #333;
+      font-weight: 700;
     }
   }
   .assiant-tasklog_avatar{
-    width: 8vw;
-    height: 8vw;
-    border-radius:0.6rem;
-    overflow: hidden;
+    width: 2.6rem;
+    height: 2.6rem;
+    span{
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+    }
     img{
       width: 100%;
       height: 100%;
+      border-radius:50%;
+    }
+    .no-headImg{
+      border-radius:50%;
+      overflow: hidden;
+      background: @baseColor;
+      color: #fff;
+      font-weight: 700;
+      line-height: 2.6rem;
+      font-size: @fontSize14;
     }
   }
 }

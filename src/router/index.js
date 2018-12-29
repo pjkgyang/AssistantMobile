@@ -7,30 +7,58 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'Tabbar',
-    //   redirect: '/more',
-    //   component: resolve => require(['@/components/public/tabbar.vue'], resolve),
-    //   children: [
-    //     {
-    //       path: '/more',
-    //       name: 'More',
-    //       meta:{
-    //         title:'工作台'
-    //       },
-    //       component: resolve => require(['@/views/More/more.vue'], resolve),
-    //     }
-    //   ]
-    // },
     {
       path: '/',
+      name: 'Tabbar',
+      redirect: '/more',
+      component: resolve => require(['@/components/public/tabbar.vue'], resolve),
+      children: [
+        {
+          path: '/more',
+          name: 'More',
+          meta:{
+            title:'工作台'
+          },
+          component: resolve => require(['@/views/More/more.vue'], resolve),
+        }
+      ]
+    },
+    {
+      path: '/taskLog',
       name: 'TaskLog',
       meta:{
         title:'日报'
       },
       component: resolve => require(['@/views/TaskLog/task-log.vue'], resolve),
-    }, {
+    },{
+      path: '/project',
+      name: 'Project',
+      meta:{
+        title:'项目'
+      },
+      component: resolve => require(['@/views/Project/project.vue'], resolve),
+     },{
+      path: '/question',
+      name: 'Question',
+      meta:{
+        title:'问题'
+      },
+      component: resolve => require(['@/views/Question/question.vue'], resolve),
+     },{
+      path: '/message',
+      name: 'Message',
+      meta:{
+        title:'通知'
+      },
+      component: resolve => require(['@/views/Message/message.vue'], resolve),
+     },{
+      path: '/mine',
+      name: 'Mine',
+      meta:{
+        title:'个人信息'
+      },
+      component: resolve => require(['@/views/Mine/mine.vue'], resolve),
+     },{
       path: '/tasklogdetail',
       name: 'TaskLogDetail',
       meta:{

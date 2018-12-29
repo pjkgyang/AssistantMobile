@@ -5,23 +5,23 @@
                 <van-panel :title="item.xmbh+' '+item.xmmc">
                     <div class="content">
                         <p>
-                            <span>项目经理：</span>{{item.xmjl}}&#x3000;
-                            <span>战队队长：</span>{{item.zddzxm}}</p>
+                            <span>项目经理：</span>{{item.xmjlxm}}&#x3000;
+                            <span>战队队长：</span>{{item.zddzxm}}&#x3000;
+                            <span>责任人：</span>{{item.zrrxm}}
+                        </p>
                         <p>
-                            <span>创建人：</span>{{item.cjrxm}} {{item.cjsj}}</p>
-                        <p>
-                            <span>责任人：</span>{{item.zrrxm}}</p>
+                            <span>创建时间：</span>{{item.cjsj}}</p>
                         <p>
                             <span>项目内容：</span>{{item.xmnr}}</p>
                         <p>
                             <span>里程碑描述：</span>{{item.lcbms}}</p>
                         <p>
-                            <span>承诺完成日期：</span>{{item.cnwcrq}}</p>
+                            <span>承诺完成日期：</span>{{item.cnjssj}}</p>
                         <p>
-                            <span>计划完成日期：</span>{{item.jhwcrq}}</p>
+                            <span>计划完成日期：</span>{{item.jhjssj}}</p>
                         <p>
                             <span>完成状态：</span>
-                            <van-tag round :type="item.wczt==1?'danger':'success'">{{item.wczt==1?'计划中':'已完成'}}</van-tag>
+                            <van-tag round :type="item.zt==1?'danger':'success'">{{item.zt_display}}</van-tag>
                         </p>
                         <p>
                             <span>未完成原因：</span>{{item.wwcyy}}</p>
@@ -34,16 +34,16 @@
                 <van-panel :title="item.xmbh+' '+item.xmmc">
                     <div class="content">
                         <p>
-                            <span>创建人：</span>{{item.cjrxm}} {{item.cjrq}}</p>
+                            <span>创建人：</span>{{item.cjrxm}}&#x3000;{{item.cjsj}}</p>
                         <p>
                             <span>责任人：</span>{{item.zrrxm}}</p>
                         <p>
-                            <span>产品名称：</span>{{item.cpmc}}</p>
+                            <span>产品名称：</span>{{item.cpmc_display}}</p>
                         <p>
-                            <span>任务名称：</span>{{item.rwmc}}</p>
+                            <span>任务名称：</span>{{item.rwmc_display}}</p>
                         <p>
                             <span>完成状态：</span>
-                            <van-tag round :type="item.wczt==1?'danger':'success'">{{item.wczt==1?'计划中':'已完成'}}</van-tag>
+                            <van-tag round :type="item.zt==1?'danger':'success'">{{item.zt==1?'计划中':'已完成'}}</van-tag>
                         </p>
                         <p>
                             <span>工作内容：</span>{{item.gznr}}</p>
@@ -58,7 +58,7 @@
                 <van-panel :title="item.xmbh+' '+item.xmmc">
                     <div class="content">
                         <p>
-                            <span>创建人：</span>{{item.cjrxm}} {{item.cjrq}}</p>
+                            <span>创建人：</span>{{item.cjrxm}}&#x3000;{{item.cjsj}}</p>
                         <p>
                             <span>责任人：</span>{{item.zrrxm}}</p>
                         <p>
@@ -71,7 +71,7 @@
                             <span>承诺解决日期：</span>{{item.cnjjrq}}</p>
                         <p>
                             <span>问题状态：</span>
-                            <van-tag round :type="item.wtzt==1?'danger':'success'">{{item.wtzt==1?'计划中':'已完成'}}</van-tag>
+                            <van-tag round :type="item.zt==1?'danger':'success'">{{item.zt==1?'计划中':'已完成'}}</van-tag>
                         </p>
                         <p>
                             <span>工作内容：</span>{{item.gznr}}</p>
@@ -96,87 +96,92 @@ import emptyContent from "../../components/public/empty-content.vue";
 export default {
   data() {
     return {
-      dataList: [
-        {
-          xmbh: "UK123456",
-          xmmc: "项目名称项目名称项目名称项目名称项目名称项目名称",
-          xmnr: "xmxmxmxmxmm",
-          lcbms: "ssssssddd",
-          cnwcrq: "2018-08-08",
-          wczt: "1",
-          cpmc: "产品名臣g",
-          rwmc: "任务名称",
-          wtbt: "张三三上哪上哪上哪啊",
-          qwjjrq: "2018-08-09",
-          cnjjrq: "2018-08-10",
-          wtzt: "1",
-          zrrxm: "张三丰",
-          cpmc: "小助手",
-          rwmc: "啊实打实大",
-          wwcyy: "请问二群翁群二无群",
-          hxcs: "请问二群翁群二无群",
-          gznr: "请问二群翁群二无群",
-          cljh: "处理计划",
-          cjrxm: "王二旺",
-          xmjl: "丁一手",
-          zddzxm: "马四王"
-        },
-        {
-          xmbh: "UK123456",
-          xmmc: "项目名称项目名称项目名称项目名称项目名称项目名称",
-          xmnr: "xmxmxmxmxmm",
-          lcbms: "ssssssddd",
-          cnwcrq: "2018-08-08",
-          wczt: "1",
-          cpmc: "产品名臣g",
-          rwmc: "任务名称",
-          wtbt: "张三三上哪上哪上哪啊",
-          qwjjrq: "2018-08-09",
-          cnjjrq: "2018-08-10",
-          wtzt: "1",
-          zrrxm: "张三丰",
-          cpmc: "小助手",
-          rwmc: "啊实打实大",
-          wwcyy: "请问二群翁群二无群",
-          hxcs: "请问二群翁群二无群",
-          gznr: "请问二群翁群二无群",
-          cljh: "处理计划",
-          cjrxm: "王二旺",
-          xmjl: "丁一手",
-          zddzxm: "马四王"
-        },
-        {
-          xmbh: "UK123456",
-          xmmc: "项目名称项目名称项目名称项目名称项目名称项目名称",
-          xmnr: "xmxmxmxmxmm",
-          lcbms: "ssssssddd",
-          cnwcrq: "2018-08-08",
-          wczt: "1",
-          cpmc: "产品名臣g",
-          rwmc: "任务名称",
-          wtbt: "张三三上哪上哪上哪啊",
-          qwjjrq: "2018-08-09",
-          cnjjrq: "2018-08-10",
-          wtzt: "1",
-          zrrxm: "张三丰",
-          cpmc: "小助手",
-          rwmc: "啊实打实大",
-          wwcyy: "请问二群翁群二无群",
-          hxcs: "请问二群翁群二无群",
-          gznr: "请问二群翁群二无群",
-          cljh: "处理计划",
-          cjrxm: "王二旺",
-          xmjl: "丁一手",
-          zddzxm: "马四王"
-        }
-      ]
+      
     };
   },
   props: {
     weekType: {
-      type: "String",
+      type:String,
       default: "lcb"
+    },
+    dataList:{
+        type:Array,
+        default:()=>{
+            return [ {
+          xmbh: "UK123456",
+          xmmc: "项目名称项目名称项目名称项目名称项目名称项目名称",
+          xmnr: "xmxmxmxmxmm",
+          lcbms: "ssssssddd",
+          cnwcrq: "2018-08-08",
+          wczt: "1",
+          cpmc: "产品名臣g",
+          rwmc: "任务名称",
+          wtbt: "张三三上哪上哪上哪啊",
+          qwjjrq: "2018-08-09",
+          cnjjrq: "2018-08-10",
+          wtzt: "1",
+          zrrxm: "张三丰",
+          cpmc: "小助手",
+          rwmc: "啊实打实大",
+          wwcyy: "请问二群翁群二无群",
+          hxcs: "请问二群翁群二无群",
+          gznr: "请问二群翁群二无群",
+          cljh: "处理计划",
+          cjrxm: "王二旺",
+          xmjl: "丁一手",
+          zddzxm: "马四王"
+        },
+        {
+          xmbh: "UK123456",
+          xmmc: "项目名称项目名称项目名称项目名称项目名称项目名称",
+          xmnr: "xmxmxmxmxmm",
+          lcbms: "ssssssddd",
+          cnwcrq: "2018-08-08",
+          wczt: "1",
+          cpmc: "产品名臣g",
+          rwmc: "任务名称",
+          wtbt: "张三三上哪上哪上哪啊",
+          qwjjrq: "2018-08-09",
+          cnjjrq: "2018-08-10",
+          wtzt: "1",
+          zrrxm: "张三丰",
+          cpmc: "小助手",
+          rwmc: "啊实打实大",
+          wwcyy: "请问二群翁群二无群",
+          hxcs: "请问二群翁群二无群",
+          gznr: "请问二群翁群二无群",
+          cljh: "处理计划",
+          cjrxm: "王二旺",
+          xmjl: "丁一手",
+          zddzxm: "马四王"
+        },
+        {
+          xmbh: "UK123456",
+          xmmc: "项目名称项目名称项目名称项目名称项目名称项目名称",
+          xmnr: "xmxmxmxmxmm",
+          lcbms: "ssssssddd",
+          cnwcrq: "2018-08-08",
+          wczt: "1",
+          cpmc: "产品名臣g",
+          rwmc: "任务名称",
+          wtbt: "张三三上哪上哪上哪啊",
+          qwjjrq: "2018-08-09",
+          cnjjrq: "2018-08-10",
+          wtzt: "1",
+          zrrxm: "张三丰",
+          cpmc: "小助手",
+          rwmc: "啊实打实大",
+          wwcyy: "请问二群翁群二无群",
+          hxcs: "请问二群翁群二无群",
+          gznr: "请问二群翁群二无群",
+          cljh: "处理计划",
+          cjrxm: "王二旺",
+          xmjl: "丁一手",
+          zddzxm: "马四王"
+        }]
+        }
     }
+
   },
   methods: {
     handleFillin(data, type) {
@@ -193,7 +198,7 @@ export default {
   margin-bottom: 0.5rem;
   .content {
     span {
-      color: #333;
+      color:  #999999;
     }
     padding: 3px 15px;
   }
@@ -204,7 +209,6 @@ export default {
   p {
     font-size: 0.8rem;
     margin: 3px 0;
-    color: rgb(129, 127, 127);
   }
 }
 </style>

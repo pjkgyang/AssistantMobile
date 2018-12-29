@@ -10,9 +10,12 @@
       <moreCard v-for="(item,index) in moreList" :key="index" :title="moreList.title" >
         <section slot="content">
           <ul class="assistant_more_item">
-            <li v-for="(option,index) in item.list" :key="index" @click="handleRouter(option.route)">
+            <li v-for="(option,index) in item.list" :key="index" @click="handleRouter(option.route)" >
               <!-- <div :style="{ backgroundImage:'url('+iconImg+')',backgroundSize:'600%',backgroundPosition:'-600px -15px'}"></div> -->
-              <div><mu-icon size="30" :value="option.icon" :color="option.color"></mu-icon></div>
+              <div :style="{background:option.bgColor}">
+                <mu-icon size="30" :value="option.icon" :color="option.color" v-if="option.icon"></mu-icon>
+                <span>{{option.name=='周报'?'周':'日'}}</span>
+              </div>
               <p>{{option.name}}</p>
             </li>
           </ul>
@@ -29,8 +32,8 @@
     return {
         moreList:[
           {title:'工作汇报',list:[
-            {icon:'today',name:'日报',route:'/tasklog',color:'indigo',bgcolor:'rgba(242, 159, 23,0.8)'},
-            // {icon:'event_note',name:'周报',route:'/weekreport',color:'blue',bgcolor:'rgba(82, 192, 214,0.8)'}
+            {icon:'',name:'日报',route:'/tasklog',color:'#fff',bgColor:'#007AFF'},
+            {icon:'',name:'周报',route:'/weekreport',color:'#fff',bgColor:'#007AFF'},
             ]
           }
         ]
@@ -72,15 +75,18 @@
       padding: 2px;
       margin:5px 0;
       div{
-        width: 11vw;
-        height: 11vw;
-        border-radius:50%;
+        width: 12vw;
+        height: 12vw;
+        border-radius:5px;
         text-align: center;
         .flex(@row:center,@col:center);
+        font-weight: 700;
+        color: #fff;
       }
       p{
-        color: #333;
-        font-size: @fontSize12;
+        color: #1E2329;
+        margin-top: 0.6rem;
+        font-size: @fontSize14;
       }
     }  
   }

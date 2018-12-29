@@ -15,7 +15,7 @@ import Vant from 'vant';
 import 'vant/lib/index.css';
 Vue.use(Vant);
 
-import { Button, Select,Picker,Icon,BottomNav,TextField } from 'muse-ui';
+import { Button, Select,Picker,Icon,BottomNav,TextField,LoadMore } from 'muse-ui';
 import 'muse-ui/lib/styles/theme.less';
 Vue.use(Button);
 Vue.use(Select);
@@ -23,6 +23,7 @@ Vue.use(Picker);
 Vue.use(Icon);
 Vue.use(BottomNav);
 Vue.use(TextField);
+Vue.use(LoadMore);
 
 
 import { Swipeout, SwipeoutItem, SwipeoutButton} from 'vux'
@@ -35,7 +36,7 @@ router.beforeEach((to, from, next) => {
   if(JSON.stringify(to.meta) != '{}'){
     document.title = to.meta.title
   }else{
-    document.title = '小助手'  
+    document.title = '工程小助手'  
   }
   next();
 });

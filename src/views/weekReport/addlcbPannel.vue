@@ -4,10 +4,11 @@
       <van-search v-model="keyword" :background="'#fff'" placeholder="搜索项目编号/项目名称" @search="handleSearchKeyword" />
     </header>
     <main>
-      <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-        <van-list v-model="loading" :finished="finished" @load="onLoad">
+
+        <mu-container ref="container" class="demo-loadmore-content">
+         <mu-load-more @refresh="onRefresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
           <van-checkbox-group v-model="result" @change="handleChangeCheckbox">
-            <van-checkbox v-for="(item, index) in list" :key="item" :name="item">
+            <van-checkbox v-for="(item, index) in listArr" :key="item" :name="item">
               <div class="question-list">
                 <h5>{{item.xmbh}} {{item.xmmc}}</h5>
                 <div class="question-info">
@@ -23,12 +24,10 @@
               </div>
             </van-checkbox>
           </van-checkbox-group>
-        </van-list>
-      </van-pull-refresh>
-      <div v-if="dataLoading && !this.loading" class="data_loading">
-          <van-loading type="spinner" />
-      </div>
-      <div v-if="!list.length && !this.loading && !this.dataLoading">
+        </mu-load-more>
+      </mu-container>
+
+      <div v-if="listArr.length==0 && !$store.state.loadingShow">
           <empty-content></empty-content>
       </div>
     </main>
@@ -46,32 +45,35 @@ export default {
       isLoading: false, //上啦刷新
       loading: false,
       finished: false,
-      dataLoading:false,
       keyword: "",
       result: [],
       lcbbhs: "",
-      curPage: 1,
+      currentPage: 1,
       pageSize: 10,
-      list: []
+      listArr: []
     };
   },
   methods: {
     // 上啦刷新
     onRefresh() {
+      this.isLoading = true;
+      this.$refs.container.scrollTop = 0;
       setTimeout(() => {
         this.init();
-      }, 500);
+      }, 1500);
     },
+    // 异步更新数据
     onLoad() {
-      // 异步更新数据
+      this.loading = true;
       setTimeout(() => {
         this.mapLcbxxForWeekPlan();
-      }, 500);
+      }, 800);
     },
     // 关键字搜索
     handleSearchKeyword() {
       this.init();
     },
+    // 取消选择
     handleClose() {
       this.$router.go(-1);
     },
@@ -88,7 +90,8 @@ export default {
       }).then(res=>{
          if(res.state == 'success'){
             this.$toast.success({message:'提交成功',duration:1500});
-            this.$router.push({ name: "weekAdd", params: { bid:1} });
+            // this.$router.push({ name: "weekAdd", params: { bid:1} });
+            this.$router.go(-1);
          }else{
            this.$toast(res.msg);
          }
@@ -103,38 +106,37 @@ export default {
     },
     // 上拉刷新初始化
     init() {
-      this.curPage = 1;
+      this.currentPage = 1;
+      this.listArr = [];
+      this.$store.dispatch("chnageLoing", true);
       this.mapLcbxxForWeekPlan();
     },
     // 获取列表
     mapLcbxxForWeekPlan() {
-      if( this.curPage == 1 && !this.loading){
-        this.dataLoading = true;
-      }
       this.$get(this.API.mapLcbxxForWeekPlan, {
-        curPage: this.curPage,
+        curPage: this.currentPage,
         pageSize: this.pageSize,
         cnjssj: this.$route.query.lastDay,
         keyword: this.keyword
       }).then(res => {
         if (res.state == "success") {
-          if (this.isLoading || this.curPage == 1) {
-            this.list = res.data.page.rows;
+          this.$store.dispatch("chnageLoing", false);
+          if (this.isLoading || this.currentPage == 1) {
+            this.listArr = res.data.page.rows;
           } else {
-            this.list = this.list.concat(res.data.page.rows);
+            this.listArr = this.listArr.concat(res.data.page.rows);
           }
           // 加载状态结束
-          this.dataLoading = false;
           this.loading = false;
           this.isLoading = false;
-          if (this.curPage >= res.data.total) {
+          if (this.currentPage >= res.data.total) {
             this.finished = true;
           }else{
             this.finished = false;
           }
-           this.curPage += 1;
+           this.currentPage += 1;
         } else {
-          this.dataLoading = false;
+          this.$store.dispatch("chnageLoing", false);
           this.$toast(res.msg);
         }
       });
@@ -142,6 +144,7 @@ export default {
   },
   mounted(){
     this.yhbh = window.userId
+    this.init();
   },
   components: {}
 };

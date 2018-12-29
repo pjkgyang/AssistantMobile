@@ -6,19 +6,20 @@
           <van-tab v-for="(tab,i) in btnList" :key="i" :title="tab.label"></van-tab>
         </van-tabs>
         <div style="text-align:center;background:#fff;padding:5px 0;">
-          <!-- <Cinput :width="'95%'" :placeholder="'请输入项目名称'" @handleSearchKeyword="handleSearchKeyword"></Cinput> -->
-          <van-search v-model="keyword" :background="'#fff'" placeholder="请输入项目名称"   @search="handleSearchKeyword" />
+          <searchInput @handleSearchKeyword="handleSearchKeyword" :place="'请输入项目名称'"></searchInput>
         </div>
         <div class="itemlist-group">
-          <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-            <van-list v-model="loading" :finished="finished" @load="onLoad">
+          <!-- <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+            <van-list v-model="loading" :finished="finished" @load="onLoad"> -->
+          <mu-container ref="container" class="demo-loadmore-content">
+            <mu-load-more @refresh="onRefresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
               <van-cell v-for="(item,index) in allItems" :key="item" :title="item.xmmc" is-link @click="handleItemClick(item.xmbh,item.xmmc)" />
-            </van-list>
-          </van-pull-refresh>
-           <div class="data_loading"  v-if="itemLoading">
-             <van-loading type="spinner"/>
-            </div>
-          <div v-if="!allItems.length && !this.itemLoading && !this.loading">
+            </mu-load-more>
+          </mu-container>  
+           <!-- </van-list>
+          </van-pull-refresh> -->
+
+          <div v-if="!allItems.length && !$store.state.loadingShow">
             <emptyContent></emptyContent>
           </div>
         </div>
@@ -55,9 +56,6 @@
               <van-cell v-for="(item,i) in task.tasks.rows" :key="i" :title="item.rwmc" is-link @click="handletaskClick(item.rwmc,item.rwbh)" />
             </van-cell-group>
           </div>
-          <div class="data_loading"  v-if="taskLoading">
-             <van-loading type="spinner"/>
-          </div>
         </div>
         <div class="assistant-back">
           <mu-button fab  color="red" @click="handleClosePopTask">
@@ -70,7 +68,7 @@
 </template>
 <script>
 import { GetDateStr, getMyDate } from "../../utils/util.js";
-import Cinput from "@/components/public/SearchInput.vue";
+import searchInput from "@/components/public/SearchInput.vue";
 import emptyContent from "@/components/public/empty-content.vue";
 
 export default {
@@ -151,6 +149,7 @@ export default {
   watch: {
     parentShow(n, o) {
       this.itemPopShow = true;
+      this.init();
     }
   },
   activated() {
@@ -265,12 +264,15 @@ export default {
     },
     // 上啦刷新
     onRefresh() {
+      this.isLoading = true;
+      this.$refs.container.scrollTop = 0;
       setTimeout(() => {
         this.init();
-      }, 800);
+      }, 1500);
     },
     onLoad() {
       // 异步更新数据
+      this.loading = true;
       setTimeout(() => {
         if (!this.tabValue) {
           this.queryAllitems();
@@ -282,6 +284,8 @@ export default {
 
     init() {
       this.curPage = 1;
+      this.allItems = [];
+      this.$store.dispatch("chnageLoing", true);
       if (!this.tabValue) {
         this.queryAllitems();
       } else {
@@ -290,10 +294,10 @@ export default {
     },
 
     queryAllitems() {
-      if(this.curPage == 1 && !this.loading){
-        this.allItems = [];
-        this.itemLoading = true;
-      }
+      // if(this.curPage == 1 && !this.loading){
+      //   this.allItems = [];
+      //   this.itemLoading = true;
+      // }
       //查询全部项目
       this.$get(this.API.getProjects, {
         curPage: this.curPage,
@@ -305,13 +309,13 @@ export default {
         pl: ""
       }).then(res => {
         if (res.state == "success") {
+          this.$store.dispatch("chnageLoing", false);
           if (this.curPage == 1) {
             this.allItems = res.data.rows;
           } else {
             this.allItems = this.allItems.concat(res.data.rows);
           }
           // 加载状态结束
-          this.itemLoading = false;
           this.loading = false;
           this.isLoading = false;
           if (this.curPage >= res.data.total) {
@@ -321,18 +325,16 @@ export default {
           }
           this.curPage += 1;
         }else{
-           this.itemLoading = false;
+           this.$store.dispatch("chnageLoing", false);
            this.$toast(res.msg);
         }
       }).catch(error=>{
-        this.itemLoading = false;
+        this.$store.dispatch("chnageLoing", false);
         this.$toast('系统繁忙,请稍后再试~');
       });;
     },
     //获取项目
     queryXMofType(pl) {
-      this.allItems = [];
-      this.itemLoading = true;
       this.$get(this.API.getMyProjects, {
         curPage: this.curPage,
         pageSize: 20,
@@ -344,13 +346,13 @@ export default {
       }).then(res => {
         if (res.state == "success") {
           //   this.total = res.data[pl].total;
+          this.$store.dispatch("chnageLoing", false);
           if (this.curPage == 1) {
             this.allItems = res.data[pl].rows;
           } else {
             this.allItems = this.allItems.concat(res.data[pl].rows);
           }
           // 加载状态结束
-          this.itemLoading = false;
           this.loading = false;
           this.isLoading = false;
           if (this.curPage >= res.data[pl].total) {
@@ -360,17 +362,18 @@ export default {
           }
           this.curPage += 1;
         } else {
-          this.itemLoading = false;
+          this.$store.dispatch("chnageLoing", false);
           this.$toast(res.msg);
         }
       }).catch(error=>{
-        this.itemLoading = false;
+        this.$store.dispatch("chnageLoing", false);
         this.$toast('系统繁忙,请稍后再试~');
       });;
     },
     // 获取任务
     getMilestoneCatalog(){
-      this.taskLoading = true;
+      this.taskItems = [];
+      this.$store.dispatch("chnageLoing", true);
       this.$get(this.API.getMilestoneCatalog, {
         xmbh: this.backupsInfo.xmbh,
         cpbh: this.backupsInfo.cpbh,
@@ -382,20 +385,20 @@ export default {
         keyword: ""
       }).then(res => {
         if (res.state == "success") {
+          this.$store.dispatch("chnageLoing", false);
           this.taskItems = res.data;
-          this.taskLoading = false;
         }else{
+          this.$store.dispatch("chnageLoing", false);
           this.$toast(res.msg);
-          this.taskLoading = false;
         }
       }).catch(error=>{
+        this.$store.dispatch("chnageLoing", false);
         this.$toast('系统繁忙,请稍后再试~');
-        this.taskLoading = false;
       });
     },
   },
   components: {
-    Cinput,
+    searchInput,
     emptyContent
   }
 };

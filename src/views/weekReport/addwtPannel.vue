@@ -4,10 +4,10 @@
             <van-search v-model="keyword" :background="'#fff'" placeholder="搜索问题标题" @search="handleSearchKeyword" />
         </header>
         <main>
-            <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-                <van-list v-model="loading" :finished="finished" @load="onLoad">
+            <mu-container ref="container" class="demo-loadmore-content">
+               <mu-load-more @refresh="refresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
                     <van-checkbox-group v-model="result" @change="handleChangeCheckbox">
-                        <van-checkbox v-for="(item, index) in list" :key="item" :name="item">
+                        <van-checkbox v-for="(item, index) in listArr" :key="item" :name="item">
                             <div class="question-list">
                                 <h5>{{item.bt}}</h5>
                                 <div class="question-info">
@@ -17,12 +17,10 @@
                             </div>
                         </van-checkbox>
                     </van-checkbox-group>
-                </van-list>
-            </van-pull-refresh>
-            <div v-if="dataLoading && !this.loading" class="data_loading">
-              <van-loading type="spinner" />
-            </div>
-            <div v-if="!list.length && !this.loading && !this.dataLoading">
+                </mu-load-more>
+          </mu-container>
+
+            <div v-if="listArr.length == 0 && !$store.state.loadingShow">
               <empty-content></empty-content>
             </div>
         </main>
@@ -41,26 +39,28 @@ export default {
       isLoading: false, //上啦刷新
       loading: false,
       finished: false,
-      dataLoading:false,
       keyword: "",
       result: [],
       wtList: "",
-      curPage:1,
+      currentPage:1,
       pageSize:18,
-      list: [],
+      listArr: [],
 
       yhbh:''
     };
   },
   methods: {
     // 上啦刷新
-    onRefresh() {
+    refresh() {
+      this.isLoading = true;
+      this.$refs.container.scrollTop = 0;
       setTimeout(() => {
          this.init();
-      }, 800);
+      }, 1500);
     },
     // 异步更新数据
     onLoad() {
+      this.loading = true;
       setTimeout(() => {
         this.getQuestionForWeekPlan();
       }, 800);
@@ -100,46 +100,47 @@ export default {
     },
     // 上拉刷新初始化
     init() {
-      this.curPage = 1;
+      this.currentPage = 1;
+      this.listArr = [];
+      this.$store.dispatch("chnageLoing", true);
       this.getQuestionForWeekPlan();
     },
+
     // 获取问题列表
     getQuestionForWeekPlan(){
-      if( this.curPage == 1 && !this.loading){
-         this.dataLoading = true;
-      }
       this.$get(this.API.pageQuestionForWeekPlan,{
-        curPage:this.curPage,
+        curPage:this.currentPage,
         pageSize:this.pageSize,
         cnjssj:this.$route.query.lastDay,
         keyword:this.keyword
       }).then(res=>{
         if(res.state == 'success'){
-          if (this.isLoading || this.curPage == 1) {
-            this.list = res.data.rows;
+          this.$store.dispatch("chnageLoing", false);
+          if (this.isLoading || this.currentPage == 1) {
+            this.listArr = res.data.rows;
           } else {
-            this.list = this.list.concat(res.data.rows);
+            this.listArr = this.listArr.concat(res.data.rows);
           }
           // 加载状态结束
-          this.dataLoading = false;
           this.loading = false;
           this.isLoading = false;
-          if (this.curPage >= res.data.total) {
+          if (this.currentPage >= res.data.total) {
             this.finished = true;
           }else{
             this.finished = false;
           }
-          this.curPage += 1;
+          this.currentPage += 1;
         } else {
-          this.dataLoading = false;
+          this.$store.dispatch("chnageLoing", false);
           this.$toast(res.msg);
         }
       })
     }
 
   },
-  mounted(){
-   this.yhbh = window.userId
+  activated(){
+    this.init();
+    this.yhbh = window.userId
   },
   components: {emptyContent}
 };

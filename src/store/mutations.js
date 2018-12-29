@@ -1,5 +1,8 @@
 
 export default {
+    chnageLoing(state, n) {
+        state.loadingShow = n;
+    },
     saveMonthValue(state, n) {
         state.weekMonthvalue = n;
     },

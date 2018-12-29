@@ -7,6 +7,10 @@ export default {
     // setname(context){ //可以理解为代表了整个的context
     //     context.commit('changename',{a:10}) 
     // },
+    
+    chnageLoing({commit},n){
+        commit('chnageLoing',n);
+    },
     saveMonthValue({commit},n){
         commit('saveMonthValue',n);
     },

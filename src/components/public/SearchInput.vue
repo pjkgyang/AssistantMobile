@@ -1,52 +1,28 @@
 <template>
     <div>
-        <input class="component-input" :type="type" :style="{fontSize:fontSize + 'rem',width:width,background:background,height:'32px'}" 
-        :placeholder="placeholder" @change="handleSearchKeyword" v-model="Searchvalue">
+       <van-search  v-model="keyword" :background="'#fff'" :placeholder="place"   @search="handleSearchKeyword" />
     </div>
 </template>
 <script>
 export default {
     data(){
       return{
-           fontSize: 0.8,
-        //    background:'#F0F0F0',
-           Searchvalue:''
+           keyword:''
       }
     },
+    props:{
+       place:{
+           type:String,
+           defualt:'请输入项目名称aa'
+       }
+    },
     methods:{
-        handleSearchKeyword(val){
-            this.$emit('handleSearchKeyword',this.Searchvalue)
+        handleSearchKeyword(){
+            this.$emit('handleSearchKeyword',this.keyword)
         }
     },
-    props:{
-       type:{
-           type:String,
-           default:''
-       },
-       width:{
-           type:String,
-           default:'' 
-       },
-       placeholder:{
-          type:String,
-           default:''  
-       },
-       background:{
-          type:String,
-           default:'#F0F0F0'  
-       },
-    }
 }
 </script>
 <style>
-.component-input{
-    border:none;
-    border-radius: 5px;
-    padding: 0 8px;
-    outline: none;
-}
-.component-input::placeholder{
-  color: #909090;
-  text-align: center !important;
-}
+
 </style>

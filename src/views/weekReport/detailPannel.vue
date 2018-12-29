@@ -1,21 +1,22 @@
 <template>
     <div class="weekReport_detail">
         <header>
-            <van-tabs v-model="weekActive">
-                <van-tab title="本周工作总结"></van-tab>
-                <van-tab title="下周工作计划"></van-tab>
-            </van-tabs>
-            <van-tabs @change="handleChange" type="card" class="tabs_card">
-                <van-tab title="里程碑工作"></van-tab>
-                <van-tab title="进度任务"></van-tab>
-                <van-tab title="问题处理"></van-tab>
-            </van-tabs>
+          <weekSwitch :month="$route.query.month" :week="$route.query.week" @handleChange="handleChange"></weekSwitch>
         </header>
         <main>
-            <detailList :weekType="weekType" ></detailList>
+           <mu-container ref="container" class="demo-loadmore-content" v-if="dataList.length">
+              <mu-load-more @refresh="refresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
+                <div class="weekReport_detail-centent">
+                  <detailList :weekType="weekType" :dataList="dataList"></detailList>
+                </div>
+               </mu-load-more>
+           </mu-container>
+           <div v-if="!dataList.length && !$store.state.loadingShow">
+              <emptyContent></emptyContent>
+           </div>
         </main>
         <footer>
-            <mu-button  full-width color="success" class="btnBlue" @click="handleReview">批阅</mu-button>
+            <!-- <mu-button  full-width color="success" class="btnBlue" @click="handleReview">批阅</mu-button> -->
             <!-- <van-button class="commitButton" type="default" @click="handleReview">批阅</van-button> -->
         </footer>
     </div>
@@ -23,30 +24,113 @@
 
 <script>
 import detailList from "../../components/weekReport/detailList.vue";
+import emptyContent from "@/components/public/empty-content.vue";
+import {
+  getMyDate,
+  getLastMonth,
+  getLastMonthDay,
+  getNextMonth,
+  getPreMonth,
+  weekIndexInMonth,
+  GetNextDate,
+  getWeeks
+} from "../../utils/util.js";
+import weekSwitch from '@/components/weekReport/switch';
+
 export default {
   data() {
     return {
+      isLoading:false,
+      finished:false,
+      loading:false,
       weekType: "lcb",
       weekActive:0,
+      currentPage:1,
+      pageSize:10,
+      total:0,
+      dataList:[],
+
+      monthValue:'',
+      weeksValue:''
+
     };
   },
   methods: {
-    handleChange(index, title) {
-      this.weekType = index == 0 ? "lcb" : index == 1 ? "jd" : "wt";
+    // 切换信息()
+    handleChange(params){
+      this.monthValue = params.monthValue
+      this.weeksValue = params.weeksValue
+      this.weekType = params.weekType
+      this.init();
     },
+
+    refresh () {
+      this.isLoading = true;
+      this.$refs.container.scrollTop = 0;
+      setTimeout(() => {
+        this.init();
+      }, 1500)
+    },
+    // 异步更新数据
+    onLoad() {
+      this.loading = true;
+      setTimeout(() => {
+        this.getPeopleWeekDetail();
+      }, 800);
+    },
+    init(){
+      this.currentPage = 1;
+      this.dataList = [];
+      this.$store.dispatch("chnageLoing", true);
+      this.getPeopleWeekDetail();
+    },
+  
     // 批阅
     handleReview(){
       this.$router.push({path:'/weekreview'})
+    },
+    // 获取人员周报详情
+    getPeopleWeekDetail(){
+      this.$get(this.weekType=='lcb'?this.API.pageWeekWork:this.weekType=='jd'?this.API.pageWeeklyReport:this.API.pageWeekQuestion,{
+        curPage:this.currentPage,
+        pageSize:this.pageSize,
+        qygc:'',
+        month:this.monthValue,
+        zxh:this.weeksValue,
+        yhbh:this.$route.query.bh
+      }).then(res=>{
+        if (res.state == "success") {
+          this.$store.dispatch("chnageLoing", false);
+          this.total = res.data.total;
+          if (this.isLoading || this.currentPage == 1) {
+            this.dataList = res.data.rows;
+          } else {
+            this.dataList = this.dataList.concat(res.data.rows);
+          }
+          // 加载状态结束
+          this.loading = false;
+          this.isLoading = false;
+          if (this.currentPage >= this.total) {
+             this.finished = true;
+          }else{
+             this.finished = false;
+          }
+          this.currentPage += 1;
+        } else {
+          this.$store.dispatch("chnageLoing", false);
+          this.$toast(res.msg);
+        }
+      })
     }
   },
-  mounted(){
-      
-  },
+
   activated(){
-    // JSON.parse(unescape(this.$route.query.data))
-    console.log(this.$route.query)
+    this.weeksValue = this.$route.query.week;
+    this.monthValue = this.$route.query.month;
+    this.init();
+
   },
-  components: { detailList }
+  components: { detailList,emptyContent,weekSwitch}
 };
 </script>
 
@@ -59,15 +143,19 @@ export default {
       width: 92%;
     }
   }
-  header {
-    margin-bottom: 0.5rem;
-    .tabs_card {
-      margin-top: 0.5rem;
-    }
-  }
+  // header {
+  //   margin-bottom: 0.5rem;
+  //   .tabs_card {
+  //     margin-top: 0.5rem;
+  //   }
+  // }
   main {
     max-height: calc(100vh - 135px);
     overflow-y: auto;
+    .weekReport_detail-centent{
+      height: 100%;
+      overflow-y: auto;
+    }
   }
   footer{
       position: absolute;

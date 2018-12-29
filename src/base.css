@@ -1,5 +1,6 @@
 /* @import '//fonts.useso.com/css?family=Roboto:300,400,500,700,400italic'; */
 /* @import 'http://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.css'; */
+
 *{
     box-sizing: border-box;
 }
@@ -20,7 +21,7 @@ ul{
     padding: 0;
 }
 .btnBlue{
-    background: #4ABADB !important;
+    background: #00c1de !important;
     border: none !important;
 }
 /*  */
@@ -61,21 +62,28 @@ ul{
 }
 /****/
 .van-tab--active{
-    color: #4ABADB !important;
+    color: #00c1de !important;
+}
+.van-tabs__nav--card{
+    border-radius: 5px !important;
+    overflow:hidden;
 }
 .van-tabs__nav--card .van-tab,.van-tabs__nav--card{
     border-color: rgba(74, 186, 219,0.5) !important;
-    color: #333 !important;
+    color: #00c1de !important;
 }
 .van-tabs__nav--card .van-tab.van-tab--active,.van-tabs__line{
-    background: #4ABADB !important;
+    background: #00c1de !important;
     color: #fff !important;
 }
 .van-tag{
     padding: 0.1em 0.5em !important;
     color: #fff !important;
 }
-
+.van-checkbox__icon--checked .van-icon{
+    background-color: #00c1de !important;
+    border-color: #00c1de !important;
+}
 /*  */
 .mu-picker{
     width: 85vw;

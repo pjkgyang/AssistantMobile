@@ -2,58 +2,45 @@
   <div class="assiant-weekReport">
     <div class="weekReport-top-filter">
       <div class="weekReport-filter--input">
-        <van-search v-model="keyword" :background="'#fff'" placeholder="搜索姓名/项目编号/项目名称/填写人姓名" @search="handleSearchKeyword" />
+        <searchInput @handleSearchKeyword="handleSearchKeyword" :place="'搜索姓名/项目编号/项目名称/填写人姓名'"></searchInput>
       </div>
       <div class="weekReport-filter--tabs">
         <span @click="hanldeSearchMonth" class="weekReport-filter-second">
-          <span :class="{'text-active':true}">{{monthValue}}</span>&nbsp;
+          <span >{{monthValue}}</span>&nbsp;
         </span>
         丨
         <span @click="hanldeSearchZs" class="weekReport-filter-week">
-          <span :class="{'text-active':true}">第{{weekValue==1?'一':weekValue==2?'二':weekValue==3?'三':weekValue==4?'四':'五'}}周 {{WeekStartdate}} 至 {{WeekEnddate}}</span>&nbsp;
+          <span >第{{weekValue==1?'一':weekValue==2?'二':weekValue==3?'三':weekValue==4?'四':'五'}}周 {{WeekStartdate}} 至 {{WeekEnddate}}</span>&nbsp;
         </span>
         丨
         <span @click="hanldeSearchYDZT" class="weekReport-filter-second">
-          <span :class="{'text-active':ydztText!='阅读状态'}">{{ydztText}}</span>&nbsp;
-          <!-- <span>{{statePopshow?'▼':'▲'}}</span> -->
+          <span>{{ydztText}}</span>&nbsp;
         </span>
       </div>
     </div>
     <!-- load more -->
     <div class="weekReport-center-content">
-      <!-- <van-pull-refresh v-model="isLoading" @refresh="onRefresh"> -->
-        <!-- <van-list v-model="loading" :finished="finished" @load="onLoad"> -->
+      <mu-container ref="container" class="demo-loadmore-content">
+        <mu-load-more @refresh="refresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
           <div class="weekReport-center-filter">
             <listcard :Datalist="weekList" @handleSeeDetails="handleSeeDetails"></listcard>
           </div>
-        <!-- </van-list> -->
-      <!-- </van-pull-refresh> -->
+        </mu-load-more>
+      </mu-container>
 
-      <div v-if="!weekList.length">
+      <!-- loading 加载完 -->
+      <div v-if="!weekList.length && !$store.state.loadingShow">
         <emptyContent></emptyContent>
       </div>
     </div>
-    <div class="weekReport-center-addtasklog">
-      <mu-button fab  color="primary" class="btnBlue" @click="handleAddLog">
-         <mu-icon value="add"></mu-icon>
-      </mu-button>
-    </div>
-   
+    <!-- 添加按钮 -->
+    <add-button @handleAdd="handleAddLog"></add-button>
+
     <van-popup v-model="statePopshow" position='bottom' >
-      <!-- <div class="weekReport-state-pop">
-        <ul>
-          <li v-for="(ydzt,i) in ydztList" :key="i" @click="handeChooseYdzt(ydzt.value,ydzt.label)">{{ydzt.label}}</li>
-        </ul>
-      </div> -->
-      <van-picker show-toolbar title="阅读状态" :columns="ydztList" @cancel="hadnleStateCancel" @confirm="hadnleStateConfirm" />
+      <van-picker show-toolbar title="填写状态" :columns="ydztList" @cancel="hadnleStateCancel" @confirm="hadnleStateConfirm" />
     </van-popup>
 
     <van-popup v-model="zsPopshow" position='bottom'>
-      <!-- <div class="weekReport-state-pop">
-        <ul>
-          <li v-for="(zs,i) in weekNum" :key="i" @click="handeChooseZs(zs)">第 {{zs==1?'一':zs==2?'二':zs==3?'三':zs==4?'四':'五'}} 周</li>
-        </ul>
-      </div> -->
       <van-picker show-toolbar title="选择周数" :columns="columns" @cancel="hadnleZsCancel"  @confirm="hadnleZsConfirm" />
     </van-popup>
 
@@ -69,6 +56,9 @@ import listcard from "@/components/weekReport/listCard.vue";
 import emptyContent from "@/components/public/empty-content.vue";
 import DatePickerMonth from "@/components/public/DatePickerMonth.vue";
 import { getMyDate,getLastMonth,getLastMonthDay,getNextMonth,getPreMonth,weekIndexInMonth,GetNextDate,getWeeks } from "../../utils/util.js";
+import addButton from '@/components/public/addButton'
+import searchInput from "@/components/public/SearchInput.vue";
+
 
 export default {
   data() {
@@ -78,12 +68,13 @@ export default {
       loading: false,
       finished: false,
       total: 0,
-      ydztList: ['全部','未阅','已阅'],
+      ydztList: ['全部','未填写','已填写'],
       statePopshow: false,
       zsPopshow: false,
       keyword: "",
-      curPage: 1,
-      ydztText: "阅读状态",
+      currentPage: 1,
+      pageSize:16,
+      ydztText: "填写状态",
       weekList: [
         {
           cjrxm: "张三",
@@ -94,7 +85,7 @@ export default {
           cjrbh:123
         },
         {
-          cjrxm: "张四",
+          cjrxm: "张四期",
           gcrq: "2018-10",
           zs: 2,
           cjsj: "2018-08-08 12:00:00",
@@ -102,7 +93,7 @@ export default {
           cjrbh:123
         },
         {
-          cjrxm: "张五",
+          cjrxm: "张五个倍",
           gcrq: "2018-10",
           zs: 2,
           cjsj: "2018-08-08 12:00:00",
@@ -124,13 +115,13 @@ export default {
     };
   },
   methods: {
+    // 选择周数
     hadnleZsConfirm(picker,values){
       this.weekValue = values+1
       this.WeekStartdate = GetNextDate(this.weekStart,values*7);//当前周周一日期
       this.WeekEnddate = GetNextDate(this.weekEnd,values*7);//当前周周日日期
+      this.init();
       this.zsPopshow = false;
-      this.saveStore();
-      
     },
     hadnleZsCancel(){
       this.zsPopshow = false;
@@ -138,10 +129,12 @@ export default {
     hadnleStateCancel(){
       this.statePopshow = false;
     },
+    // 阅读状态
     hadnleStateConfirm(picker, values){
-      this.curPage = 1;
+      this.currentPage = 1;
       this.isRead = values-1<0?'':values-1;
       this.ydztText = picker;
+      this.init();
       this.statePopshow = false;
     },
     handleAddLog(){
@@ -154,6 +147,7 @@ export default {
     handleChooseMonth(data) {
       this.pickerMonthShow = false;
       this.formatDate(data.getFullYear(),data.getMonth());
+      this.init();
     },
     handleChangeJsrqPicker(data) {
       this.jsrqDate = getMyDate(data);
@@ -168,46 +162,72 @@ export default {
       this.zsPopshow = !this.zsPopshow;
       this.statePopshow = false;
     },
-    // // 查看阅读状态
-    // handeChooseYdzt(value, label) {
-    //   this.curPage = 1;
-    //   this.isRead = value;
-    //   this.ydztText = label;
-    //   this.statePopshow = false;
-    // },
-    // // 选择周数
-    // handeChooseZs(data) {
-    //   this.weekValue = data
-    //   this.WeekStartdate = GetNextDate(this.weekStart,(data-1)*7);//当前周周一日期
-    //   this.WeekEnddate = GetNextDate(this.weekEnd,(data-1)*7);//当前周周日日期
-    //   this.zsPopshow = false;
-    //   this.saveStore();
-    // },
     //关键字筛选
     handleSearchKeyword(val) {
-      this.curPage = 1;
       this.keyword = val;
+      this.init();
     },
-    // 上啦刷新
-    // onRefresh() {
-    //   setTimeout(() => {
-    //     // this.init();
-    //   }, 800);
-    // },
-    // onLoad() {
-    //   // 异步更新数据
-    //   setTimeout(() => {
-    //     // this.queryTaskProcess(this.startDate, this.endDate);
-    //   }, 800);
-    // },
+    refresh () {
+      this.isLoading = true;
+      this.$refs.container.scrollTop = 0;
+      setTimeout(() => {
+        this.init();
+      }, 1500)
+    },
+    // 异步更新数据
+    onLoad() {
+      this.loading = true;
+      setTimeout(() => {
+        this.getPageWeekPlanPerson();
+      }, 800);
+    },
+
     handleSeeDetails(data){
-      // escape(JSON.stringify(data))}
-      this.$router.push({path:'/weekdetail',query:{month:this.monthValue,week:this.weekValue,bh:data.cjrbh}});
+      this.$router.push({path:'/weekdetail',query:{month:this.monthValue,week:this.weekValue,bh:data.yhbh}});
     },
     // 上拉刷新初始化
     init() {
-      this.curPage = 1;
+      this.currentPage = 1;
+      this.weekList = [];
+      this.$store.dispatch("chnageLoing", true);
+      this.getPageWeekPlanPerson();
     },
+
+    // 获取人员周报列表
+    getPageWeekPlanPerson(){
+      this.$get(this.API.pageWeekPlanPerson,{
+        curPage:this.currentPage,
+        pageSize:this.pageSize,
+        month:this.monthValue,
+        zxh:this.weekValue,
+        qygc:'',
+        zt:this.isRead,
+        keyword:this.keyword
+      }).then(res=>{
+          if (res.state == "success") {
+          this.$store.dispatch("chnageLoing", false);
+          this.total = res.data.total;
+          if (this.isLoading || this.currentPage == 1) {
+            this.weekList = res.data.rows;
+          } else {
+            this.weekList = this.weekList.concat(res.data.rows);
+          }
+          // 加载状态结束
+          this.loading = false;
+          this.isLoading = false;
+          if (this.currentPage >= this.total) {
+            this.finished = true;
+          }else{
+             this.finished = false;
+          }
+          this.currentPage += 1;
+        } else {
+          this.$store.dispatch("chnageLoing", false);
+          this.$toast(res.msg);
+        }
+      })
+    },
+
     InitDate(){
       this.columns = [];
       this.year = new Date().getFullYear();
@@ -234,18 +254,19 @@ export default {
            this.columns.push('第'+index+'周');
        }
     },
-    saveStore(){
-      this.$store.dispatch("saveMonthValue", this.monthValue);
-      this.$store.dispatch("saveWeekNum", this.weekNum);
-      this.$store.dispatch("saveStartDate", this.weekStart);
-      this.$store.dispatch("saveEndDate", this.weekEnd);
-    }
+    // saveStore(){
+    //   this.$store.dispatch("saveMonthValue", this.monthValue);
+    //   this.$store.dispatch("saveWeekNum", this.weekNum);
+    //   this.$store.dispatch("saveStartDate", this.weekStart);
+    //   this.$store.dispatch("saveEndDate", this.weekEnd);
+    // }
   },
   computed: {
    
   },
   mounted() {
     this.InitDate();
+    this.init();
   },
 
   activated() {},
@@ -253,7 +274,9 @@ export default {
   components: {
     listcard,
     emptyContent,
-    DatePickerMonth
+    DatePickerMonth,
+    addButton,
+    searchInput
   }
 };
 </script>
@@ -272,6 +295,9 @@ export default {
 .weekReport-filter--tabs {
   padding: 8px 0;
   display: @flex;
+  color: #999999;
+  border-bottom: 1px solid  #D7D7D8;
+  border-top: 1px solid  #D7D7D8;
   .weekReport-filter-week {
     width: 60%;
   }

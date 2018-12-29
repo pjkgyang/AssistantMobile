@@ -2,45 +2,38 @@
   <div class="assiant-taskLog">
     <div class="taskLog-top-filter" :style="{'z-index':zIndex}">
       <div class="taskLog-filter--input">
-        <van-search v-model="keyword" :background="'#fff'" placeholder="搜索姓名/项目编号/项目名称/填写人姓名"   @search="handleSearchKeyword" />
+        <searchInput @handleSearchKeyword="handleSearchKeyword" :place="'搜索姓名/项目编号/项目名称/填写人姓名'"></searchInput>
       </div>
       <div class="taskLog-filter--tabs">
         <span @click="hanldeSearchTXSJ" class="taskLog-filter-first">
-          <span :class="{'text-active':txsjText!='填写时间'}">{{txsjText}}</span>&nbsp;
-         
+          <span>{{txsjText}}</span>&nbsp;
         </span>
         丨
         <span @click="hanldeSearchYDZT" class="taskLog-filter-second">
-          <span :class="{'text-active':ydztText!='阅读状态'}">{{ydztText}}</span>&nbsp;
-        
+          <span>{{ydztText}}</span>&nbsp;
         </span>
         丨
         <span @click="hanldeSearchFW" class="taskLog-filter-third">
-          <span :class="{'text-active':fwText!='范围'}">{{fwText}}</span>&nbsp;
+          <span>{{fwText}}</span>&nbsp;
         </span>
       </div>
     </div>
     <!-- load more -->
     <div class="taskLog-center-content">
-      <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-        <van-list v-model="loading" :finished="finished" @load="onLoad">
+      <mu-container ref="container" class="demo-loadmore-content">
+        <mu-load-more @refresh="onRefresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
           <div class="taskLog-center-filter">
             <TaskLogList :Datalist="ProcessList" @handleOnButtonClick="handleOnButtonClick" @handleSeeDetails="handleSeeDetails"></TaskLogList>
           </div>
-        </van-list>
-      </van-pull-refresh>
-       <div class="data_loading"  v-if="dataLoading && !this.loading">
-             <van-loading type="spinner"/>
-      </div>
-      <div v-if="!ProcessList.length && !this.loading && !this.dataLoading">
+        </mu-load-more>
+      </mu-container>
+
+      <div v-if="!ProcessList.length && !$store.state.loadingShow">
         <emptyContent></emptyContent>
       </div>
     </div>
-    <div class="taskLog-center-addtasklog">
-      <mu-button fab  color="primary" class="btnBlue" @click="handleAddLog">
-        <mu-icon value="add"></mu-icon>
-      </mu-button>
-    </div>
+    <!-- 添加按钮 -->
+    <add-button @handleAdd="handleAddLog"></add-button>
 
     <van-popup v-model="DataPopshow" position='top' class="pop">
       <div class="taskLog-search-pop">
@@ -87,14 +80,14 @@
   </div>
 </template>
 <script>
-import Cinput from "@/components/public/SearchInput.vue";
+import searchInput from "@/components/public/SearchInput.vue";
 import Cbutton from "@/components/public/Button.vue";
 import TaskLogList from "@/components/taskLog/TaskLog-card.vue";
 import emptyContent from "@/components/public/empty-content.vue";
 import { GetDateStr, getQueryStringByName } from "../../utils/util.js";
 import DatePicker from "@/components/public/DatePicker.vue";
 import { getMyDate } from "../../utils/util.js";
-
+import addButton from '@/components/public/addButton'
 
 export default {
   data() {
@@ -105,7 +98,6 @@ export default {
       isLoading: false, //上啦刷新
       loading: false,
       finished: false,
-      dataLoading:false,
       total: 0,
       ydztList: [
         { label: "全部", value: "" },
@@ -129,7 +121,7 @@ export default {
       ksrqDate: "",
       jsrqDate: "",
       keyword: "",
-      curPage: 1,
+      currentPage: 1,
       ydztText: "阅读状态",
       fwText: "范围",
       txsjText: "填写时间",
@@ -149,14 +141,14 @@ export default {
     },
     // 阅读状态pop确定
     hadnleStateConfirm(picker,values){
-      this.curPage = 1;
+      this.currentPage = 1;
       this.isRead = values==0?'':values==1?'0':'1';
       this.ydztText = picker;
       this.queryTaskProcess(this.startDate, this.endDate);
       this.statePopshow = false;
     },
     hadnleFwConfirm(picker,values){
-      this.curPage = 1;
+      this.currentPage = 1;
       this.fwValue = values-1<0?'':values-1;
       this.fwText = picker;
       this.queryTaskProcess(this.startDate, this.endDate);
@@ -168,7 +160,6 @@ export default {
     handleChooseJsrq() {
       this.pickerJsrqShow= true;
     },
-
     handleChangeKsrqPicker(data) {
       this.ksrqDate = getMyDate(data);
       this.pickerKsrqShow = false;
@@ -177,47 +168,31 @@ export default {
       this.jsrqDate = getMyDate(data);
       this.pickerJsrqShow = false;
     },
+    //填写时间
     hanldeSearchTXSJ() {
-      //填写时间
       this.zIndex = 2500;
       this.statePopshow = this.fwPopshow = false;
       this.ksrqDate = this.startDate;
       this.jsrqDate = this.endDate;
       this.DataPopshow = !this.DataPopshow;
     },
+    //阅读状态
     hanldeSearchYDZT() {
-      //阅读状态
       this.zIndex = 1000;
       this.fwOrstate = "阅读状态";
       this.DataPopshow = this.fwPopshow = false;
       this.statePopshow = !this.statePopshow;
     },
+    //范围
     hanldeSearchFW() {
-      //范围
       this.zIndex = 1000;
       this.fwOrstate = "范围";
       this.DataPopshow = this.statePopshow = false;
       this.fwPopshow = !this.fwPopshow;
     },
-    // handeChooseYdzt(value, label) {
-    //   // 查看阅读状态
-    //   this.curPage = 1;
-    //   this.isRead = value;
-    //   this.ydztText = label;
-    //   this.queryTaskProcess(this.startDate, this.endDate);
-    //   this.statePopshow = false;
-    // },
-    // handeChooseFw(value, label) {
-    //   //查看范围
-    //   this.curPage = 1;
-    //   this.fwValue = value;
-    //   this.fwText = label;
-    //   this.queryTaskProcess(this.startDate, this.endDate);
-    //   this.fwPopshow = false;
-    // },
+    //日期筛选
     handleClickQuery() {
-      //日期筛选
-      this.curPage = 1;
+      this.currentPage = 1;
       this.startDate = this.ksrqDate;
       this.endDate = this.jsrqDate;
       this.queryTaskProcess(this.ksrqDate, this.jsrqDate);
@@ -225,30 +200,31 @@ export default {
       this.DataPopshow = !this.DataPopshow
 
     },
-
+    //重置日期
     handleClickReset() {
-      //重置日期
       this.ksrqDate = GetDateStr(-7);
       this.jsrqDate = GetDateStr(0);
     },
 
+    //关键字筛选
     handleSearchKeyword(val) {
-      //关键字筛选
-      this.curPage = 1;
       this.keyword = val;
-      this.queryTaskProcess(this.startDate, this.endDate);
+      this.init();
     },
     // 上啦刷新
     onRefresh() {
+      this.isLoading = true;
+      this.$refs.container.scrollTop = 0;
       setTimeout(() => {
         this.init();
-      }, 500);
+      }, 1500);
     },
+    // 异步更新数据
     onLoad() {
-      // 异步更新数据
+      this.loading = true;
       setTimeout(() => {
         this.queryTaskProcess(this.startDate, this.endDate);
-      }, 500);
+      }, 800);
     },
 
     handleOnButtonClick(data) {
@@ -305,8 +281,8 @@ export default {
       //   });
       // }
     },
+    //查看详情
     handleSeeDetails(data) {
-      //查看详情
       if (data.ydzt == 0) {
         this.$post(this.API.readLog, {
           wid: data.wid
@@ -318,23 +294,21 @@ export default {
       }
       this.$router.push({ name: "TaskLogDetail", params: { data: data } });
     },
+    // 添加日报
     handleAddLog() {
-      // 添加日报
       this.$router.push({ name: "AddTaskLog" });
     },
     // 上拉刷新初始化
     init() {
-      this.curPage = 1;
+      this.currentPage = 1;
+      this.ProcessList = [];
+      this.$store.dispatch("chnageLoing", true);
       this.queryTaskProcess(this.startDate, this.endDate);
     },
     // 获取日志列表
     queryTaskProcess(start, end) {
-      if(this.curPage == 1 && !this.loading){
-         this.dataLoading = true;
-         this.ProcessList = [];
-      }
       this.$get(this.API.queryLogTaskProcess, {
-        curPage: this.curPage,
+        curPage: this.currentPage,
         pageSize: 16,
         startDay: start,
         endDay: end,
@@ -344,21 +318,23 @@ export default {
       }).then(res => {
         if (res.state == "success") {
           this.total = res.data.total;
-          if (this.isLoading || this.curPage == 1) {
+          this.$store.dispatch("chnageLoing", false);
+          if (this.isLoading || this.currentPage == 1) {
             this.ProcessList = res.data.rows;
           } else {
             this.ProcessList = this.ProcessList.concat(res.data.rows);
           }
           // 加载状态结束
-          this.dataLoading = false;
           this.loading = false;
           this.isLoading = false;
-          if (this.curPage >= this.total) {
+          if (this.currentPage >= this.total) {
             this.finished = true;
+          }else{
+            this.finished = false;
           }
-          this.curPage += 1;
+          this.currentPage += 1;
         } else {
-          this.dataLoading = false;
+          this.$store.dispatch("chnageLoing", false);
           this.$toast(res.msg);
         }
       });
@@ -368,6 +344,7 @@ export default {
     this.startDate = GetDateStr(-7);
     this.endDate = GetDateStr(0);
     this.txsjText = this.startDate + " - " + this.endDate;
+    this.init();
   },
   activated() {
     if(this.$route.params.bid == 1){
@@ -381,11 +358,12 @@ export default {
   },
 
   components: {
-    Cinput,
+    searchInput,
     TaskLogList,
     Cbutton,
     emptyContent,
-    DatePicker
+    DatePicker,
+    addButton
   }
 };
 </script>
@@ -403,6 +381,9 @@ export default {
 .taskLog-filter--tabs {
   padding: 8px 0;
   display: @flex;
+  color: #999999;
+  border-bottom: 1px solid  #D7D7D8;
+  border-top: 1px solid  #D7D7D8;
   .taskLog-filter-first {
     width: 48%;
   }
@@ -427,15 +408,6 @@ export default {
 .taskLog-center-filter {
   height: 100%;
   overflow-y: auto;
-}
-.taskLog-center-addtasklog {
-  position: fixed;
-  bottom: 14vw;
-  right:2vw;
-  font-size:1rem;
-}
-.text-active {
-  color: @text-color;
 }
 //  pop
 .pop {

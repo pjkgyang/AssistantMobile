@@ -1,6 +1,6 @@
 @text-color:#4376FF;
-@fontSize12:0.6rem;
-@fontSize14:0.8rem;
+@fontSize12:0.75rem;
+@fontSize14:0.9rem;
 @fontSize16:1rem;
 @fontSize20:1.25rem;
 @bg-active-wy:#F19000;
@@ -11,14 +11,14 @@
 @spacearoung:'space-around';
 @spacebetween:'space-between';
 @color:#909090;
-@border:1px solid #ccc;
+@border:1px solid #E8E8E8;
 @border-ef:1px solid #efefef;
+@fontWeight:700;
+@baseColor:#00c1de;
+// #4ABADB;
 
 
-.data_loading{
-    height: 100vh;
-   .flex(@row:center,@col:center);
-}
+
 .flex(@row:flex-start,@col:flex-start,@column:row){
     display: flex;
     justify-content: @row;
@@ -42,7 +42,7 @@
     }
 }
 .commitButton {
-    background: #4ABADB;
+    background: @baseColor;
 }
 .operate-btn{
     display: @flex;

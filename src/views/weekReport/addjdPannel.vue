@@ -1,7 +1,8 @@
 <template>
     <div class="addweekprocess">
         <div>
-            <van-cell-group style="height:44px;padding:10px 7px;display:flex;align-items:center" v-if="this.$route.query.data!=1">
+            <van-cell-group style="height:44px;padding:10px 7px;display:flex;align-items:center" 
+            v-if="$route.params.weekActive != 1">
                 <span class="switch_title">是否完成</span>
                 <van-switch v-model="form.sfwc" size="20px" />
             </van-cell-group>
@@ -9,7 +10,7 @@
             <van-cell-group>
                 <van-field required v-model="form.gznr" label="工作内容" type="textarea" placeholder="请输入工作内容" rows="3" autosize />
             </van-cell-group>
-            <div v-if="!form.sfwc && this.$route.query.data!=1">
+            <div v-if="!form.sfwc && $route.params.weekActive != 1">
                 <van-cell-group>
                     <van-field required v-model="form.wwcyy" label="未完成原因" type="textarea" placeholder="请输入未完成原因" rows="3" autosize />
                 </van-cell-group>
@@ -21,9 +22,7 @@
                 <van-field required v-model="taskName" type="textarea" label="关联任务" is-link rows="1" autosize @click="onClick" />
             </van-cell-group>
 
-            <!-- <van-popup v-model="show"> -->
             <choose-task :parentShow="show" @handleClosePop="handleClosePop" @handletaskClick="handletaskClick"></choose-task>
-            <!-- </van-popup> -->
         </div>
         <footer>
             <van-button size="normal" type="default" @click="handleClose">取消</van-button>
@@ -44,7 +43,7 @@ export default {
         wwcyy: "",
         hxcs: ""
       },
-      xmInfo:'',
+      xmInfo:{},
       taskName: "",
       uid:'',
       queryData:{}
@@ -59,7 +58,6 @@ export default {
     },
     // 确定(选择任务)
     handletaskClick(name,data){
-        console.log(data)
         this.xmInfo = data;
         this.taskName = name;
     },
@@ -74,12 +72,14 @@ export default {
             rwbh:  this.xmInfo.rwbh,
             gzms: this.form.gznr,
             zt:!this.form.sfwc?0:1,
-            wwcyy:this.form.wwcyy,
-            hxcs:this.form.hxcs
+            wwcyy:this.form.sfwc?'':this.form.wwcyy,
+            hxcs:this.form.sfwc?'':this.form.hxcs
         }).then(res=>{
             if(res.state == 'success'){
                 this.$toast.success({message:'保存成功~',duration:2000});
-                this.$router.push({name:'weekAdd',params:{sftj:1}})
+                this.$router.go(-1);
+            }else{
+                this.$toast.success({message:res.msg,duration:2000}); 
             }
         })
     },
@@ -106,12 +106,31 @@ export default {
         return true;
     }
   },
-  mounted(){
-    this.uid = window.userId;
-  },
+  mounted(){},
   activated() {
-    this.queryData = this.$route.query;  
-    console.log(this.queryData);
+    this.uid = window.userId;
+    document.title = '添加任务进度';
+    if(JSON.stringify(this.$route.params) !== '{}'){
+        if(!this.$route.params.weekActive){   //本周
+           this.form.wwcyy = this.$route.params.wwcyy;
+           this.form.hxcs = this.$route.params.hxcs; 
+           this.form.sfwc = this.$route.params.zt==0?false:true;
+        }else{                                //下周                  
+           this.form.gznr = this.$route.params.gzms;
+           this.form.wwcyy = this.form.hxcs = ''
+        }
+        this.queryData.month = this.$route.params.yf;
+        this.queryData.week = this.$route.params.zxh;
+        this.xmInfo.xmbh = this.$route.params.xmbh;
+        this.xmInfo.rwbh = this.$route.params.rwbh;
+        this.xmInfo.lcbbh = this.$route.params.lcbbh;
+        this.taskName = this.$route.params.xmmc + " — " + this.$route.params.cpmc_display + " — " + this.$route.params.rwmc_display
+    }
+    if(JSON.stringify(this.$route.query) !== '{}'){
+      this.queryData = this.$route.query;  
+      this.form.sfwc = false;
+      this.taskName = this.form.gznr = this.form.wwcyy = this.form.hxcs = ''
+    }
   },
   components: { chooseTask }
 };
