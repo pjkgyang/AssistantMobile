@@ -26,6 +26,7 @@
             <TaskLogList :Datalist="ProcessList" @handleOnButtonClick="handleOnButtonClick" @handleSeeDetails="handleSeeDetails"></TaskLogList>
           </div>
         </mu-load-more>
+        <p v-if="finished && !!ProcessList.length" class="empty-content-tip">没有更多数据了</p>
       </mu-container>
 
       <div v-if="!ProcessList.length && !$store.state.loadingShow">
@@ -323,6 +324,9 @@ export default {
             this.ProcessList = res.data.rows;
           } else {
             this.ProcessList = this.ProcessList.concat(res.data.rows);
+          }
+          if(!res.data.rows){
+            this.ProcessList = [];
           }
           // 加载状态结束
           this.loading = false;

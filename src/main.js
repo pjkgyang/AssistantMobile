@@ -25,7 +25,6 @@ Vue.use(BottomNav);
 Vue.use(TextField);
 Vue.use(LoadMore);
 
-
 import { Swipeout, SwipeoutItem, SwipeoutButton} from 'vux'
 Vue.component('swipeout', Swipeout)
 Vue.component('swipeout-item', SwipeoutItem)

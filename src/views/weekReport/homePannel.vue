@@ -6,26 +6,26 @@
       </div>
       <div class="weekReport-filter--tabs">
         <span @click="hanldeSearchMonth" class="weekReport-filter-second">
-          <span >{{monthValue}}</span>&nbsp;
+          <span >{{monthValue}}</span>
         </span>
-        丨
         <span @click="hanldeSearchZs" class="weekReport-filter-week">
-          <span >第{{weekValue==1?'一':weekValue==2?'二':weekValue==3?'三':weekValue==4?'四':'五'}}周 {{WeekStartdate}} 至 {{WeekEnddate}}</span>&nbsp;
+          <span >第{{weekValue==1?'一':weekValue==2?'二':weekValue==3?'三':weekValue==4?'四':'五'}}周 
+          <span class="week-date">{{WeekStartdate}} 至 {{WeekEnddate}}</span></span>
         </span>
-        丨
         <span @click="hanldeSearchYDZT" class="weekReport-filter-second">
-          <span>{{ydztText}}</span>&nbsp;
+          <span>{{ydztText}}</span>
         </span>
       </div>
     </div>
     <!-- load more -->
-    <div class="weekReport-center-content">
-      <mu-container ref="container" class="demo-loadmore-content">
+    <div class="weekReport-center-content" ref="weekScrollcontent"  @scroll="handleScroll">
+      <mu-container ref="container" class="demo-loadmore-content" >
         <mu-load-more @refresh="refresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
           <div class="weekReport-center-filter">
             <listcard :Datalist="weekList" @handleSeeDetails="handleSeeDetails"></listcard>
           </div>
         </mu-load-more>
+        <p v-if="finished && !!weekList.length" class="empty-content-tip">没有更多数据了</p>
       </mu-container>
 
       <!-- loading 加载完 -->
@@ -56,7 +56,7 @@ import listcard from "@/components/weekReport/listCard.vue";
 import emptyContent from "@/components/public/empty-content.vue";
 import DatePickerMonth from "@/components/public/DatePickerMonth.vue";
 import { getMyDate,getLastMonth,getLastMonthDay,getNextMonth,getPreMonth,weekIndexInMonth,GetNextDate,getWeeks } from "../../utils/util.js";
-import addButton from '@/components/public/addButton'
+import addButton from '@/components/public/addButton';
 import searchInput from "@/components/public/SearchInput.vue";
 
 
@@ -74,7 +74,7 @@ export default {
       keyword: "",
       currentPage: 1,
       pageSize:16,
-      ydztText: "填写状态",
+      ydztText: "状态",
       weekList: [
         {
           cjrxm: "张三",
@@ -137,8 +137,9 @@ export default {
       this.init();
       this.statePopshow = false;
     },
+    // 添加日报
     handleAddLog(){
-       this.$router.push({path:'/weekadd',query:{month:this.monthValue,week:this.weekValue}});
+       this.$router.push({name:'weekAdd',query:{month:this.monthValue,week:this.weekValue},params:{bid:1}});
     },
     // 选择月
     hanldeSearchMonth() {
@@ -212,11 +213,14 @@ export default {
           } else {
             this.weekList = this.weekList.concat(res.data.rows);
           }
+          if(!res.data.rows){
+            this.weekList = [];
+          }
           // 加载状态结束
           this.loading = false;
           this.isLoading = false;
           if (this.currentPage >= this.total) {
-            this.finished = true;
+             this.finished = true;
           }else{
              this.finished = false;
           }
@@ -232,7 +236,7 @@ export default {
       this.columns = [];
       this.year = new Date().getFullYear();
       this.month =  new Date().getMonth();
-      this.monthValue = this.year+'-'+((this.month+1)<10?'0'+this.month+1:this.month+1);
+      this.monthValue = this.year+'-'+((this.month+1)<10?'0'+(this.month+1):this.month+1);
       this.WeekStartdate = this.weekStart =  getLastMonth(this.year,this.month);//获取当月开始第一周周一日期
       this.WeekEnddate = this.weekEnd = GetNextDate(this.WeekStartdate,6);//获取当月开始第一周周日日期
       this.weekNum = getWeeks(this.year,this.month+1);  //获取当月周数
@@ -254,6 +258,9 @@ export default {
            this.columns.push('第'+index+'周');
        }
     },
+    handleScroll(){
+      var scrollTop = this.$refs.weekScrollcontent.scrollTop
+    }
     // saveStore(){
     //   this.$store.dispatch("saveMonthValue", this.monthValue);
     //   this.$store.dispatch("saveWeekNum", this.weekNum);
@@ -265,6 +272,9 @@ export default {
    
   },
   mounted() {
+    // this.$nextTick(() => {
+      // document.getElementById('weekReportContent').scrollTop = 30
+    // })
     this.InitDate();
     this.init();
   },
@@ -287,22 +297,26 @@ export default {
   background: #fff;
   box-shadow: 0 2px 5px #eee;
   position: relative;
-  // z-index: 2222;
 }
 .weekReport-filter--input {
   padding: 0.5rem;
 }
 .weekReport-filter--tabs {
   padding: 8px 0;
-  display: @flex;
+ .flex(space-between,center);
   color: #999999;
   border-bottom: 1px solid  #D7D7D8;
   border-top: 1px solid  #D7D7D8;
   .weekReport-filter-week {
-    width: 60%;
+    width: 64%;
+    border-left: 1.5px solid #D7D7D8;
+    border-right: 1.5px solid #D7D7D8;
+    .week-date{
+      font-size: @fontSize12;
+    }
   }
   .weekReport-filter-second {
-    width: 20%;
+    width: 16%;
   }
 }
 .weekReport-filter--tabs {
@@ -313,9 +327,6 @@ export default {
     display: @flex;
     align-items: center;
     justify-content: center;
-  }
-  big {
-    color: #909090;
   }
 }
 .weekReport-center-filter {
@@ -344,7 +355,7 @@ export default {
   text-align: center;
 }
 .weekReport-center-content {
-  height: calc(100vh - 13vh);
+  height: calc(100vh - 100px);
   overflow-y: auto;
   margin-top: 5px;
 }

@@ -25,9 +25,10 @@
             </van-checkbox>
           </van-checkbox-group>
         </mu-load-more>
+        <p v-if="finished && !!listArr.length" class="empty-content-tip">没有更多数据了</p>
       </mu-container>
 
-      <div v-if="listArr.length==0 && !$store.state.loadingShow">
+      <div v-if="!listArr && !$store.state.loadingShow">
           <empty-content></empty-content>
       </div>
     </main>
@@ -125,6 +126,9 @@ export default {
             this.listArr = res.data.page.rows;
           } else {
             this.listArr = this.listArr.concat(res.data.page.rows);
+          }
+          if(!res.data.page.rows){
+            this.listArr = [];
           }
           // 加载状态结束
           this.loading = false;

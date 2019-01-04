@@ -20,13 +20,20 @@ ul{
     margin: 0;
     padding: 0;
 }
+/* 暂无内容 */
+.empty-content-tip{
+    color: #999;
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 4px 0;
+}
 .btnBlue{
     background: #00c1de !important;
     border: none !important;
 }
 /*  */
 .van-search{
-    padding: 5px 10px !important;
+    padding: 5px !important;
 }
 .van-search input::placeholder{
     font-size: 0.7rem;
@@ -60,7 +67,8 @@ ul{
     padding: 2px 15px;
     font-weight: 700;
 }
-/****/
+
+/**van tabs**/
 .van-tab--active{
     color: #00c1de !important;
 }
@@ -84,7 +92,30 @@ ul{
     background-color: #00c1de !important;
     border-color: #00c1de !important;
 }
-/*  */
+/*van actionsheet  */
+.van-actionsheet__header{
+    border-bottom: #999999 !important;
+}
+/* 右箭头 */
+.van-icon-arrow{
+    color: #999999;
+    font-weight: 700 !important;
+}
+/* van cell */
+.van-cell__title{
+    font-weight: 700;
+    color:#333333;
+}
+/*
+**  我的
+*/
 .mu-picker{
     width: 85vw;
+}
+.van-cell__value{
+    flex: 2 !important;
+}
+.mine-footer .van-cell__title{
+    display: flex;
+    align-items: center;
 }

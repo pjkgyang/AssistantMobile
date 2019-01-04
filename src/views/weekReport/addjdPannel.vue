@@ -64,6 +64,7 @@ export default {
     handleCommit(){
         if(!this.validata()) return;
         this.$post(this.API.saveWeeklyReport,{
+            wid:JSON.stringify(this.$route.params) !== '{}'?this.$route.params.wid:'',
             yhbh: this.uid,
             yf: this.queryData.month,
             zxh: this.queryData.week,
@@ -91,11 +92,11 @@ export default {
            this.$toast('请填写工作内容~'); 
            return false;
         }
-        if(!this.show && /^[\s]*$/.test(this.form.wwcyy) && !this.$route.query.data && !this.form.sfwc){
+        if(!this.show && /^[\s]*$/.test(this.form.wwcyy) && ((this.$route.params.weekActive==0 || JSON.stringify(this.$route.query) !== '{}') && !this.form.sfwc)){
            this.$toast('请填写未完成原因~'); 
            return false;
         }
-        if(!this.show && /^[\s]*$/.test(this.form.hxcs) && !this.$route.query.data && !this.form.sfwc){
+        if(!this.show && /^[\s]*$/.test(this.form.hxcs) && ((this.$route.params.weekActive==0 || JSON.stringify(this.$route.query) !== '{}') && !this.form.sfwc)){
            this.$toast('请填写后续措施~'); 
            return false;
         }
@@ -111,14 +112,16 @@ export default {
     this.uid = window.userId;
     document.title = '添加任务进度';
     if(JSON.stringify(this.$route.params) !== '{}'){
+        console.log(this.$route.params)
         if(!this.$route.params.weekActive){   //本周
            this.form.wwcyy = this.$route.params.wwcyy;
            this.form.hxcs = this.$route.params.hxcs; 
            this.form.sfwc = this.$route.params.zt==0?false:true;
         }else{                                //下周                  
-           this.form.gznr = this.$route.params.gzms;
            this.form.wwcyy = this.form.hxcs = ''
         }
+
+        this.form.gznr = this.$route.params.gzms;
         this.queryData.month = this.$route.params.yf;
         this.queryData.week = this.$route.params.zxh;
         this.xmInfo.xmbh = this.$route.params.xmbh;
@@ -150,7 +153,6 @@ export default {
   }
   footer{
       text-align: center;
-
       button{
           width: 48%;
           border: none;

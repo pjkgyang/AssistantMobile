@@ -1,7 +1,13 @@
 
 
 export default {
-    
+    // 系统
+    sendCode:WINDOW_CONFIG__BASEURL +'verify/sendCode.do',//发送验证码
+    verifyCode:WINDOW_CONFIG__BASEURL +'verify/verifyCode.do',//校验验证码
+    getDictEnum:WINDOW_CONFIG__BASEURL +'dict/getDictEnum.do',//获取枚举
+
+
+
     getLoginUser:WINDOW_CONFIG__BASEURL +'sys/getLoginUser.do',
     wxLogin:WINDOW_CONFIG__BASEURL +'wx/wxLogin.do',  //微信登录
     queryLogTaskProcess:WINDOW_CONFIG__BASEURL +'process/queryLogTaskProcess.do',//日报过程
@@ -35,8 +41,12 @@ export default {
     batchUpdateWeekWorkGznr:WINDOW_CONFIG__BASEURL +'plan/batchUpdateWeekWorkGznr.do',// 工作内容(里程碑)
     batchUpdateWeekQuestionAll:WINDOW_CONFIG__BASEURL +'plan/batchUpdateWeekQuestionAll.do',//未完成原因，后续措施，处理计划(问题)
     batchUpdateWeekQuestionCljh:WINDOW_CONFIG__BASEURL +'plan/batchUpdateWeekQuestionCljh.do',//处理计划(问题)
-
     pageWeekWork:WINDOW_CONFIG__BASEURL +'plan/pageWeekWork.do',//获取里程碑列表
     pageWeekQuestion:WINDOW_CONFIG__BASEURL +'plan/pageWeekQuestion.do',//获取问题列表
     pageWeeklyReport:WINDOW_CONFIG__BASEURL +'plan/pageWeeklyReport.do',//获取进度列表
+    deleteWeeklyReport:WINDOW_CONFIG__BASEURL +'plan/deleteWeeklyReport.do',//删除进度任务
+    deleteWeekWork:WINDOW_CONFIG__BASEURL +'plan/deleteWeekWork.do',//删除里程碑
+    deleteWeekQuestion:WINDOW_CONFIG__BASEURL +'plan/deleteWeekQuestion.do',//删除问题
+    isWeekPlanBlocked:WINDOW_CONFIG__BASEURL +'plan/isWeekPlanBlocked.do',//是否封存
+
 }

@@ -69,7 +69,7 @@ export function  getWeeks(year, month){
     }
     
     let myDate = new Date(year, month, 0); 
-    let myDay = year + "-" + month + "-" + myDate.getDate();////本月的最后一天
+    let myDay = year + "/" + month + "/" + myDate.getDate();////本月的最后一天
     let firstWeekDay = new Date(myDay).getDay();
     if(firstWeekDay<4){
         firstWeek =  addDate(myDay,-(firstWeekDay));
@@ -78,7 +78,7 @@ export function  getWeeks(year, month){
     } 
 
     let lastDate = new Date(lastYear, lastMonth, 0); 
-    let lastDay = lastYear + "-" + lastMonth + "-" + lastDate.getDate();//上月的最后一天
+    let lastDay = lastYear + "/" + lastMonth + "/" + lastDate.getDate();//上月的最后一天
     let lastWeekDay = new Date(lastDay).getDay();
     if(lastWeekDay<4){
         lastWeek =  addDate(lastDay,-(lastWeekDay-1));
@@ -87,6 +87,7 @@ export function  getWeeks(year, month){
     }
     let week_count = getOffsetDays(new Date(firstWeek).getTime(),new Date(lastWeek).getTime());
     // let week_count = (myDay % 7)>2?Math.ceil(myDay / 7):Math.floor(myDay / 7);
+
     return week_count;
 }
 // 获取 （days 前后日期）
@@ -246,3 +247,12 @@ export function weekIndexInMonth(str){
     }
     return weekIndex;
 }
+
+
+export function getCookie(name){ 
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    if(arr=document.cookie.match(reg))
+        return unescape(arr[2]); 
+        else 
+        return null; 
+} 

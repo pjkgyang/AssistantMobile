@@ -15,49 +15,45 @@ export default {
   name: "app",
   data() {
     return {
-      active: 0
+      active: 0,
     };
   },
   components:{loading},
   beforeCreate() {
     // console.log(this.$store.state.loadingShow)
-    //  this.$router.push({ path: "/login" });
-    //  this.$get(this.API.getLoginUser, {}).then(res => {
-    //     if (res.state == "success") {
-    //         window.userName = res.data.nickName;
-    //         window.userId = res.data.uid;
-    //         sessionStorage.setItem("jzUser", res.data.unitType);
-    //     } else {
-    //       alert(res.msg);
-    //     }
-    // }).catch(error=>{
-
-    // });
     // window.openId = getQueryStringByName("openId");
+    // window.lx = getQueryStringByName("lx");
+
     // if (window.openId) {
     //   sessionStorage.setItem("openId", window.openId);
     // } else {
     //   window.openId = sessionStorage.getItem("openId");
     // }
+
+    // if(window.lx){
+    //   sessionStorage.setItem("lx", window.lx);
+    // }else{
+    //   window.lx = sessionStorage.getItem("lx"); 
+    // }
     // this.$post(this.API.wxLogin, {
-    //   openId: window.openId
+    //   openId: window.openId,
+    //   lx: window.lx
     // }).then(res => {
     //   if (res.state == "success") {
-    //     if (!!res.data) {
-          this.$get(this.API.getLoginUser, {}).then(res => {
-            if (res.state == "success") {
-              window.userName = res.data.nickName;
-              window.userId = res.data.uid;
-              sessionStorage.setItem("jzUser", res.data.unitType);
-            } else {
-              alert(res.msg);
-            }
-          });
-    //     }
+        this.$get(this.API.getLoginUser,{}).then(res=>{
+          if (res.state == "success") {
+            window.userName = res.data.nickName;
+            window.userId = res.data.uid;
+            sessionStorage.setItem("userInfo", JSON.stringify(res.data));
+          }else{
+            this.$toast(res.msg);
+          }
+        })
     //   } else {
     //     this.$router.push({ path: "/login" });
     //     // window.location.href = 'http://careful.wisedu.com/emap/sys/etender/wx/index.html#/login'
     //   }
+    //    alert(JSON.stringify(res));
     // });
   }
 };

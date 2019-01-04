@@ -1,11 +1,15 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-
-Vue.use(Router)
+import Vue from 'vue';
+import Router from 'vue-router';
+Vue.use(Router);
 
 // import taskLog from "@/views/task-log.vue"
+import userInfo from "@/components/mine/infoList.vue";
+import addQuestion from "@/views/Question/addQuestion.vue";
+
 
 export default new Router({
+  // mode: 'history',
+  // base:'/emap/sys/etender/wx/beta/',
   routes: [
     {
       path: '/',
@@ -20,7 +24,35 @@ export default new Router({
             title:'工作台'
           },
           component: resolve => require(['@/views/More/more.vue'], resolve),
-        }
+        },{
+          path: '/project',
+          name: 'Project',
+          meta:{
+            title:'项目'
+          },
+          component: resolve => require(['@/views/Project/project.vue'], resolve),
+         },{
+          path: '/question',
+          name: 'Question',
+          meta:{
+            title:'问题'
+          },
+          component: resolve => require(['@/views/Question/question.vue'], resolve),
+         },{
+          path: '/message',
+          name: 'Message',
+          meta:{
+            title:'通知'
+          },
+          component: resolve => require(['@/views/Message/message.vue'], resolve),
+         },{
+          path: '/mine',
+          name: 'Mine',
+          meta:{
+            title:'个人信息'
+          },
+          component: resolve => require(['@/views/Mine/mine.vue'], resolve),
+         }
       ]
     },
     {
@@ -31,34 +63,6 @@ export default new Router({
       },
       component: resolve => require(['@/views/TaskLog/task-log.vue'], resolve),
     },{
-      path: '/project',
-      name: 'Project',
-      meta:{
-        title:'项目'
-      },
-      component: resolve => require(['@/views/Project/project.vue'], resolve),
-     },{
-      path: '/question',
-      name: 'Question',
-      meta:{
-        title:'问题'
-      },
-      component: resolve => require(['@/views/Question/question.vue'], resolve),
-     },{
-      path: '/message',
-      name: 'Message',
-      meta:{
-        title:'通知'
-      },
-      component: resolve => require(['@/views/Message/message.vue'], resolve),
-     },{
-      path: '/mine',
-      name: 'Mine',
-      meta:{
-        title:'个人信息'
-      },
-      component: resolve => require(['@/views/Mine/mine.vue'], resolve),
-     },{
       path: '/tasklogdetail',
       name: 'TaskLogDetail',
       meta:{
@@ -129,6 +133,22 @@ export default new Router({
         title:'登录'
       },
       component: resolve => require(['@/views/Login/login.vue'], resolve),
+    },{
+      path: '/userinfolist',
+      name: 'Userinfolist',
+      meta:{
+        title:'用户详情'
+      },
+      component: userInfo
+    },
+    // 问题
+    {
+      path: '/addquestion',
+      name: 'addQuestion',
+      meta:{
+        title:'提问'
+      },
+      component: addQuestion
     }
   ]
 })

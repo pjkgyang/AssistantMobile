@@ -1,9 +1,9 @@
-var path = require('path')
-var webpack = require('webpack')
+var path = require('path');
+var webpack = require('webpack');
 const vuxLoader = require('vux-loader');
 
 function resolve(dir) {
-  return path.join(__dirname, '.', dir)
+  return path.join(__dirname, '.', dir);
 }
 
 const webpackConfig = {
@@ -11,6 +11,7 @@ const webpackConfig = {
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
+    // publicPath:'/emap/sys/etender/wx/beta/',
     filename: 'build.js'
   },
 
@@ -115,7 +116,7 @@ if (process.env.NODE_ENV === 'production') {
       'process.env': {
         NODE_ENV: '"production"'
       },
-      "WINDOW_CONFIG__BASEURL": '"http://careful.wisedu.com/emap/sys/etender/api/"'
+      "WINDOW_CONFIG__BASEURL": '"http://careful.wisedu.com:8887/emap/sys/etender/api/"'
     }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,

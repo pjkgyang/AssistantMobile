@@ -3,14 +3,13 @@
     <header>
       <weekSwitch :month="$route.query.month" :week="$route.query.week" @handleChange="handleChange"></weekSwitch>
     </header>
-    <!-- <section v-if="weekType == 'jd'||weekType == 'wt'||(weekType == 'lcb'&& weekActive == 1)" class="add_btn">
-      <mu-button  small color="primary" class="btnBlue" @click="handleAdd(weekType)">新增</mu-button>
-    </section> -->
-    <main :style="{'height':maxHeight}">
+    <main>
         <mu-container ref="container" class="demo-loadmore-content" v-if="dataList.length">
          <mu-load-more @refresh="refresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">       
-            <weekList :dataList="dataList" :weekType="weekType" :weekState="weekActive" @handleFillin="handleFillin"></weekList>
+            <weekList :dataList="dataList" :weekType="weekType" :weekState="weekActive" :isBlock="isBlock" :isNextBlock="isNextBlock" 
+             @handleFillin="handleFillin" @handleDelete="handleDelete"></weekList>
           </mu-load-more>
+          <p v-if="finished && !!dataList.length" class="empty-content-tip">没有更多数据了</p>
         </mu-container>
   
       <div v-if="!dataList.length && !$store.state.loadingShow">
@@ -55,11 +54,6 @@ import emptyContent from "../../components/public/empty-content.vue";
 // import { mapGetters } from "vuex";
 import weekSwitch from '@/components/weekReport/switch';
 import addButton from '@/components/public/addButton'
-import {
-  getLastMonth,
-  GetNextDate,
-  getWeeks
-} from "../../utils/util.js";
 
 export default {
   data() {
@@ -72,7 +66,7 @@ export default {
       currentPage: 1,
       pageSize: 10,
       dataList: [],
-      maxHeight: window.innerHeight - 105 + "px",
+      // maxHeight: window.innerHeight - 100 + "px",
       yycsShow: false,
       weekType: "lcb",
       weekActive: 0,
@@ -85,8 +79,14 @@ export default {
       weeksValue: "",  //周数
       monthValue: "",  //月数
       lastMonthDay:'',  //本月最后一天
-      
-      dataObj:{}
+
+      newWeek:'',   //记录周
+      newMonth:'',  //记录月
+      dataObj:{},
+
+      isBlock:false, //是否封存
+      isNextBlock:'',  //是否下周封存
+      isNext:0
     };
   },
   methods: {
@@ -110,25 +110,23 @@ export default {
       this.$router.push({
         path:data == "jd"? "/addweekprocess": data == "wt" ? "/addweekquestion" : "/addweekmilestone",
         query: {
-          data: this.weekActive,
+          // data: this.weekActive,
           week: this.weeksValue,
           month: this.monthValue,
-          lastDay: this.lastMonthDay
         }
       });
     },
     // tab
     handleChange(params){
-      this.monthValue = params.monthValue
-      this.weeksValue = params.weeksValue  
+      this.monthValue = this.newMonth =  params.monthValue
+      this.weeksValue = this.newWeek =  params.weeksValue  
       this.weekType = params.weekType      //类型tab
       this.weekActive = params.weekActive  //本周，下周tab
-      if(params.weekType != 'lcb' && !params.weekActive){
-        this.maxHeight = window.innerHeight - 135 + "px"
-      }else{
-        this.maxHeight = window.innerHeight - 105 + "px"
-      }
       this.init();
+      if(!this.isNext && !!this.weekActive){
+        this.isWeekPlanBlocked(this.monthValue,this.weeksValue,true);
+      }
+      
     },
     // 填写未完成原因，后续措施  
     handleFillin(params, type) {
@@ -142,6 +140,38 @@ export default {
         params: params
       });
       }
+    },
+    
+    // 删除进度任务
+    handleDelete(params,type,index){
+      let obj = {};
+      switch(type){
+       case 'lcb':
+         obj.zgzWid = params.zgzWid
+        break;
+       case 'jd':
+         obj.wid = params.wid
+        break;
+       case 'wt':
+         obj.zwtWid = params.zwtWid
+        break;
+    }
+      this.$dialog.confirm({
+       title: '提示',
+       message: type == 'jd'?'是否确定删除此任务进度?':type=='lcb'?'是否确定删除此里程碑?':'是否确定删除此问题?'
+       }).then(() => {
+         this.$post(type=='jd'?this.API.deleteWeeklyReport:type=='lcb'?this.API.deleteWeekWork:this.API.deleteWeekQuestion,
+         obj).then(res=>{
+            if(res.state == 'success'){
+              this.dataList.splice(index,1);
+              this.$toast('删除成功~'); 
+            }else{
+              this.$toast(res.msg); 
+            }
+         })
+       }).catch(() => {
+
+       });
     },
     handleClosepop() {
       this.yycsShow = !this.yycsShow;
@@ -161,7 +191,7 @@ export default {
               if (res.state == "success") {
                   this.init();
                   this.yycsShow = !this.yycsShow 
-                  this.$toast.success({message:'保存成功',duration:1500});
+                  this.$toast('保存成功~');
               }else{
                   this.$toast(res.msg);  
               }
@@ -178,9 +208,9 @@ export default {
           }).then(res => {
             if (res.state == "success") {
               if (res.state == "success") {
+                this.$toast('保存成功~');
                 this.init();
                 this.yycsShow = !this.yycsShow 
-                this.$toast.success({message:'保存成功',duration:1500});
              }else{
                 this.$toast(res.msg);  
              }
@@ -237,6 +267,9 @@ export default {
           } else {
             this.dataList = this.dataList.concat(res.data.rows);
           }
+          if(!res.data.rows){
+            this.dataList = [];
+          }
           this.loading = false;
           this.isLoading = false;
           if (this.currentPage >= res.data.total) {
@@ -254,13 +287,24 @@ export default {
           this.$toast('系统繁忙，请稍后再试~');
       });
     },
-    // 获取本月最后一天
-    getlastMonthDay(year,month){
-      this.lastMonthDay = GetNextDate(
-        GetNextDate(getLastMonth(year, month - 1), 6),
-          (getWeeks(year, month) - 1) * 7
-      )
-    }
+    // 是否封存
+    isWeekPlanBlocked(month,zxh,isNext){
+     this.$get(this.API.isWeekPlanBlocked,{
+       month:month,
+       zxh:zxh
+     }).then(res=>{
+       if(res.state == 'success'){
+          if(isNext){
+            this.isNextBlock = res.data.bolck;
+            this.isNext = 1;
+          }else{
+            this.isBlock = res.data.bolck;
+          }
+       }else{
+         this.$toast(res.msg); 
+       }
+     })
+    },
   },
   computed: {},
   watch: {},
@@ -270,13 +314,12 @@ export default {
   watch: {},
   activated() {
     this.uid = window.userId;
-    this.weeksValue = this.$route.query.week;
-    this.monthValue = this.$route.query.month;
-    this.getlastMonthDay(Number(this.monthValue.split('-')[0]),Number(this.monthValue.split('-')[1]));
+    this.monthValue = this.newMonth?this.newMonth:this.$route.query.month;
+    this.weeksValue = this.newWeek?this.newWeek:this.$route.query.week;
     this.init();
-    // if (this.$route.params.bid) {
-    //   this.init();
-    // }
+    if(!!this.$route.params.bid){
+      this.isWeekPlanBlocked(this.monthValue,this.weeksValue,false);
+    }
   },
   components: { weekList, emptyContent,weekSwitch ,addButton}
 };
@@ -284,8 +327,8 @@ export default {
 
 <style lang="less" scoped>
 .weekReport_add {
-  
   main {
+    height: calc(100vh - 95px);
     overflow-y: auto;
   }
 }

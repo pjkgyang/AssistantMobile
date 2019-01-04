@@ -1,6 +1,8 @@
 <template>
     <div>
-       <van-search  v-model="keyword" :background="'#fff'" :placeholder="place"   @search="handleSearchKeyword" />
+       <form >
+        <van-search   v-model="keyword" :background="'#fff'" :placeholder="place"   @search="handleSearchKeyword" />
+       </form>
     </div>
 </template>
 <script>

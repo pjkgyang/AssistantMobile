@@ -10,7 +10,9 @@
                   <detailList :weekType="weekType" :dataList="dataList"></detailList>
                 </div>
                </mu-load-more>
+               <p v-if="finished && !!dataList.length" class="empty-content-tip">没有更多数据了</p>
            </mu-container>
+
            <div v-if="!dataList.length && !$store.state.loadingShow">
               <emptyContent></emptyContent>
            </div>
@@ -107,6 +109,9 @@ export default {
           } else {
             this.dataList = this.dataList.concat(res.data.rows);
           }
+          if(!res.data.rows){
+            this.dataList = [];
+          }
           // 加载状态结束
           this.loading = false;
           this.isLoading = false;
@@ -150,7 +155,7 @@ export default {
   //   }
   // }
   main {
-    max-height: calc(100vh - 135px);
+    max-height: calc(100vh - 95px);
     overflow-y: auto;
     .weekReport_detail-centent{
       height: 100%;

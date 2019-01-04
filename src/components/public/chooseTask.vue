@@ -9,16 +9,11 @@
           <searchInput @handleSearchKeyword="handleSearchKeyword" :place="'请输入项目名称'"></searchInput>
         </div>
         <div class="itemlist-group">
-          <!-- <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-            <van-list v-model="loading" :finished="finished" @load="onLoad"> -->
           <mu-container ref="container" class="demo-loadmore-content">
             <mu-load-more @refresh="onRefresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
               <van-cell v-for="(item,index) in allItems" :key="item" :title="item.xmmc" is-link @click="handleItemClick(item.xmbh,item.xmmc)" />
             </mu-load-more>
           </mu-container>  
-           <!-- </van-list>
-          </van-pull-refresh> -->
-
           <div v-if="!allItems.length && !$store.state.loadingShow">
             <emptyContent></emptyContent>
           </div>
@@ -127,14 +122,7 @@ export default {
       taskItems: [], //任务
       taskName: "请选择",
       taskLogDetail: {},
-      pullupDefaultConfig: {
-        pullUpHeight: 100,
-        height: 40,
-        autoRefresh: true,
-        upContent: "上拉加载更多...",
-        downContent: "释放后加载",
-        loadingContent: "加载中..."
-      },
+
       hfrxm: "",
       hfrbh: "",
       showLoading: false
@@ -153,6 +141,7 @@ export default {
     }
   },
   activated() {
+    console.log('===')
     this.showLoading = false;
     if (this.$route.params.data) {
       this.taskLogDetail = JSON.parse(this.$route.params.data);

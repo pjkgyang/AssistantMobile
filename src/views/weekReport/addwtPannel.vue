@@ -18,9 +18,10 @@
                         </van-checkbox>
                     </van-checkbox-group>
                 </mu-load-more>
+                <p v-if="finished && !!listArr.length" class="empty-content-tip">没有更多数据了</p>
           </mu-container>
 
-            <div v-if="listArr.length == 0 && !$store.state.loadingShow">
+            <div v-if="!listArr.length && !$store.state.loadingShow">
               <empty-content></empty-content>
             </div>
         </main>
@@ -32,7 +33,12 @@
 </template>
 
 <script>
-import emptyContent from '../../components/public/empty-content.vue'
+import {
+  getLastMonth,
+  GetNextDate,
+  getWeeks
+} from "../../utils/util.js";
+import emptyContent from '../../components/public/empty-content.vue';
 export default {
   data() {
     return {
@@ -46,7 +52,8 @@ export default {
       pageSize:18,
       listArr: [],
 
-      yhbh:''
+      yhbh:'',
+      lastdate:'' //最后一天日期
     };
   },
   methods: {
@@ -111,7 +118,7 @@ export default {
       this.$get(this.API.pageQuestionForWeekPlan,{
         curPage:this.currentPage,
         pageSize:this.pageSize,
-        cnjssj:this.$route.query.lastDay,
+        cnjssj:this.lastdate,
         keyword:this.keyword
       }).then(res=>{
         if(res.state == 'success'){
@@ -120,6 +127,9 @@ export default {
             this.listArr = res.data.rows;
           } else {
             this.listArr = this.listArr.concat(res.data.rows);
+          }
+          if(!res.data.rows){
+            this.listArr = [];
           }
           // 加载状态结束
           this.loading = false;
@@ -135,10 +145,17 @@ export default {
           this.$toast(res.msg);
         }
       })
+    },
+    // 获取本月最后一天
+    getlastMonthDay(year,month){
+      this.lastdate = GetNextDate(
+        GetNextDate(getLastMonth(year, month - 1), 6),
+          (getWeeks(year, month) - 1) * 7
+      );
     }
-
   },
   activated(){
+    this.getlastMonthDay(Number(this.$route.query.month.split('-')[0]),Number(this.$route.query.month.split('-')[1]));
     this.init();
     this.yhbh = window.userId
   },

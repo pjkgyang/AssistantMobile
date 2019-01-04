@@ -54,6 +54,25 @@ export default {
          }
       }
   },
+  mounted(){
+      switch(this.$route.name){
+             case 'Project':
+                this.active = 'project';
+             break;
+             case 'Question':
+                this.active = 'question';
+             break;
+             case 'More':
+                this.active = 'more';
+             break;
+             case 'Message':
+                this.active = 'message';
+             break;
+             case 'Mine':
+                this.active = 'contact';
+             break;
+         }
+  },
   components: {}
 };
 </script>

@@ -1,33 +1,38 @@
 <template>
   <div class="weekadd_card">
-    <div v-for="item in dataList">
+    <div v-for="(item,index) in dataList">
       <div v-if="weekType == 'lcb'" class="container">
         <van-panel :title="item.xmbh+' '+item.xmmc">
           <div class="content">
             <p><span>项目内容：</span>{{item.xmnr}}</p>
             <p><span>里程碑描述：</span>{{item.lcbms}}</p>
             <p><span>承诺完成时间：</span>{{item.cnwcrq}}</p>
-            <p><span>完成状态：</span><van-tag round :type="item.zt==0?'danger':'success'">{{item.zt==0?'计划中':'已完成'}}</van-tag></p> 
-            <p v-if="item.zt == 0"><span>未完成原因:</span>{{item.wwcyy}}</p>
-            <p v-if="item.zt == 0"><span>后续措施:</span>{{item.hxcs}}</p>
+            <p><span>完成状态：</span><van-tag round :type="item.zt==1?'danger':'success'">{{item.zt_display}}</van-tag></p> 
+            <p><span>工作内容:</span>{{item.gzms}}</p>
+            <p v-if="item.zt == 1 && !weekState"><span>未完成原因:</span>{{item.wwcyy}}</p>
+            <p v-if="item.zt == 1 && !weekState"><span>后续措施:</span>{{item.hxcs}}</p>
           </div>
-          <div slot="footer" class="btn" v-if="item.zt==0">
-            <van-button style="background:#00c1de" size="mini" type="danger" @click="handleFillin(item,'lcb')">填写原因措施</van-button>
+          <!-- 封存不能操作 -->
+          <div slot="footer" class="btn" v-if="(!!weekState && !isNextBlock) || (!weekState && !isBlock)">
+            <van-button v-if="item.zt == 1" style="background:#00c1de" size="mini" type="danger" @click="handleFillin(item,'lcb')">{{weekState==0?'填写原因措施':'填写工作内容'}}</van-button>
+            <van-button  size="mini" type="danger" @click="handleDelete(item,'lcb',index)">删除</van-button>
           </div>
         </van-panel>
       </div>
       <div v-if="weekType == 'jd'" class="container">
         <van-panel :title="item.xmbh+' '+item.xmmc">
-          <div class="content">
+          <div class="content Jd_content">
             <p><span>产品名称：</span>{{item.cpmc}}</p>
             <p><span>任务名称：</span>{{item.rwmc}}</p>
             <p><span>完成状态：</span><van-tag round :type="item.zt==0?'danger':'success'">{{item.zt==0?'计划中':'已完成'}}</van-tag></p> 
             <p><span>工作内容:</span>{{item.gzms}}</p>
-            <p v-if="item.zt == 0"><span>未完成原因:</span>{{item.wwcyy}}</p>
-            <p v-if="item.zt == 0"><span>后续措施:</span>{{item.hxcs}}</p>
+            <p v-if="item.zt == 0 && !weekState"><span>未完成原因:</span>{{item.wwcyy}}</p>
+            <p v-if="item.zt == 0 && !weekState"><span>后续措施:</span>{{item.hxcs}}</p>
           </div>
-          <div slot="footer" class="btn" v-if="item.zt == 0">
-            <van-button style="background:#00c1de" size="mini"  @click="handleFillin(item,'jd')">{{weekState==0?'总结':'计划'}}</van-button>
+          <!-- 是否封存 v-if="!isBlock" -->
+          <div slot="footer" class="btn" v-if="(!!weekState && !isNextBlock) || (!weekState && !isBlock)">
+            <van-button v-if="item.zt == 0"  style="background:#00c1de" size="mini"  @click="handleFillin(item,'jd')">{{weekState==0?'总结':'计划'}}</van-button>
+            <van-button  size="mini" type="danger" @click="handleDelete(item,'jd',index)">删除</van-button>
           </div>
         </van-panel>
       </div>
@@ -38,11 +43,12 @@
             <p><span>期望解决日期：</span>{{item.qwjjrq}}</p>
             <p><span>承诺解决日期：</span>{{item.cnjjrq}}</p>
             <p><span>问题状态：</span><van-tag round :type="item.zt==0?'danger':'success'">{{item.zt==0?'计划中':'已完成'}}</van-tag></p> 
-            <p v-if="item.zt == 0"><span>未完成原因:</span>{{item.wwcyy}}</p>
-            <p v-if="item.zt == 0"><span>后续措施:</span>{{item.hxcs}}</p>
+            <p v-if="item.zt == 0 && !weekState"><span>未完成原因:</span>{{item.wwcyy}}</p>
+            <p v-if="item.zt == 0 && !weekState"><span>后续措施:</span>{{item.hxcs}}</p>
           </div>
-          <div slot="footer" class="btn" v-if="item.zt==0">
-            <van-button size="mini" @click="handleFillin(item,'wt')" style="background:#00c1de">填写原因措施</van-button>
+          <div slot="footer" class="btn" v-if="(!!weekState && !isNextBlock) || (!weekState && !isBlock)">
+            <van-button  v-if="item.zt==0" size="mini" @click="handleFillin(item,'wt')" style="background:#00c1de">填写原因措施</van-button>
+            <van-button  size="mini" type="danger" @click="handleDelete(item,'wt',index)">删除</van-button>
           </div>
         </van-panel>
       </div>
@@ -72,11 +78,22 @@ export default {
     weekState:{
       type: Number,
       default:0
+    },
+    isBlock:{
+      type:Boolean,
+      default:false
+    },
+    isNextBlock:{
+      type:Boolean,
+      default:false
     }
   },
   methods:{
     handleFillin(data,type){
       this.$emit('handleFillin',data,type);
+    },
+    handleDelete(data,type,index){
+      this.$emit('handleDelete',data,type,index);
     }
   },
   components: {}
@@ -94,11 +111,11 @@ export default {
       width:90px;
      }
     }
-    &:nth-of-type(2){
-      span:nth-child(1){
-        width:70px;
-      }
-    }
+  }
+  .content.Jd_content{
+    span:nth-child(1){
+      width:75px;
+     }
   }
   .week_title {
     font-size: 0.9rem;
@@ -108,7 +125,6 @@ export default {
     text-align: right;
     padding: 0.2rem 0;
     button{
-      background: #169BD5;
       color: #fff;
       border: none;
       width: 80px;

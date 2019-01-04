@@ -26,7 +26,7 @@
         </div> -->
     <div class="tasklog-detail-approval">
       <h5>审批意见
-        <span v-if="sfJzUser == 0&&logDetail.ydzt != 2" @click="handleCheckPZ">查看批注列表</span>
+        <span v-if="unitType == 0&&logDetail.ydzt != 2" @click="handleCheckPZ">查看批注列表</span>
       </h5>
       <div v-if="logDetail.ydzt != 2">
         <!-- <x-textarea placeholder="请填写审批意见" :rows='8' v-model="SPvalue" :show-counter="true" :max="200"></x-textarea> -->
@@ -90,7 +90,7 @@ export default {
         }
       ],
       SPvalue: "",
-      sfJzUser: "",
+      unitType: "",
     };
   },
   mounted() {},
@@ -139,7 +139,7 @@ export default {
     }
   },
   activated() {
-    this.sfJzUser = sessionStorage.getItem("jzUser");
+    this.unitType = JSON.parse(sessionStorage.getItem("userInfo")).unitType;
     this.logDetail = this.$route.params.data;
     if (this.logDetail.ydzt != 2) {
       this.$get(this.API.getLogComment, {

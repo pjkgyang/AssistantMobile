@@ -1,13 +1,13 @@
 <template>
     <div>
       <lazy-component>
-        <swipeout v-for="(list,index) in Datalist" :key="index" :disabled="!list.editable">
+        <!-- <swipeout v-for="(list,index) in Datalist" :key="index" :disabled="!list.editable">
         <swipeout-item :threshold=".5" underlay-color="#ccc">
             <div slot="right-menu" >
             <swipeout-button @click.native="onButtonClick('edit&'+JSON.stringify(list))" background-color="#336DD6">编辑</swipeout-button>
             <swipeout-button @click.native="onButtonClick('delete&'+JSON.stringify(list))" background-color="#D23934">删除</swipeout-button>
-            </div>
-            <div slot="content" class="demo-content vux-1px-tb" @click="handleSeeDetails(list)">
+            </div> -->
+            <div v-for="(list,index) in Datalist" :key="index" :disabled="!list.editable" @click="handleSeeDetails(list)">
               <card :class="{'assiant-weekreport-list':true}">
                   <section slot="avatar">
                       <div class="assiant-weekreport_avatar">
@@ -37,8 +37,8 @@
                   </section>
               </card>
             </div>
-        </swipeout-item>
-      </swipeout>
+        <!-- </swipeout-item>
+      </swipeout> -->
       </lazy-component>
     </div>
 </template>
@@ -82,6 +82,7 @@ export default {
   border-bottom: @border;
   padding:0.5rem  0.5rem 0.5rem 0;
   height: 4rem;
+  background: #fff;
   
   .assiant-weekreport_info,.weekreport_date{
     color: #8d8b8b;
