@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="question-reply-btngroup">
-            <van-button v-for="(btn,index) in btngroupArr" :key="index" :type="btn.type" @click="hanleClick(btn.en)"
+            <van-button v-for="(btn,index) in btngroupArr" :key="index" :type="btn.type" @click="handleClick(btn.en)"
             :class="{'btnClasshf':!btn.type && btn.name=='回复','btnClassqt':!btn.type && btn.name!='回复'}">{{btn.name}}</van-button>
 
 
@@ -11,7 +11,7 @@
         <div class="reply-btngroup-more" v-show="show">
             <ul>
                 <li v-for="(btn,index) in btngroup">
-                   <van-button  :key="index" :type="btn.type"
+                   <van-button  :key="index" :type="btn.type" @click="handleClick(btn.en)"
                     :class="{'btnClasshf':!btn.type && btn.name=='回复','btnClassqt':!btn.type && btn.name!='回复'}">{{btn.name}}</van-button>  
                 </li>
             </ul>
@@ -40,28 +40,23 @@ export default {
         btnAuth:{}
     };
   },
-  methods:{
-      hanleClick(){
-
-      }
-  },
   mounted(){
       this.btnAuth = {
-            cb: false,
-            cnsj: false,
+            cb: true,
+            cnsj: true,
             fsxx: false,
-            gb: false,
-            hf: false,
+            gb: true,
+            hf: true,
             qwjjrq: "2019-01-08",
-            sl: false,
+            sl: true,
             sqdyz: false,
-            sqjs: false,
+            sqjs: true,
             xgcrowId: false,
             yyjl: false,
             yyzf: false,
             zdr: false,
             zf: false
-      }
+        }
       this.btnArr.forEach(ele=>{
          ele.show = this.btnAuth[ele.en]
       })  
@@ -80,6 +75,10 @@ export default {
   methods:{
       handleCheckMore(){
          this.show = !this.show;   
+      },
+      handleClick(data){
+          this.$emit('handleClick',data);
+          this.show = false; 
       }
   },
   components: {}
@@ -97,7 +96,7 @@ export default {
 }
 .reply-btngroup-more{
     position: fixed;
-    bottom:5.5vh;
+    bottom:44px;
     ul{
         li{
           width: 100vw;

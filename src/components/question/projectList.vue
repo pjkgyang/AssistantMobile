@@ -77,12 +77,11 @@ import searchInput from "@/components/public/SearchInput.vue";
     }
     .question-projectlist_content{
         height: calc(100vh - 100px);
-        border: 1px solid #000;
         padding: 0.5rem 0;
         section{
             background:#fff;
             padding: 0.633333rem ;
-            border-bottom:1.5px solid #9999;
+            border-bottom:1.5px solid rgb(228, 225, 225);
             .flex(space-between,center);
             .question-projectlist_detail{
                 width: 90%;

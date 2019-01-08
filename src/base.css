@@ -106,6 +106,14 @@ ul{
     font-weight: 700;
     color:#333333;
 }
+.van-radio__input{
+    font-size:16px !important;
+ }
+ /* 问题关闭 */
+ .close-hjgxr .van-field__control{
+   text-align: center;      
+}
+
 /*
 **  我的
 */

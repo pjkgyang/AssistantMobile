@@ -8,9 +8,9 @@
             <van-field required v-model="questionmcData.sfjj" type="textarea" label="是否紧急" placeholder="请选择" is-link rows="1" autosize @click="onClick('sfjj')" />
             <van-field required v-model="questionmcData.cpmc" type="textarea" label="产品" placeholder="请选择" is-link rows="1" autosize @click="onClick('cp')" />
             <van-field required v-model="questionmcData.yxfw" type="textarea" label="影响范围" placeholder="请选择" is-link rows="1" autosize @click="onClick('yxfw')" />
-            <van-field required v-model="questionmcData.bbh" type="textarea"  label="版本号" placeholder="请输入" is-link rows="1" autosize  />
             <van-field required v-model="questionData.cnjsrq" type="textarea" label="承诺结束日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('cnjsrq')" />
-           <van-field required v-model="questionData.bt" type="textarea" label="标题" placeholder="请输入" rows="2" autosize />
+            <van-field required v-model="questionData.bbh" type="textarea"  label="版本号" placeholder="请输入"  rows="1" autosize  />
+            <van-field required v-model="questionData.bt" type="textarea" label="标题" placeholder="请输入" rows="2" autosize />
         </van-cell-group>
 
         <div class="addquestion-detail">
@@ -19,17 +19,13 @@
           </div>
           <div class="detail-content">
              <!-- <uploadImg></uploadImg> -->
-             <van-field style="padding:0"  v-model="questionData.nr" type="textarea"  placeholder="请输入"  rows="4" autosize  />
+             <div class="xq-textarea">
+                <van-field style="padding:0"  v-model="questionData.nr" type="textarea"  placeholder="请输入"  rows="5"  clearable />
+             </div>
           </div>
         </div>
-
-
-<!--         
-          <van-cell-group>
-              <van-field required v-model="questionData.nr" type="textarea" label="详情" placeholder="请输入" is-link rows="4" autosize  />
-         </van-cell-group> -->
-         
        </div> 
+
         <footer>
             <van-button size="normal" type="default" @click="handleClose">取消</van-button>
             <van-button class="commitButton" size="normal" type="primary" @click="handleCommit">提交</van-button>
@@ -47,8 +43,8 @@
         </div>
 
         <!-- <van-actionsheet v-model="wtlxShow" :actions="actions" @select="onSelect"/> -->
-        <van-actionsheet v-model="wtlxShow" title="选择问题类型" >
-           <ul class="actionsheet_list"> 
+        <van-actionsheet v-model="wtlxShow" :title="'选择'+actionSheetTitle" >
+           <ul :class="{'actionsheet_list':true,'height40':type=='wtlx'||type=='cp','height20':type!='wtlx'&&type!='cp'}" > 
                 <li v-for="(value,key) in optionList" @click="handleOnSelect(key,value)">{{value}}</li>
            </ul>
         </van-actionsheet>
@@ -59,7 +55,7 @@
  import projectList from '@/components/question/projectList.vue';
  import datePicker from '@/components/public/DatePicker.vue';
  import { getMenu,getSession,getMyDate} from '@/utils/util.js';
-import uploadImg from '@/components/public/uploadImg';
+ import uploadImg from '@/components/public/uploadImg';
 
 
 export default {
@@ -68,6 +64,7 @@ export default {
       projectlistShow:false,
       pickerKsrqShow:false,
       wtlxShow:false,
+      actionSheetTitle:'',
       actions: [
         {
           name: '选项'
@@ -175,18 +172,23 @@ export default {
       console.log(n)
       switch (n) {
         case 'wtlx':
+          this.actionSheetTitle = '问题类型';
           this.optionList = this.wtlxList;
           break;
         case 'wtjb':
+          this.actionSheetTitle = '问题级别';
           this.optionList = this.wtjbList;
           break;
         case 'sfjj':
+          this.actionSheetTitle = '是否紧急';
           this.optionList = this.sfjjList;
           break;
         case 'yxfw':
+          this.actionSheetTitle = '影响范围';
           this.optionList = this.yxfwList;
           break;
         case 'cp':
+          this.actionSheetTitle = '产品';
           this.optionList = this.cpList;
           break;
         default:
@@ -199,22 +201,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
-  footer{
-      text-align: center;
-      button{
-          width: 48%;
-          border: none;
-          margin: 5vw 0;
-      }
-  }
   .actionsheet_list{
-      height: 35vh;
       overflow-y: auto;
       li{
         color: #575656;
         text-align: center;
-        padding: 0.35555rem 0;
+        padding: 0.45555rem 0;
         font-size: 0.85rem;
       }
   } 
@@ -223,7 +215,10 @@ export default {
    background:#fff;
    padding: 10px 15px;
    .detail-label{
-    width:90px;color:#333;font-size:14px;font-weight:700;
+    width:90px ;
+    color:#333;
+    font-size:14px;
+    font-weight:700;
      &::before{
        content:'*';
        position:absolute;
@@ -234,10 +229,19 @@ export default {
    }
    .detail-content{
      display:flex;
-     flex-direction:column
+     flex-direction:column;
+     .xq-textarea{
+       width:calc(100vw - 120px);
+     }
    }
  }
 
+.height40{
+  height: 35vh;
+}
+.height20{
+  height: 20vh;
+}
 .datePop{
   z-index: 5000;
 }

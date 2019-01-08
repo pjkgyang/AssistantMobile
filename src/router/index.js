@@ -2,10 +2,13 @@ import Vue from 'vue';
 import Router from 'vue-router';
 Vue.use(Router);
 
-// import taskLog from "@/views/task-log.vue"
 import userInfo from "@/components/mine/infoList.vue";
 import addQuestion from "@/views/Question/addQuestion.vue";
 import questionDetail from "@/views/Question/questionDetail.vue";
+import reply from "@/views/Question/reply.vue";
+import closeQuestion from "@/views/Question/questionClose.vue";
+import applyClose from "@/views/Question/applyClose.vue";
+
 
 export default new Router({
   // mode: 'history',
@@ -157,6 +160,24 @@ export default new Router({
         title:'问题详情'
       },
       component: questionDetail
+    },
+    {
+      path: '/reply',
+      name: 'Reply',
+      meta:{title:'问题回复'},
+      component: reply
+    },
+    {
+      path: '/closequestion',
+      name: 'closeQuestion',
+      meta:{title:'关闭问题'},
+      component: closeQuestion
+    },
+    {
+      path: '/applyclose',
+      name: 'applyClose',
+      meta:{title:'申请关闭问题'},
+      component: applyClose
     }
   ]
 })
