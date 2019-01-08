@@ -5,7 +5,7 @@ Vue.use(Router);
 // import taskLog from "@/views/task-log.vue"
 import userInfo from "@/components/mine/infoList.vue";
 import addQuestion from "@/views/Question/addQuestion.vue";
-
+import questionDetail from "@/views/Question/questionDetail.vue";
 
 export default new Router({
   // mode: 'history',
@@ -149,6 +149,14 @@ export default new Router({
         title:'提问'
       },
       component: addQuestion
+    },
+    {
+      path: '/questiondetail',
+      name: 'questionDetail',
+      meta:{
+        title:'问题详情'
+      },
+      component: questionDetail
     }
   ]
 })

@@ -1,3 +1,51 @@
+import Vue from "vue";
+let _this = new Vue();
+
+ // 枚举;
+ export  function getMenu(type,isInterface){
+     var objData = new Promise(function(resolve, reject){
+            _this.$get(WINDOW_CONFIG__BASEURL +'dict/getDictEnum.do',{
+                name:type,
+                isInterface:isInterface||''   
+            }).then(res=>{
+                    if (res.state == "success") {     
+                        if(!!res.data){
+                            resolve(res.data);
+                            sessionStorage.setItem(type,JSON.stringify(res.data));  
+                        }
+                    }
+            });
+    });
+    return objData; 
+    // return _this.$get(WINDOW_CONFIG__BASEURL +'dict/getDictEnum.do',{
+    //     name:type,
+    //     isInterface:isInterface||''   
+    // }).then(res=>{
+    //         if (res.state == "success") {     
+    //             if(!!res.data){
+    //                 sessionStorage.setItem(type,JSON.stringify(res.data));  
+    //             }
+    //         }
+    // });
+    // getResponsibleTaskList({
+    //     name:type,
+    //     isInterface:isInterface||''
+    // }).then(({data})=>{
+    //   if (!!data && data.state == "success") {     
+    //           let map = data.data;
+    //           let Arr = Object.keys(map);
+    //           let McArr = Object.values(map)
+    //           for(var i = 0;i< Arr.length;i++){
+    //               Arrlist.push({
+    //                 label:Arr[i],
+    //                 mc:McArr[i]
+    //               })
+    //             }
+    //         sessionStorage.setItem(type,JSON.stringify(Arrlist));
+    //         delCookie(type);
+    //       }
+    //  })
+ }
 
 
 export function  GetDateStr(DayCount) { 
@@ -256,3 +304,7 @@ export function getCookie(name){
         else 
         return null; 
 } 
+// 获取sesstion
+export function getSession(name) {
+    return JSON.parse(sessionStorage.getItem(name));
+}

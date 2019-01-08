@@ -5,7 +5,10 @@
       "libraryName": "muse-ui",
       "libraryDirectory": "lib",
       "camel2DashComponentName": false
-    }]
+    }],
+    [
+      "transform-runtime"
+    ]
   ],
   "presets":["es2015","stage-3"]
 }

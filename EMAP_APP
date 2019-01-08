@@ -1,0 +1,4 @@
+#emap app properties file
+#Fri Aug 03 09:45:23 CST 2018
+datasource=DB_ETENDER_BIZ_BASE
+parent=assistantauth

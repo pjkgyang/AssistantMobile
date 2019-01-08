@@ -1,9 +1,9 @@
 <template>
 <div>
-  <div class="assistant-question" v-if="false">
+  <div class="assistant-question" >
     <div class="weekReport-top-filter">
         <div class="weekReport-filter--input">
-            <searchInput :place="'搜索学校/项目编号/项目名称/合同编号/项目经理'"></searchInput>
+            <searchInput :place="'搜索学校/项目编号/项目名称/合同编号/问题编号'"></searchInput>
         </div>
         <div class="weekReport-filter--tabs">
             <span @click="hanldeSearchWtfl" >
@@ -18,20 +18,20 @@
               <span>{{sqgbText}}</span>
             </span>
             丨
-          <span class="filter_more"> 
-              <a href="javaScript:;;">更多筛选</a>
+          <span class="filter_more" @click="handleCheckFilter"> 
+              <a href="javaScript:;;" >更多筛选</a>
           </span>
         </div>
       </div>
 
       <div>
-        <questionlist></questionlist>
+        <questionlist @handleCheckDetail="handleCheckDetail"></questionlist>
       </div>
 
       <!-- 添加问题 -->
       <addButton @handleAdd="handleAddQuestion" :bottom="'18vw'"></addButton>
       <!-- 筛选条件 -->
-      <filterCondition :show="false"></filterCondition>
+      <filterCondition :show="filterShow" @handleClose="handleCheckFilter"></filterCondition>
 
       <van-popup v-model="wtflPopshow" position='bottom' >
         <van-picker show-toolbar title="问题分类" :columns="wtflList" @cancel="handleCancel" @confirm="hadnleWtflConfirm" />
@@ -43,7 +43,7 @@
         <van-picker show-toolbar title="申请关闭" :columns="sqgbList" @cancel="handleCancel" @confirm="hadnleSqgbConfirm" />
       </van-popup>
   </div>
-  <develop></develop>
+  <!-- <develop></develop> -->
  </div>
 </template>
 
@@ -61,6 +61,7 @@
        wtflPopshow:false,
        wtztPopshow:false,
        sqgbPopshow:false,
+       filterShow:false,//更多筛选
        wtflList:['全部','我的提问','待我解决问题','我相关的问题','我受理过的问题','待我受理的问题'],
        wtztList:['全部','处理中','已关闭'],
        sqgbList:['全部','否','是'],
@@ -74,6 +75,11 @@
      }
    },
    methods:{
+    //  查看问题详情
+     handleCheckDetail(params){
+       this.$router.push({path:'questiondetail',query:{}})
+     },
+
     //  关闭pop
      handleCancel(){
        this.wtflPopshow = this.wtztPopshow = this.sqgbPopshow = false;
@@ -109,7 +115,11 @@
        this.sqgb = values==0?'':values-1
        this.sqgbPopshow = !this.sqgbPopshow
      },
-
+     // 更多筛选(取消筛选)
+     handleCheckFilter(){
+       this.filterShow = !this.filterShow;
+     },
+    // 添加问题；
      handleAddQuestion(){
        this.$router.push({path:'/addquestion'});
      }
@@ -144,7 +154,7 @@
   }
   .filter_more{
     a{
-       color: @baseColor !important;
+       color: #999999 !important;
     }
   }
 }

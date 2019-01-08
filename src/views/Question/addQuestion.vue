@@ -8,13 +8,27 @@
             <van-field required v-model="questionmcData.sfjj" type="textarea" label="是否紧急" placeholder="请选择" is-link rows="1" autosize @click="onClick('sfjj')" />
             <van-field required v-model="questionmcData.cpmc" type="textarea" label="产品" placeholder="请选择" is-link rows="1" autosize @click="onClick('cp')" />
             <van-field required v-model="questionmcData.yxfw" type="textarea" label="影响范围" placeholder="请选择" is-link rows="1" autosize @click="onClick('yxfw')" />
-            <van-field required v-model="questionmcData.bbh" type="textarea" label="版本号" placeholder="请选择" is-link rows="1" autosize @click="onClick('bbh')" />
-            <van-field required v-model="questionData.cnjsrq" type="textarea" label="承诺结束日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('bbh')" />
-           <van-field required v-model="questionData.bt" type="textarea" label="标题" placeholder="请选择" is-link rows="3" autosize />
+            <van-field required v-model="questionmcData.bbh" type="textarea"  label="版本号" placeholder="请输入" is-link rows="1" autosize  />
+            <van-field required v-model="questionData.cnjsrq" type="textarea" label="承诺结束日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('cnjsrq')" />
+           <van-field required v-model="questionData.bt" type="textarea" label="标题" placeholder="请输入" rows="2" autosize />
         </van-cell-group>
-         <van-cell-group>
-            <van-field required v-model="questionData.nr" type="textarea" label="详情" placeholder="请选择" is-link rows="3" autosize  />
-         </van-cell-group>
+
+        <div class="addquestion-detail">
+          <div class="detail-label">
+             <span>详情</span>
+          </div>
+          <div class="detail-content">
+             <!-- <uploadImg></uploadImg> -->
+             <van-field style="padding:0"  v-model="questionData.nr" type="textarea"  placeholder="请输入"  rows="4" autosize  />
+          </div>
+        </div>
+
+
+<!--         
+          <van-cell-group>
+              <van-field required v-model="questionData.nr" type="textarea" label="详情" placeholder="请输入" is-link rows="4" autosize  />
+         </van-cell-group> -->
+         
        </div> 
         <footer>
             <van-button size="normal" type="default" @click="handleClose">取消</van-button>
@@ -26,22 +40,33 @@
           <projectList @handleClose="handleCloseXMPop" @handleChooseItem="handleChooseItem"></projectList>
         </van-popup>
 
+        <div class="datePop">
+          <van-popup v-model="pickerKsrqShow">
+            <datePicker @handleChangeDatePicker="handleChangeDate"></datePicker>
+          </van-popup>
+        </div>
+
         <!-- <van-actionsheet v-model="wtlxShow" :actions="actions" @select="onSelect"/> -->
         <van-actionsheet v-model="wtlxShow" title="选择问题类型" >
-           <section class="actionsheet_list"> 
-              <p v-for="item in actions" @click="handleOnSelect(item)">{{item.name}}</p>
-           </section>
+           <ul class="actionsheet_list"> 
+                <li v-for="(value,key) in optionList" @click="handleOnSelect(key,value)">{{value}}</li>
+           </ul>
         </van-actionsheet>
     </div>
 </template>
 
 <script>
- import projectList from '@/components/question/projectList.vue'
+ import projectList from '@/components/question/projectList.vue';
+ import datePicker from '@/components/public/DatePicker.vue';
+ import { getMenu,getSession,getMyDate} from '@/utils/util.js';
+import uploadImg from '@/components/public/uploadImg';
+
 
 export default {
   data() {
     return {
       projectlistShow:false,
+      pickerKsrqShow:false,
       wtlxShow:false,
       actions: [
         {
@@ -71,16 +96,25 @@ export default {
         wtjb:'',
         sfjj:'',
         yxfw:'',
-        cpmc:''
       },
 
-      type:''//记录选择cell
+      type:'',//记录选择cell
+      optionList:{},//列表数据
+      cpList:{},//产品
+      wtlxList:{},//问题类型
+      wtjbList:{0:'不严重',1:'一般',2:'严重'},//问题级别
+      sfjjList:{0:'否',1:'是'},//是否紧急
+      yxfwList:{0:'影响局部',1:'影响整体'},//影响范围
+      sgbugList:{0:'否',1:'是'},//是否bug
     };
   },
   methods:{
-   onClick(params){
+   onClick(params,e){
+     document.activeElement.blur();
      if(params=='xm'){
        this.projectlistShow = true;
+     }else if(params=='cnjsrq'){
+       this.pickerKsrqShow = true;
      }else{
        this.wtlxShow = true;    
        this.type = params;
@@ -101,17 +135,66 @@ export default {
      this.$router.go(-1);
    },
    // 选择
-   handleOnSelect(item){
-     console.log(item);
-     this.questionmcData.wtlx = item.name;
+   handleOnSelect(key,value){
+     this.questionmcData.wtlx = value;
      this.wtlxShow = false;
    },
-
+   //  选择日期
+   handleChangeDate(data){
+     this.questionData.cnjsrq = getMyDate(data);
+     this.pickerKsrqShow = false;
+   },
    handleCommit(){
 
+   },
+
+  // 获取枚举
+   getDictEnum(){
+    if(!getSession('kycp')){
+      getMenu('kycp',true).then(data=>{
+          this.cpList = data;
+        });
+      }else{
+        this.cpList = getSession('kycp');
+      } 
+
+      if(!getSession('ProblemType')){
+      getMenu('ProblemType','').then(data=>{
+        this.wtlxList = data;
+        });
+      }else{
+        this.wtlxList = getSession('ProblemType');
+      } 
    }
   },
-  components: {projectList}
+  mounted(){
+    this.getDictEnum();
+  },
+  watch:{
+    type(n,o){
+      console.log(n)
+      switch (n) {
+        case 'wtlx':
+          this.optionList = this.wtlxList;
+          break;
+        case 'wtjb':
+          this.optionList = this.wtjbList;
+          break;
+        case 'sfjj':
+          this.optionList = this.sfjjList;
+          break;
+        case 'yxfw':
+          this.optionList = this.yxfwList;
+          break;
+        case 'cp':
+          this.optionList = this.cpList;
+          break;
+        default:
+          break;
+      }
+    }
+  },
+  components: {projectList,getMenu,datePicker,uploadImg}
 };
 </script>
 
@@ -126,16 +209,36 @@ export default {
       }
   }
   .actionsheet_list{
-      min-height: 20vh;
-      max-height: 35vh;
+      height: 35vh;
       overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      p{
-        color: #999999;
+      li{
+        color: #575656;
         text-align: center;
-        padding: 0.25555rem 0;
+        padding: 0.35555rem 0;
+        font-size: 0.85rem;
       }
   } 
+ .addquestion-detail{
+   display:flex;
+   background:#fff;
+   padding: 10px 15px;
+   .detail-label{
+    width:90px;color:#333;font-size:14px;font-weight:700;
+     &::before{
+       content:'*';
+       position:absolute;
+       left: 7px;
+       font-size:14px;
+       color: #f44;
+     }
+   }
+   .detail-content{
+     display:flex;
+     flex-direction:column
+   }
+ }
+
+.datePop{
+  z-index: 5000;
+}
 </style>
