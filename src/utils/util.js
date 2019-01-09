@@ -17,35 +17,24 @@ let _this = new Vue();
             });
     });
     return objData; 
-    // return _this.$get(WINDOW_CONFIG__BASEURL +'dict/getDictEnum.do',{
-    //     name:type,
-    //     isInterface:isInterface||''   
-    // }).then(res=>{
-    //         if (res.state == "success") {     
-    //             if(!!res.data){
-    //                 sessionStorage.setItem(type,JSON.stringify(res.data));  
-    //             }
-    //         }
-    // });
-    // getResponsibleTaskList({
-    //     name:type,
-    //     isInterface:isInterface||''
-    // }).then(({data})=>{
-    //   if (!!data && data.state == "success") {     
-    //           let map = data.data;
-    //           let Arr = Object.keys(map);
-    //           let McArr = Object.values(map)
-    //           for(var i = 0;i< Arr.length;i++){
-    //               Arrlist.push({
-    //                 label:Arr[i],
-    //                 mc:McArr[i]
-    //               })
-    //             }
-    //         sessionStorage.setItem(type,JSON.stringify(Arrlist));
-    //         delCookie(type);
-    //       }
-    //  })
  }
+// 通过code获取名称
+ export  function getMenuByCode(type,code,isInterface){
+    var codeData = new Promise(function(resolve, reject){
+           _this.$get(WINDOW_CONFIG__BASEURL +'dict/getDictEnum.do',{
+               name:type,
+               code:code,
+               isInterface:isInterface||''   
+           }).then(res=>{
+                   if (res.state == "success") {     
+                       if(!!res.data){
+                           resolve(res.data);
+                       }
+                   }
+           });
+   });
+   return codeData; 
+}
 
 
 export function  GetDateStr(DayCount) { 

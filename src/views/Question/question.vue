@@ -3,29 +3,41 @@
   <div class="assistant-question" >
     <div class="weekReport-top-filter">
         <div class="weekReport-filter--input">
-            <searchInput :place="'搜索学校/项目编号/项目名称/合同编号/问题编号'"></searchInput>
+            <searchInput @handleSearchKeyword="handleSearchKeyword" :place="'搜索学校/项目编号/项目名称/合同编号/问题编号'"></searchInput>
         </div>
         <div class="weekReport-filter--tabs">
             <span @click="hanldeSearchWtfl" >
-              <span>{{wtflText}}</span>
+              <span>{{wtflText}}</span>&nbsp;&nbsp;<van-icon name="arrow" />
             </span>
             丨
             <span @click="hanldeSearchWtzt" >
-              <span>{{WtztText}}</span>
+              <span>{{WtztText}}</span>&nbsp;&nbsp;<van-icon name="arrow" />
             </span>
             丨
             <span @click="hanldeSearchSqgb">
-              <span>{{sqgbText}}</span>
+              <span>{{sqgbText}}</span>&nbsp;&nbsp;<van-icon name="arrow" />
             </span>
             丨
           <span class="filter_more" @click="handleCheckFilter"> 
-              <a href="javaScript:;;" >更多筛选</a>
+              <a href="javaScript:;;" >更多筛选 &nbsp;<mu-icon size="14" value="filter_list"></mu-icon></a>
           </span>
         </div>
       </div>
+      
+      <!-- 问题列表 -->
+      <div class="layout-scroll">
+        <mu-container ref="container" class="demo-loadmore-content" >
+          <mu-load-more @refresh="refresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
+            <div class="layout-scroll-center">
+                <questionlist :questionList="questionList" @handleCheckDetail="handleCheckDetail"></questionlist>
+            </div>
+          </mu-load-more>
+          <p v-if="finished && !!questionList.length" class="empty-content-tip">没有更多数据了</p>
+        </mu-container>
 
-      <div>
-        <questionlist @handleCheckDetail="handleCheckDetail"></questionlist>
+        <div v-if="!questionList.length && !$store.state.loadingShow">
+          <emptyContent></emptyContent>
+        </div>
       </div>
 
       <!-- 添加问题 -->
@@ -53,7 +65,7 @@
  import questionlist from '@/components/question/questionlist.vue';
  import addButton from '@/components/public/addButton';
  import filterCondition from '@/components/public/filterCondition'
-
+import emptyContent from "@/components/public/empty-content.vue";
 
  export default {
    data () {
@@ -65,21 +77,31 @@
        wtflList:['全部','我的提问','待我解决问题','我相关的问题','我受理过的问题','待我受理的问题'],
        wtztList:['全部','处理中','已关闭'],
        sqgbList:['全部','否','是'],
-       wtfl:'',
-       wtzt:'0',
-       sqgb:'',
+       wtfl:'',//问题分类
+       wtzt:'0',//问题状态
+       sqgb:'', //申请关闭
+       keyword:'',
        wtflText:'问题分类',
        WtztText:'处理中',
        sqgbText:'申请关闭',
-       cpText:'产品'
+       cpText:'产品',
+       currentPage:1,
+       pageSize:10,
+       questionList:[],
+       isLoading:false,
+       loading:false,
+       finished:false,
+
      }
+   },
+   mounted(){
+     this.init();
    },
    methods:{
     //  查看问题详情
      handleCheckDetail(params){
-       this.$router.push({path:'questiondetail',query:{}})
+       this.$router.push({path:'questiondetail',query:{wid:params.wid}})
      },
-
     //  关闭pop
      handleCancel(){
        this.wtflPopshow = this.wtztPopshow = this.sqgbPopshow = false;
@@ -91,10 +113,11 @@
      },
      hadnleWtflConfirm(picker,values){
        this.wtflText = picker;
-       this.wtfl = values==0?'':values-1
-       this.wtflPopshow = !this.wtflPopshow
-
+       this.wtfl = values==0?'':values-1;
+       this.wtflPopshow = !this.wtflPopshow;
+       this.init();
      },
+
      //  问题状态确定
      hanldeSearchWtzt(){
         this.wtztPopshow = true;
@@ -102,9 +125,11 @@
      },
      hadnleWtztConfirm(picker,values){
        this.WtztText = picker;
-       this.wtzt = values==0?'':values-1
-       this.wtztPopshow = !this.wtztPopshow
+       this.wtzt = values==0?'':values-1;
+       this.wtztPopshow = !this.wtztPopshow;
+       this.init();
      },
+
      //  申请关闭确定
      hanldeSearchSqgb(){
         this.sqgbPopshow = true;
@@ -113,18 +138,87 @@
      hadnleSqgbConfirm(picker,values){
        this.sqgbText = picker;
        this.sqgb = values==0?'':values-1
-       this.sqgbPopshow = !this.sqgbPopshow
+       this.sqgbPopshow = !this.sqgbPopshow;
+       this.init();
      },
      // 更多筛选(取消筛选)
      handleCheckFilter(){
        this.filterShow = !this.filterShow;
      },
-    // 添加问题；
+    // 添加问题
      handleAddQuestion(){
        this.$router.push({path:'/addquestion'});
+     },
+
+/**
+ *   问题列表操作
+ */
+    // 关键字查询
+    handleSearchKeyword(val){
+      this.keyword = val;
+      this.init();
+    },
+    // 上啦刷新
+    refresh () {
+      this.isLoading = true;
+      this.$refs.container.scrollTop = 0;
+      setTimeout(() => {
+        this.init();
+      }, 1500)
+    },
+    // 异步更新数据
+    onLoad() {
+      this.loading = true;
+      setTimeout(() => {
+        this.getQuestionList();
+      }, 800);
+    },
+    // 上拉刷新初始化
+    init() {
+      this.currentPage = 1;
+      this.questionList = [];
+      this.$store.dispatch("chnageLoing", true);
+      this.getQuestionList();
+    },
+    //  获取问题列表
+     getQuestionList(){
+       this.$get(this.API.queryAllQuestions,{
+         curPage:this.currentPage,
+         pageSize:this.pageSize,
+         zt:this.wtzt,//问题状态
+         wtfl:this.wtfl,
+         sqgb:this.sqgb,
+         cp:'',
+         keyword:this.keyword
+       }).then(res=>{
+         if (res.state == "success") {
+          this.$store.dispatch("chnageLoing", false);
+          this.total = res.data.total;
+          if (this.isLoading || this.currentPage == 1) {
+            this.questionList = res.data.rows;
+          } else {
+            this.questionList = this.questionList.concat(res.data.rows);
+          }
+          if(!res.data.rows){
+            this.questionList = [];
+          }
+          // 加载状态结束
+          this.loading = false;
+          this.isLoading = false;
+          if (this.currentPage >= this.total) {
+             this.finished = true;
+          }else{
+             this.finished = false;
+          }
+          this.currentPage += 1;
+        } else {
+          this.$store.dispatch("chnageLoing", false);
+          this.$toast(!res.msg?'系统超时，请稍后再试~':res.msg);
+        }
+       })
      }
    },
-   components: {develop,searchInput,questionlist,addButton,filterCondition}
+   components: {develop,searchInput,questionlist,addButton,filterCondition,emptyContent}
  }
 </script>
 
@@ -155,7 +249,11 @@
   .filter_more{
     a{
        color: #999999 !important;
+       .flex(@col:center)
     }
+  }
+  .van-icon{
+    transform: rotate(90deg);
   }
 }
 

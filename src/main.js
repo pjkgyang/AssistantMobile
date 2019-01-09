@@ -16,6 +16,7 @@ import 'vant/lib/index.css';
 Vue.use(Vant);
 
 
+
 import Helpers from 'muse-ui/lib/Helpers';
 Vue.use(Helpers);
 import { Button, Select,Picker,Icon,BottomNav,TextField,LoadMore} from 'muse-ui';

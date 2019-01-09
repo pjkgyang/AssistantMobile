@@ -1,7 +1,7 @@
 <template>
  <div>
      <van-popup v-model="show" position="right" >
-         <div  class="filter-pop">
+       <div  class="filter-pop">
         <div class="assistant-filtercondition">
            <section v-for="(filter,index) in filterList">
                <h5>{{filter.name}}</h5>
@@ -74,9 +74,10 @@
 @import '../../index.less';
 .filter-pop{
     background: #F2F3F5;
+    height: 100vh;
 }
 .assistant-filtercondition{
-    height: 90vh;
+    height:calc(100vh - 68px);
     width: 90vw;
     background: #fff;
     h5{
@@ -91,13 +92,5 @@
         }
     }
 }
-  footer{
-      text-align: center;
-      height: 10vh;
-      button{
-          width: 48%;
-          border: none;
-          margin: 5vw 0;
-      }
-  }
+
 </style>

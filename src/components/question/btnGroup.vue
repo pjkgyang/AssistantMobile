@@ -33,6 +33,7 @@ export default {
             {name:'申请关闭',type:'',en:'sqjs'},
             {name:'转发问题',type:'',en:'zf'},
             {name:'修改承诺时间',type:'',en:'cnsj'},
+            {name:'关联开发任务',type:'',en:'xgcrowId'},
         ],
         btngroup:[],//记录btn
         btngroupArr:[],
@@ -51,11 +52,11 @@ export default {
             sl: true,
             sqdyz: false,
             sqjs: true,
-            xgcrowId: false,
+            xgcrowId: true,
             yyjl: false,
             yyzf: false,
             zdr: false,
-            zf: false
+            zf: true
         }
       this.btnArr.forEach(ele=>{
          ele.show = this.btnAuth[ele.en]
@@ -97,12 +98,15 @@ export default {
 .reply-btngroup-more{
     position: fixed;
     bottom:44px;
+    width: 100vw;
     ul{
+        width: 33.33333%;
+        float: right;
+        box-shadow: 0 0 5px rgb(211, 203, 203);
         li{
-          width: 100vw;
-          text-align: right;
+          width: 100%;
           button{
-              width: 33.33333%;
+              width:100%;
               margin-bottom: 0.12222rem;
           }
         }

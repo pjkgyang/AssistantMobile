@@ -1,32 +1,33 @@
-<template>
+<template> 
  <div class="questionDetail" >
-   <div class="questionDetail-top">
+   <div class="questionDetail-top" @scroll="handleScroll" ref="questionDetail">
      <section class="questionDetail-desc">
           <div class="questionDetail-detail">
-           <h4>消息中心配置前置代理时发现</h4>
+           <h4>{{questionData.bt}}</h4>
             <div class="questionDetail-desc-info">
               <div class="questionDetail-desc-tag">
-                  <van-tag round  color="#F0871E">已申请关闭</van-tag>
+                  <van-tag round  color="#F0871E" v-if="questionData.sqgbCount > 0 && questionData.fbzt != 1">已申请关闭</van-tag>
                   <van-tag round  color="#29BE1E">总部工程专家受理</van-tag>
+                  <a href="javaScript:;;" @click="handleCheckProcess(questionData.wid)">查看问题进度 ></a>
                 </div>
-                <p>问题编号：<span>jz181100997</span></p>
-                <p>提问时间：<span>2018.04.08 12:00:00</span></p>
-                <p>发布人：<span>李俊</span></p>
-                <p>所属单位：<span>江苏金智教育信息股份有限公司</span></p>
-                <p>所属项目：<span>华东理工大学OA系统</span></p>
-                <p>问题类型：<span>使用操作</span></p>
-                <p>产品：<span>消息中心</span></p>
-                <p>期望解决日期：<span>2018-11-14</span></p>
-                <p>承诺结束日期：<span>无</span></p>
+                <p>问题编号：<span>{{questionData.wtbh}}</span></p>
+                <p>提问时间：<span>{{questionData.fbrq}}</span></p>
+                <p>发布人：<span>{{questionData.fbrxm}}</span></p>
+                <p>所属单位：<span>{{questionData.ssbm}}</span></p>
+                <p>所属项目：<span>{{questionData.xmmc}}</span></p>
+                <p>问题类型：<span>{{questionData.wtlx_display}}</span></p>
+                <p>产品：<span>{{questionData.cpmc}}</span></p>
+                <p>期望解决日期：<span>{{questionData.qwjjrq}}</span></p>
+                <p>承诺结束日期：<span>{{questionData.cnjsrq}}</span></p>
             </div> 
           </div>
           <div class="questionDetail-desc-nr">
-             <h4>问题</h4>
-             <div class="question-content">内容</div>
+             <div class="question-content" v-html="questionData.nr">内容</div>
           </div>
-      </section >
+      </section>
+      <!-- 回复列表 -->
       <section class="questionDetail-reply">
-        <replyList></replyList>
+        <replyList :replyData="replyData"></replyList>
       </section>
     </div>
 
@@ -49,7 +50,8 @@
             <van-button class="commitButton" size="normal" type="primary" @click="handleCommit">提交</van-button>
         </footer> 
       </div>  
-    </van-actionsheet>    
+    </van-actionsheet>   
+
     <div class="datePop">
         <van-popup v-model="pickerKsrqShow">
           <datePicker @handleChangeDatePicker="handleChangeDate"></datePicker>
@@ -61,6 +63,13 @@
           <cbrylist :show="cbryShow" @handleClose="handleClose" @handleChooseCbry="handleChooseCbry"></cbrylist>
         </van-popup>
     </div>
+
+  <!-- <mu-fade-transition>
+    <aside v-if="scrollTop > 350">
+      <h4>{{questionData.bt}}</h4>
+      <p>发布人：<span>{{questionData.fbrxm}}</span>&#x3000;{{questionData.fbrq}}</p>
+    </aside>
+  </mu-fade-transition> -->
  </div>
 </template>
 
@@ -68,7 +77,7 @@
  import replyList from '@/components/question/replyList';
  import btnGroup from '@/components/question/btnGroup';
  import datePicker from '@/components/public/DatePicker';
- import { getMyDate} from '@/utils/util.js';
+ import { getMyDate,getMenuByCode} from '@/utils/util.js';
  import cbrylist from '@/components/question/cbryList';
 
  export default {
@@ -80,7 +89,7 @@
         curOperate:'', //当前按钮
         dateType:'',
         operateTitle:'',
-
+        questionData:{},//单个问题详情
         // 修改（承诺结束日期,受理）
         formData:{
             cnjsrq:'',
@@ -89,18 +98,32 @@
             rymc:'',
             rybh:''
         },
+        replyData:[],//回复列表
+        scrollTop:''
      }
    },
+   mounted(){
+     this.queryQuestion();
+     this.queryAnswers();
+   },
    methods:{
+     handleScroll(){
+       this.scrollTop = this.$refs.questionDetail.scrollTop
+     },
+    //  查看问题进度
+     handleCheckProcess(data){
+       this.$router.push({name:'QuestionProcess',query:{wid:data},params:{data:this.questionData}});
+     },
+    //  按钮操作
      handleClick(data){
         console.log(data);
         if(data=='cnsj'||data=='cb'){
           this.curOperate = data;
           this.operateShow = !this.operateShow;
           if(data=='cnsj'){
-            this.operateTitle = '修改承诺结束日期'
+            this.operateTitle = '修改承诺结束日期';
           }else{
-            this.operateTitle = '催办'
+            this.operateTitle = '催办';
           }
         }else if(data=='hf'){
           this.$router.push({path:'/reply'});
@@ -159,10 +182,43 @@
        this.formData.rybh = bhArr.join(',');
        console.log(this.formData);
        this.cbryShow = false;
+     },
+     
+     // 获取单个问题
+     queryQuestion(){
+       this.$get(this.API.queryQuestion,{
+         wid:this.$route.query.wid
+       }).then(res=>{
+         if(res.state == 'success'){
+           this.questionData = res.data
+           this.getCode(res.data.wtlb);
+         }else{
+           this.$toast(!res.msg?'系统超时，请稍后再试~':res.msg);
+         }
+       })
+     },
+    
+    // 获取回复列表
+    queryAnswers(){
+      this.$get(this.API.queryAnswers,{
+        wid:this.$route.query.wid,
+        isSolution:''
+      }).then(res=>{
+        if(res.state == 'success'){
+          this.replyData = res.data
+        }else{
+          this.$toast(!res.msg?'系统超时，请稍后再试~':res.msg);
+        }
+      })
+    },
+    //  通过code获取名称
+     getCode(code){
+       getMenuByCode('ProblemType',code).then(data=>{
+         this.questionData.wtlx_display = data
+       })
      }
    },
    watch:{
-      // 
       operateShow(n,o){
         this.formData.rymc = this.formData.rybh = this.formData.sm = this.formData.cnjsrq = this.formData.qwjjrq = '';
       }
@@ -173,8 +229,9 @@
 
 <style lang="less" scoped>
 @import '../../index.less';
+
 .questionDetail-top{
-  height:calc(100vh - 46px);
+  height:calc(100vh - 50px);
   overflow-y: auto;
   .questionDetail-desc{
   background: #fff;
@@ -185,6 +242,9 @@
       font-size: @fontSize12;
       .questionDetail-desc-tag{
         margin: 0.5rem 0;
+        a{
+          float:right;
+        }
       }
     }
     p{
@@ -194,15 +254,11 @@
       }
     }
   }
-
   // 问题内容
     .questionDetail-desc-nr{
-      padding:1rem  1.25rem ;
-      h4{
-        color: #E93546;
-      }
+      padding:0.75rem  1.25rem ;
       .question-content{
-        font-size:@fontSize14;
+        font-size:0.85rem;
       }
     }
   }
@@ -216,16 +272,26 @@
     bottom: 0;
   }
 }
-
-
-
 .questionDetail-bottom{
   position: absolute;
   bottom:0;
 }
 .questionDetail-reply{
-  // background: #fff; 
-  // padding:0.5rem  1.25rem ;
   margin: 0.5rem 0 0 0;
 }
+// aside{
+//   padding: 0.5rem 1rem;
+//   position: fixed;
+//   top: 0;
+//   background: #fff;
+//   width: 100%;
+//   box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+//   p{
+//      font-size: @fontSize12;
+//       color: #999999;
+//       span{
+//         color: #333;
+//       }
+//     }
+// }
 </style>

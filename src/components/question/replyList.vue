@@ -1,16 +1,23 @@
 <template>
     <div>
         <section class="quesiton-reply" v-for="reply in replyData">
-            <div>
-                <van-tag size="large" :color="reply.hflx == 3?'rgb(255, 68, 68)':'#007AFF'">
-                    {{reply.hflx == 1?'回复':reply.hflx == 2?'转发问题':reply.hflx == 3?'申请关闭':reply.hflx == 4?'受理':reply.hflx == 5?'取消':reply.hflx == 6?'指定责任人':reply.hflx == 7?'催办':reply.hflx == 99?'运营记录':reply.hflx == 10?'申请待验证':reply.hflx == 11?'标签':reply.hflx == 12?'集成':reply.hflx == 13?'运营':'开发'}}
-                </van-tag>
+            <div class="reply-state"> 
+                <div>
+                  <van-tag size="large" :color="reply.hflx == 3?'rgb(255, 68, 68)':'rgb(57, 147, 243)'">
+                      {{reply.hflx == 1?'回复':reply.hflx == 2?'转发问题':reply.hflx == 3?'申请关闭':reply.hflx == 4?'受理':reply.hflx == 5?'取消':reply.hflx == 6?'指定责任人':reply.hflx == 7?'催办':reply.hflx == 99?'运营记录':reply.hflx == 10?'申请待验证':reply.hflx == 11?'标签':reply.hflx == 12?'集成':reply.hflx == 13?'运营':'开发'}}
+                  </van-tag>
+                </div>
+                <div>
+                  <van-tag   type="success">{{reply.lcbh==''?'无':reply.lcbh}}</van-tag>
+                </div>
             </div>
             <div class="reply-header">
                 <p class="fontColorb">
-                    <span>{{reply.hfrxm}}&#x3000;</span>
-                    <van-tag round type="success">{{reply.lcbh==''?'无':reply.lcbh}}</van-tag>&#x3000;
-                    <span>{{reply.cjsj}}</span><br>
+                    <span>{{reply.fbrxm}}&#x3000;</span>
+                    <span>{{reply.fbsj}}</span>
+                    <!-- 申请关闭 驳回 -->
+                    <span v-if="reply.hflx == 3" class="floatRight"><van-button size="mini" type="danger">驳回</van-button></span>
+                    <br>
                 </p>
                 <p class="fontColorg" v-if="reply.hflx == 4">
                     承诺结束日期：{{reply.cnjsrq}}&#x3000;工时：{{!reply.gs?0:reply.gs}}
@@ -106,6 +113,9 @@ export default {
       color: #999999;
       font-size: @fontSize12;
     }
+  }
+  .reply-state{
+    .flex(space-between);
   }
 
   .reply-content {

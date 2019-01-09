@@ -8,6 +8,7 @@ import questionDetail from "@/views/Question/questionDetail.vue";
 import reply from "@/views/Question/reply.vue";
 import closeQuestion from "@/views/Question/questionClose.vue";
 import applyClose from "@/views/Question/applyClose.vue";
+import questionProcess from "@/views/Question/questionProcess.vue";
 
 
 export default new Router({
@@ -178,6 +179,12 @@ export default new Router({
       name: 'applyClose',
       meta:{title:'申请关闭问题'},
       component: applyClose
+    },
+    {
+      path: '/questionProcess',
+      name: 'QuestionProcess',
+      meta:{title:'问题进度'},
+      component: questionProcess
     }
   ]
 })

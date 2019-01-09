@@ -6,8 +6,6 @@ export default {
     verifyCode:WINDOW_CONFIG__BASEURL +'verify/verifyCode.do',//校验验证码
     getDictEnum:WINDOW_CONFIG__BASEURL +'dict/getDictEnum.do',//获取枚举
 
-
-
     getLoginUser:WINDOW_CONFIG__BASEURL +'sys/getLoginUser.do',
     wxLogin:WINDOW_CONFIG__BASEURL +'wx/wxLogin.do',  //微信登录
     queryLogTaskProcess:WINDOW_CONFIG__BASEURL +'process/queryLogTaskProcess.do',//日报过程
@@ -49,4 +47,24 @@ export default {
     deleteWeekQuestion:WINDOW_CONFIG__BASEURL +'plan/deleteWeekQuestion.do',//删除问题
     isWeekPlanBlocked:WINDOW_CONFIG__BASEURL +'plan/isWeekPlanBlocked.do',//是否封存
 
+    // 问题
+    queryAllQuestions:WINDOW_CONFIG__BASEURL +'question/queryAllQuestions.do',//获取问题列表
+    showQuestionCondition:WINDOW_CONFIG__BASEURL +'question/showQuestionCondition.do',//问题展示条件
+    queryQuestion:WINDOW_CONFIG__BASEURL +'question/queryQuestion.do',//获取单个问题
+    queryAnswers:WINDOW_CONFIG__BASEURL +'question/queryAnswers.do',//获取回复列表
+    saveQuestion:WINDOW_CONFIG__BASEURL +'question/saveQuestion.do',//保存问题
+    closeQuestion:WINDOW_CONFIG__BASEURL +'question/closeQuestion.do',//关闭问题
+    queryrReferenceHour:WINDOW_CONFIG__BASEURL +'question/queryrReferenceHour.do',//获取工时
+    queryrHfHour:WINDOW_CONFIG__BASEURL +'question/queryrHfHour.do',//获取回复工时
+    queryContributionPeople:WINDOW_CONFIG__BASEURL +'question/queryContributionPeople.do',//获取问题贡献人
+    queryBtnAuth:WINDOW_CONFIG__BASEURL +'question/queryBtnAuth.do',//获取按钮权限
+    queryProcess:WINDOW_CONFIG__BASEURL +'question/queryProcess.do',//获取问题进度
+    saveAnswer:WINDOW_CONFIG__BASEURL +'question/saveAnswer.do',//回复/催办问题
+    showCbCondition:WINDOW_CONFIG__BASEURL +'question/showCbCondition.do',//获取催办条件
+    queryCbRy:WINDOW_CONFIG__BASEURL +'question/queryCbRy.do',//获取催办人员
+    changeCommitmentDate:WINDOW_CONFIG__BASEURL +'question/changeCommitmentDate.do',//修改承诺结束时间
+    customerQuestion:WINDOW_CONFIG__BASEURL +'question/customerQuestion.do',//受理
+    canSubmitQuestion:WINDOW_CONFIG__BASEURL +'question/canSubmitQuestion.do',//是否可以提问
+    canApplyClose:WINDOW_CONFIG__BASEURL +'question/canApplyClose.do',//是否可以申请关闭
+    canClose:WINDOW_CONFIG__BASEURL +'question/canClose.do',//问题是否可以关闭
 }

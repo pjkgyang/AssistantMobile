@@ -6,7 +6,7 @@
             <van-field required v-model="questionmcData.sfjj" type="textarea" label="是否紧急" placeholder="请选择" is-link rows="1" autosize @click="onClick('sfjj')" />
             <van-field required v-model="questionmcData.sfbug" type="textarea" label="是否bug" placeholder="请选择" is-link rows="1" autosize @click="onClick('sfbug')" />
             <van-field required v-model="questionData.gs" type="textarea" label="工时" placeholder="请输入" rows="1" autosize />
-            <van-field required v-model="questionData.bt" type="textarea" label="关闭说明" placeholder="请输入" rows="2"  />
+            <van-field required v-model="questionData.bt" type="textarea" label="关闭说明" placeholder="请输入" rows="5"  />
         </van-cell-group>
 
         <footer>

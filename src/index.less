@@ -25,6 +25,9 @@
     align-items: @col;
     flex-direction: @column;
 }
+.floatRight{
+    float:right;
+}
 .textalign(@type:center){
     text-align: @type
 }
@@ -73,4 +76,22 @@ footer{
         border: none !important;
         margin: 0.6666rem 0.3333rem;
     }
+}
+
+// 滚动内容
+.layout-scroll{
+  height: calc(100vh - 155px);
+  overflow-y: auto;
+  margin-top: 5px;
+}
+.layout-scroll-center{
+  height: 100%;
+  overflow-y: auto;
+}
+
+.active-color-orange{
+    background: rgb(240, 135, 30); 
+}
+.active-color-green{
+    background: rgb(68, 187, 0); 
 }

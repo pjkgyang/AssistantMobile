@@ -1,21 +1,25 @@
 <template>
   <div class="questionlist">
-      <div class="question-card" v-for="item in 3" @click="handleCheckDetail(item)">
+      <div class="question-card" v-for="(question,index) in questionList" @click="handleCheckDetail(question)">
         <div>
-        <section class="question-card_icon">
+        <!-- <section class="question-card_icon">
             <van-icon name="question" size="1.8em"/>
-        </section>
+        </section> -->
         <section class="question-card_info">
-           <h4>消息中心配置前置代理时发现</h4>
+           <h4>{{question.bt}}</h4>
            <div class="card-info_detail">
-             <div>
-                <van-tag round  color="#F0871E">已申请关闭</van-tag>
+              <div>
+                <van-tag  round  type="success">{{question.lcMc}}</van-tag>
+                <!-- v-if="question.sqgbCount > 0 && question.fbzt != 1" -->
+                <van-tag  round  color="#F0871E">已申请关闭</van-tag>
+                <!-- v-if="question.tjkfs > 0" -->
+                <van-tag  round  color="#7232dd">已提交开发</van-tag>
               </div>
-              <p>问题编号：<span>jz181100997</span></p>
-              <p>提问时间：<span>2018.04.08 12:00:00</span></p>
-              <p>发布人：<span>李俊</span></p>  
-              <p>单位：<span>宁波大学</span></p>
-              <p>产品：<span>OA-Domino版</span></p>
+              <p>问题编号：<span>{{question.wtbh}}</span></p>
+              <p>提问时间：<span>{{question.fbrq}}</span></p>
+              <p>发布人：<span>{{question.fbrxm}}</span></p>  
+              <p>单位：<span>{{question.ssbm}}</span></p>
+              <p>产品：<span>{{question.cpmc}}</span></p>
            </div>
         </section >
         <section class="question-card_link">
@@ -23,6 +27,10 @@
         </section>
         </div>
         <hr>
+
+        <aside :class="{'active-color-orange':question.fbzt==0,'active-color-green':question.fbzt==1}">
+          处理中
+        </aside>
       </div>
   </div>
 </template>
@@ -39,41 +47,61 @@
        this.$emit('handleCheckDetail',params)
      }
    },
+   props:{
+     questionList:{
+       type:Array,
+       default:()=>{
+         return []
+       }
+     }
+   },
    components: {}
  }
 </script>
 
 <style lang="less" scoped>
 @import '../../index.less';
-.questionlist{
-  padding: 0.5rem 0;
-  height: calc(100vh - 150px);
-}
+
 .question-card{
   background: #fff;
+  position: relative;
+  overflow: hidden;
   &::after{
     display: block;
     content: "";
     clear: both;
   }
   >div{
-  .flex(@col:center);
+    padding: 0 0.85rem;
+    .flex(@col:center);
   }
   hr{
     border: none;
     border-top: 2px solid #E8E8E8;
-    width: 85%;
+    width: 98%;
     float: right;
     margin-bottom: 0;
   }
-  // 问题icon
-  .question-card_icon{
-    width:17%;
+  aside{
+    color: #fff;
+    transform: rotate(45deg);
+    width: 80px;
+    height: 1.3rem;
+    position: absolute;
+    right: -21px;
+    top:8px;
     text-align: center;
-    .van-icon{
-      color: #f00;
-    }
+    font-size:@fontSize12;
+    line-height: 1.3rem;
   }
+  // 问题icon
+  // .question-card_icon{
+  //   width:17%;
+  //   text-align: center;
+  //   .van-icon{
+  //     color: #f00;
+  //   }
+  // }
   // link
   .question-card_link{
     width:12%;
@@ -81,12 +109,12 @@
   }
   // 内荣
   .question-card_info{
-    width:71%;
+    width:88%;
     h4{
       margin: 0.3rem 0 0 0 ;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
+      // text-overflow: ellipsis;
+      // white-space: nowrap;
+      // overflow: hidden;
     }
     .card-info_detail{
       font-size: @fontSize12;

@@ -11,17 +11,15 @@
             <van-field required v-model="questionData.cnjsrq" type="textarea" label="承诺结束日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('cnjsrq')" />
             <van-field required v-model="questionData.bbh" type="textarea"  label="版本号" placeholder="请输入"  rows="1" autosize  />
             <van-field required v-model="questionData.bt" type="textarea" label="标题" placeholder="请输入" rows="2" autosize />
+            <van-field required v-model="questionData.nr" type="textarea" label="标题" placeholder="请输入" rows="5" clearable />
         </van-cell-group>
 
         <div class="addquestion-detail">
           <div class="detail-label">
-             <span>详情</span>
+             <span>上传图片</span>
           </div>
           <div class="detail-content">
-             <!-- <uploadImg></uploadImg> -->
-             <div class="xq-textarea">
-                <van-field style="padding:0"  v-model="questionData.nr" type="textarea"  placeholder="请输入"  rows="5"  clearable />
-             </div>
+              <uploadImg></uploadImg>
           </div>
         </div>
        </div> 
@@ -219,20 +217,6 @@ export default {
     color:#333;
     font-size:14px;
     font-weight:700;
-     &::before{
-       content:'*';
-       position:absolute;
-       left: 7px;
-       font-size:14px;
-       color: #f44;
-     }
-   }
-   .detail-content{
-     display:flex;
-     flex-direction:column;
-     .xq-textarea{
-       width:calc(100vw - 120px);
-     }
    }
  }
 
