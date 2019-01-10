@@ -139,7 +139,7 @@ export default {
     }
   },
   activated() {
-    this.unitType = JSON.parse(sessionStorage.getItem("userInfo")).unitType;
+    this.unitType = this.$store.state.userInfo.unitType;
     this.logDetail = this.$route.params.data;
     if (this.logDetail.ydzt != 2) {
       this.$get(this.API.getLogComment, {

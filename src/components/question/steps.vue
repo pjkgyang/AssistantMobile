@@ -1,5 +1,5 @@
 <template>
-    <div >
+    <div>
         <ul v-if="list.length">
             <li v-for="(process,index) in list" :key="index" :class="{'active':process.flag == 2}">
                 {{process.mc}}

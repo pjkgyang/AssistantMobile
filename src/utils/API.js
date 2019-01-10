@@ -67,4 +67,6 @@ export default {
     canSubmitQuestion:WINDOW_CONFIG__BASEURL +'question/canSubmitQuestion.do',//是否可以提问
     canApplyClose:WINDOW_CONFIG__BASEURL +'question/canApplyClose.do',//是否可以申请关闭
     canClose:WINDOW_CONFIG__BASEURL +'question/canClose.do',//问题是否可以关闭
+    forwardLabel:WINDOW_CONFIG__BASEURL +'question/forwardLabel.do',//获取转发对象
+    applyDismiss:WINDOW_CONFIG__BASEURL +'question/applyDismiss.do',//驳回申请关闭
 }

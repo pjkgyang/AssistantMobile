@@ -2,34 +2,34 @@
   <div class="questionlist">
       <div class="question-card" v-for="(question,index) in questionList" @click="handleCheckDetail(question)">
         <div>
-        <!-- <section class="question-card_icon">
-            <van-icon name="question" size="1.8em"/>
-        </section> -->
-        <section class="question-card_info">
-           <h4>{{question.bt}}</h4>
-           <div class="card-info_detail">
-              <div>
-                <van-tag  round  type="success">{{question.lcMc}}</van-tag>
-                <!-- v-if="question.sqgbCount > 0 && question.fbzt != 1" -->
-                <van-tag  round  color="#F0871E">已申请关闭</van-tag>
-                <!-- v-if="question.tjkfs > 0" -->
-                <van-tag  round  color="#7232dd">已提交开发</van-tag>
-              </div>
-              <p>问题编号：<span>{{question.wtbh}}</span></p>
-              <p>提问时间：<span>{{question.fbrq}}</span></p>
-              <p>发布人：<span>{{question.fbrxm}}</span></p>  
-              <p>单位：<span>{{question.ssbm}}</span></p>
-              <p>产品：<span>{{question.cpmc}}</span></p>
-           </div>
-        </section >
-        <section class="question-card_link">
-            <van-icon name="arrow" />
-        </section>
+          <section class="question-card_info">
+            <h4>{{question.bt}}</h4>
+            <div class="card-info_detail">
+                <div>
+                  <van-tag  round  type="success">{{question.lcMc}}</van-tag>
+                  <!-- v-if="question.sqgbCount > 0 && question.fbzt != 1" -->
+                  <van-tag v-if="question.sqgbCount > 0 && question.fbzt != 1" round  color="#F0871E">已申请关闭</van-tag>
+                  <!-- v-if="question.tjkfs > 0" -->
+                  <van-tag v-if="question.tjkfs > 0" round  color="#7232dd">已提交开发</van-tag>
+                </div>
+                <p>问题编号：<span>{{question.wtbh}}</span></p>
+                <p>提问时间：<span>{{question.fbrq}}</span></p>
+                <p>发布人：<span>{{question.fbrxm}}</span></p>  
+                <p>单位：<span>{{question.ssbm}}</span></p>
+                <p>产品：<span>{{question.cpmc}}</span></p>
+            </div>
+          </section >
+          <section class="question-card_link">
+              <van-icon name="arrow" />
+          </section>
+        </div>
+        <div v-if="isCloseShow" class="btn-reject-close">
+          <van-button size="small" type="warning" @click.stop="handleCloseOrReject('reject',question)">驳回</van-button>
+          <van-button size="small" type="danger"  @click.stop="handleCloseOrReject('close',question)">关闭</van-button>
         </div>
         <hr>
-
         <aside :class="{'active-color-orange':question.fbzt==0,'active-color-green':question.fbzt==1}">
-          处理中
+          {{question.fbzt==0?'处理中':'已关闭'}}
         </aside>
       </div>
   </div>
@@ -44,7 +44,11 @@
    },
    methods:{
      handleCheckDetail(params){
-       this.$emit('handleCheckDetail',params)
+       this.$emit('handleCheckDetail',params);
+     },
+     //  
+     handleCloseOrReject(params){
+       this.$emit('handleCloseOrReject',params);
      }
    },
    props:{
@@ -53,6 +57,10 @@
        default:()=>{
          return []
        }
+     },
+     isCloseShow:{
+       type:Boolean,
+       default:false
      }
    },
    components: {}
@@ -94,14 +102,7 @@
     font-size:@fontSize12;
     line-height: 1.3rem;
   }
-  // 问题icon
-  // .question-card_icon{
-  //   width:17%;
-  //   text-align: center;
-  //   .van-icon{
-  //     color: #f00;
-  //   }
-  // }
+
   // link
   .question-card_link{
     width:12%;
@@ -126,6 +127,11 @@
         padding: 0.3rem 0;
       }
     }
+  }
+  .btn-reject-close{
+    display: block;
+    text-align: right;
+    margin: 0.3rem 0;
   }
 } 
 </style>

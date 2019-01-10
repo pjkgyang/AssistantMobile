@@ -144,7 +144,8 @@ export default {
             if (res.state == "success") {
               window.userName = res.data.nickName;
               window.userId = res.data.uid;
-              sessionStorage.setItem("userInfo", JSON.stringify(res.data));
+              this.$store.dispatch('adduser',res.data);
+              // sessionStorage.setItem("userInfo", JSON.stringify(res.data));
             }else{
               this.$toast(res.msg);
             }

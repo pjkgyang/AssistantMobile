@@ -49,7 +49,7 @@
            })
        }
    },
-   mounted(){
+   activated(){
        this.queryProcess();
        this.questionData = this.$route.params.data
    },
@@ -78,8 +78,10 @@
   }
 }
 .questionProcess-steps{
+    max-height: calc(100vh - 205px);
     padding: 1rem 1.25rem;
     background: #fff;
+    overflow-y: auto;
 }
  
 </style>

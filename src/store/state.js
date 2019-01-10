@@ -3,7 +3,10 @@ const state = {
     // weekNum:'',
     // weekStartDate:'',
     // weekEndDate:'',
-    loadingShow:false
+    loadingShow:false,
+    btnloading:false,
+    mark:false,
+    userInfo:{}
 };
 
 export default state;

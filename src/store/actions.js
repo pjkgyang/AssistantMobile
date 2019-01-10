@@ -11,16 +11,26 @@ export default {
     chnageLoing({commit},n){
         commit('chnageLoing',n);
     },
-    saveMonthValue({commit},n){
-        commit('saveMonthValue',n);
+    chnageBtnloing({commit},n){
+        commit('chnageBtnloing',n);
     },
-    saveWeekNum({commit},n){
-        commit('saveWeekNum',n);
+    chnageMark({commit},n){
+        commit('chnageMark',n);
     },
-    saveStartDate({commit},n){
-        commit('saveStartDate',n);
+    adduser({commit},n){
+        commit('addUser',n);
     },
-    saveEndDate({commit},n){
-        commit('saveEndDate',n);
-    }
+
+    // saveMonthValue({commit},n){
+    //     commit('saveMonthValue',n);
+    // },
+    // saveWeekNum({commit},n){
+    //     commit('saveWeekNum',n);
+    // },
+    // saveStartDate({commit},n){
+    //     commit('saveStartDate',n);
+    // },
+    // saveEndDate({commit},n){
+    //     commit('saveEndDate',n);
+    // }
 }

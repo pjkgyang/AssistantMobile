@@ -3,15 +3,15 @@
       <div>
         <van-cell-group>
             <van-field required v-model="questionData.xmmc" type="textarea" label="项目名称" placeholder="请选择" is-link rows="1" autosize @click="onClick('xm')" />
-            <van-field required v-model="questionmcData.wtlx" type="textarea" label="问题类型" placeholder="请选择" is-link rows="1" autosize @click="onClick('wtlx')" />
-            <van-field required v-model="questionmcData.wtjb" type="textarea" label="问题级别" placeholder="请选择" is-link rows="1" autosize @click="onClick('wtjb')" />
+            <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionmcData.wtlx" type="textarea" label="问题类型" placeholder="请选择" is-link rows="1" autosize @click="onClick('wtlx')" />
+            <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionmcData.wtjb" type="textarea" label="问题级别" placeholder="请选择" is-link rows="1" autosize @click="onClick('wtjb')" />
             <van-field required v-model="questionmcData.sfjj" type="textarea" label="是否紧急" placeholder="请选择" is-link rows="1" autosize @click="onClick('sfjj')" />
             <van-field required v-model="questionmcData.cpmc" type="textarea" label="产品" placeholder="请选择" is-link rows="1" autosize @click="onClick('cp')" />
-            <van-field required v-model="questionmcData.yxfw" type="textarea" label="影响范围" placeholder="请选择" is-link rows="1" autosize @click="onClick('yxfw')" />
-            <van-field required v-model="questionData.cnjsrq" type="textarea" label="承诺结束日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('cnjsrq')" />
-            <van-field required v-model="questionData.bbh" type="textarea"  label="版本号" placeholder="请输入"  rows="1" autosize  />
+            <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionmcData.yxfw" type="textarea" label="影响范围" placeholder="请选择" is-link rows="1" autosize @click="onClick('yxfw')" />
+            <van-field required v-model="questionData.qwjjrq" type="textarea" label="期望结束日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('qwjjrq')" />
+            <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionData.bbh" type="textarea"  label="版本号" placeholder="请输入"  rows="1" autosize  />
             <van-field required v-model="questionData.bt" type="textarea" label="标题" placeholder="请输入" rows="2" autosize />
-            <van-field required v-model="questionData.nr" type="textarea" label="标题" placeholder="请输入" rows="5" clearable />
+            <van-field required v-model="questionData.nr" type="textarea" label="详情" placeholder="请输入" rows="5" clearable />
         </van-cell-group>
 
         <div class="addquestion-detail">
@@ -26,7 +26,7 @@
 
         <footer>
             <van-button size="normal" type="default" @click="handleClose">取消</van-button>
-            <van-button class="commitButton" size="normal" type="primary" @click="handleCommit">提交</van-button>
+            <van-button :loading="$store.state.btnloading" class="commitButton" size="normal" type="primary" @click="handleCommit">提交</van-button>
         </footer>
 
         <!-- 选择项目 -->
@@ -82,7 +82,7 @@ export default {
         cpbh:'',
         yxfw:'',
         bbh:'',
-        cnjsrq:'',
+        qwjjrq:'',
         nr:'',
         bt:'',
       },
@@ -91,6 +91,7 @@ export default {
         wtjb:'',
         sfjj:'',
         yxfw:'',
+        cpmc:''
       },
 
       type:'',//记录选择cell
@@ -108,7 +109,7 @@ export default {
      document.activeElement.blur();
      if(params=='xm'){
        this.projectlistShow = true;
-     }else if(params=='cnjsrq'){
+     }else if(params=='qwjjrq'){
        this.pickerKsrqShow = true;
      }else{
        this.wtlxShow = true;    
@@ -131,16 +132,41 @@ export default {
    },
    // 选择
    handleOnSelect(key,value){
-     this.questionmcData.wtlx = value;
+     switch (this.type) {
+        case 'wtlx':
+          this.questionmcData.wtlx = value;
+          this.questionData.wtlx = key;
+          break;
+        case 'wtjb':
+          this.questionmcData.wtjb = value;
+          this.questionData.wtjb = key;
+          break;
+        case 'sfjj':
+          this.questionmcData.sfjj = value;
+          this.questionData.sfjj = key;
+          break;
+        case 'yxfw':
+          this.questionmcData.yxfw = value;
+          this.questionData.yxfw = key;
+          break;
+        case 'cp':
+          this.questionmcData.cpmc = value;
+          this.questionData.cpbh = key;
+          break;
+        default:
+          break;
+     }
      this.wtlxShow = false;
    },
    //  选择日期
    handleChangeDate(data){
-     this.questionData.cnjsrq = getMyDate(data);
+     this.questionData.qwjjrq = getMyDate(data);
      this.pickerKsrqShow = false;
    },
    handleCommit(){
-
+     console.log(this.questionData)
+     if(!this.validDate()) return;
+     this.$store.dispatch("chnageBtnloing", true);
    },
 
   // 获取枚举
@@ -160,11 +186,60 @@ export default {
       }else{
         this.wtlxList = getSession('ProblemType');
       } 
+   },
+
+       // 提交校验
+   validDate(){
+     if(!this.questionData.xmbh){
+       this.$toast('请选择项目名称');
+       return false;
+     }
+     if(!this.questionData.wtlx && this.$store.state.userInfo.unitType != 1){
+       this.$toast('请选择问题类型');
+       return false;
+     }
+     if(!this.questionData.wtjb  && this.$store.state.userInfo.unitType != 1){
+       this.$toast('请选择问题级别');
+       return false;
+     }
+     if(!this.questionData.sfjj){
+       this.$toast('请选择是否紧急');
+       return false;
+     }
+     if(!this.questionData.cpbh){
+       this.$toast('请选择产品');
+       return false;
+     }
+     if(!this.questionData.yxfw  && this.$store.state.userInfo.unitType != 1){
+       this.$toast('请选择影响范围');
+       return false;
+     }
+     if(!this.questionData.qwjjrq){
+       this.$toast('请选择期望结束日期');
+       return false;
+     }
+     if(!this.questionData.bbh  && this.$store.state.userInfo.unitType != 1){
+       this.$toast('请输入版本号');
+       return false;
+     }
+     if(!this.questionData.bt){
+       this.$toast('请输入问题标题');
+       return false;
+     }
+     if(!this.questionData.nr){
+       this.$toast('请输入问题详情');
+       return false;
+     }
+     return true;
    }
   },
   mounted(){
     this.getDictEnum();
   },
+  activated(){
+    this.questionData = {};
+    this.questionmcData = {};
+  },              
   watch:{
     type(n,o){
       console.log(n)

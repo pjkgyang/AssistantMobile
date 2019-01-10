@@ -1,10 +1,10 @@
 <template>
     <div>
-        <section class="quesiton-reply" v-for="reply in replyData">
+        <section class="quesiton-reply" v-for="(reply,index) in replyData">
             <div class="reply-state"> 
                 <div>
                   <van-tag size="large" :color="reply.hflx == 3?'rgb(255, 68, 68)':'rgb(57, 147, 243)'">
-                      {{reply.hflx == 1?'回复':reply.hflx == 2?'转发问题':reply.hflx == 3?'申请关闭':reply.hflx == 4?'受理':reply.hflx == 5?'取消':reply.hflx == 6?'指定责任人':reply.hflx == 7?'催办':reply.hflx == 99?'运营记录':reply.hflx == 10?'申请待验证':reply.hflx == 11?'标签':reply.hflx == 12?'集成':reply.hflx == 13?'运营':'开发'}}
+                      {{reply.hflx == 1?'回复':reply.hflx == 2?'转发':reply.hflx == 3?'申请':reply.hflx == 4?'受理':reply.hflx == 5?'取消':reply.hflx == 6?'指定责任人':reply.hflx == 7?'催办':reply.hflx == 99?'运营':reply.hflx == 10?'待验':reply.hflx == 11?'标签':reply.hflx == 12?'集成':reply.hflx == 13?'运营':'开发'}}
                   </van-tag>
                 </div>
                 <div>
@@ -15,9 +15,15 @@
                 <p class="fontColorb">
                     <span>{{reply.fbrxm}}&#x3000;</span>
                     <span>{{reply.fbsj}}</span>
-                    <!-- 申请关闭 驳回 -->
-                    <span v-if="reply.hflx == 3" class="floatRight"><van-button size="mini" type="danger">驳回</van-button></span>
-                    <br>
+                    <!-- 申请关闭 驳回-->
+                    <span v-if="(reply.hflx == 3||reply.hflx == 10) && questionData.fbzt != 1">
+                       <span class="floatRight" v-if="reply.sfbh == 0">
+                         <van-button size="mini" type="danger" @click="handleReject(reply,index)">驳回</van-button>
+                        </span>
+                        <span class="floatRight" v-if="reply.sfbh == 1">
+                          <van-tag>已驳回</van-tag>
+                        </span>
+                    </span>
                 </p>
                 <p class="fontColorg" v-if="reply.hflx == 4">
                     承诺结束日期：{{reply.cnjsrq}}&#x3000;工时：{{!reply.gs?0:reply.gs}}
@@ -37,13 +43,57 @@
             </div>
             <div class="reply-content" v-html="reply.nr"></div>
         </section>
+
+        <section class="quesiton-reply" v-if="questionData.fbzt == 1">
+            <div class="reply-state"> 
+              <div>
+                  <van-tag size="large" color="rgb(255, 68, 68)">
+                     关闭
+                  </van-tag>
+                </div>
+            </div>
+            <div class="reply-header">
+                <p class="fontColorb">
+                    <span>{{questionData.wtgbr}}&#x3000;</span>
+                    <span>{{questionData.gbsj}}</span>
+                </p>
+            </div>
+            <div class="reply-content">
+                <section>
+                   <h4>服务评价</h4>
+                   <div class="reply-close-fwzl">
+                     <span>服务质量：</span><van-rate v-model="questionData.zlpf"  disabled />&#x3000;{{questionData.zlpf}} 分
+                   </div>
+                </section>
+                <section>
+                   <h4>有效贡献人</h4>
+                   <div v-if="!!gxrList.length">
+                     <p v-for="gxr in gxrList"><span>姓名：{{gxr.gxrxm}}</span> &#x3000; 工时：{{gxr.gs}} (小时)</p>
+                     <p>合计工时：{{hjgs}} (小时)</p>
+                   </div>
+                   <div v-else>
+                     暂无贡献人
+                   </div>
+                </section>
+                <section>
+                   <h4>解决说明</h4>
+                   <div v-html="!questionData.jjsm?'无':questionData.jjsm"></div>
+                </section>
+                <section>
+                   <h4>是否认可工时：<span>{{questionData.gssfrk==1?'是':'否'}}</span></h4>
+                </section>
+            </div>
+        </section>
     </div>
 </template>
 
 <script>
 export default {
   data() {
-    return {};
+    return {
+        gxrList:[], // 贡献人
+        hjgs:0
+    };
   },
   props: {
     replyData: {
@@ -90,7 +140,49 @@ export default {
           }
         ];
       }
+    },
+    // 问题详情
+    questionData:{
+      type:Object,
+      default:()=>{
+        return {}
+      }
     }
+  },
+
+  methods:{
+    handleReject(params,index){
+      this.$emit('handleReject',params,index)
+    },
+    // 获取贡献人
+     getContributionPeople(){
+       this.$get(this.API.queryContributionPeople,{
+         wid:this.questionData.wid,
+       }).then(res=>{
+         if(res.state == 'success'){
+           console.log(res)
+           if(!!res.data){
+            this.gxrList = res.data
+            this.gxrList.forEach((ele, i, arr) => {
+                if (ele.gs.split(".")[0] == "") {
+                  ele.gs = 0 + ele.gs;
+                }
+                this.hjgs += parseFloat(ele.gs);
+            });
+           }else{
+             this.gxrList = [];
+             this.hjgs = 0;
+           }
+         }else{
+           this.$toast(!res.msg?'系统超时，请稍后再试~':res.msg);
+         }
+       })
+     }
+  },
+  mounted(){
+     if(this.questionData.fbzt==1){
+       this.getContributionPeople();
+     }
   },
   components: {}
 };
@@ -121,6 +213,29 @@ export default {
   .reply-content {
     padding: 0.5rem 0;
     font-size: @fontSize14;
+    >section{
+      margin: 0.3rem 0;
+      h4{
+        background: linear-gradient(to right bottom, rgb(38, 80, 82), rgb(217, 217, 240));
+        -webkit-background-clip: text;
+        color: transparent;
+        span{
+          color: #f00;
+        }
+      }
+      >div{
+      padding:0 0.85rem;
+      p{
+        span:nth-of-type(1){
+          display: inline-block;
+          width: 40%;
+        }
+      }
+     }
+    } 
+    .reply-close-fwzl{
+      .flex();
+    }
   }
 }
 </style>

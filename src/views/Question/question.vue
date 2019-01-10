@@ -6,15 +6,15 @@
             <searchInput @handleSearchKeyword="handleSearchKeyword" :place="'搜索学校/项目编号/项目名称/合同编号/问题编号'"></searchInput>
         </div>
         <div class="weekReport-filter--tabs">
-            <span @click="hanldeSearchWtfl" >
+            <span @click="hanldeSearchFilter('wtfl')" >
               <span>{{wtflText}}</span>&nbsp;&nbsp;<van-icon name="arrow" />
             </span>
             丨
-            <span @click="hanldeSearchWtzt" >
+            <span @click="hanldeSearchFilter('wtzt')" >
               <span>{{WtztText}}</span>&nbsp;&nbsp;<van-icon name="arrow" />
             </span>
             丨
-            <span @click="hanldeSearchSqgb">
+            <span @click="hanldeSearchFilter('sqgb')">
               <span>{{sqgbText}}</span>&nbsp;&nbsp;<van-icon name="arrow" />
             </span>
             丨
@@ -65,7 +65,7 @@
  import questionlist from '@/components/question/questionlist.vue';
  import addButton from '@/components/public/addButton';
  import filterCondition from '@/components/public/filterCondition'
-import emptyContent from "@/components/public/empty-content.vue";
+ import emptyContent from "@/components/public/empty-content.vue";
 
  export default {
    data () {
@@ -100,16 +100,24 @@ import emptyContent from "@/components/public/empty-content.vue";
    methods:{
     //  查看问题详情
      handleCheckDetail(params){
-       this.$router.push({path:'questiondetail',query:{wid:params.wid}})
+       this.$router.push({path:'questiondetail',query:{wid:params.wid,lc:params.lcMc}})
      },
     //  关闭pop
      handleCancel(){
        this.wtflPopshow = this.wtztPopshow = this.sqgbPopshow = false;
      },
-    //  问题分类确定
-     hanldeSearchWtfl(){
-        this.wtflPopshow = true;
-        this.wtztPopshow = this.sqgbPopshow = false;
+    // 筛选条件选择
+     hanldeSearchFilter(params){
+       if(params == 'wtfl'){
+         this.wtflPopshow = true;
+         this.wtztPopshow = this.sqgbPopshow = this.filterShow = false;
+       }else if(params == 'wtzt'){
+         this.wtztPopshow = true;
+         this.wtflPopshow =  this.sqgbPopshow = this.filterShow = false;
+       }else if(params == 'sqgb'){
+         this.sqgbPopshow = true;
+         this.wtflPopshow = this.wtztPopshow = this.filterShow = false;
+       }
      },
      hadnleWtflConfirm(picker,values){
        this.wtflText = picker;
@@ -118,22 +126,11 @@ import emptyContent from "@/components/public/empty-content.vue";
        this.init();
      },
 
-     //  问题状态确定
-     hanldeSearchWtzt(){
-        this.wtztPopshow = true;
-        this.wtflPopshow =  this.sqgbPopshow = false;
-     },
      hadnleWtztConfirm(picker,values){
        this.WtztText = picker;
        this.wtzt = values==0?'':values-1;
        this.wtztPopshow = !this.wtztPopshow;
        this.init();
-     },
-
-     //  申请关闭确定
-     hanldeSearchSqgb(){
-        this.sqgbPopshow = true;
-        this.wtflPopshow = this.wtztPopshow  = false;
      },
      hadnleSqgbConfirm(picker,values){
        this.sqgbText = picker;
@@ -147,9 +144,36 @@ import emptyContent from "@/components/public/empty-content.vue";
      },
     // 添加问题
      handleAddQuestion(){
-       this.$router.push({path:'/addquestion'});
+       this.$dialog.confirm({
+              title: '提示',
+              confirmButtonText:'前去处理',
+              cancelButtonText:'暂不处理',
+              message:  "您有 " + 1 +" 个问题申请关闭，请根据问题处理情况驳回或者关闭，处理之后可以继续提问，谢谢支持!",
+            }).then(() => {
+               this.$router.push({name:'sqgbList'});
+            }).catch(() => {
+              
+            });
+       return;
+       this.$get(this.API.canSubmitQuestion,{}).then(res=>{
+         if(res.state == 'success'){
+           if(res.data >= 1){
+             this.$toast.confirm({
+              title: '提示',
+              confirmButtonText:'前去处理',
+              cancelButtonText:'不处理',
+              message:  "您有" + res.data +"个问题申请关闭，请根据问题处理情况驳回或者关闭，处理之后可以继续提问，谢谢支持",
+            }).then(() => {
+               
+            }).catch(() => {
+              
+            });
+           }else{
+              this.$router.push({path:'/addquestion'});
+           }
+         }
+       })
      },
-
 /**
  *   问题列表操作
  */

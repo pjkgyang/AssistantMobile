@@ -12,11 +12,11 @@
  export default {
    data () {
      return {
-         userInfo:{}
+        userInfo:{}
      }
    },
     mounted(){
-        this.userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+        this.userInfo = this.$store.state.userInfo
     },
     filters:{
             FormatPhoneNumber:function(value){

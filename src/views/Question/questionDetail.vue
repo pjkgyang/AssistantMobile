@@ -7,7 +7,7 @@
             <div class="questionDetail-desc-info">
               <div class="questionDetail-desc-tag">
                   <van-tag round  color="#F0871E" v-if="questionData.sqgbCount > 0 && questionData.fbzt != 1">已申请关闭</van-tag>
-                  <van-tag round  color="#29BE1E">总部工程专家受理</van-tag>
+                  <van-tag round  color="#29BE1E">{{$route.query.lc}}</van-tag>
                   <a href="javaScript:;;" @click="handleCheckProcess(questionData.wid)">查看问题进度 ></a>
                 </div>
                 <p>问题编号：<span>{{questionData.wtbh}}</span></p>
@@ -27,7 +27,7 @@
       </section>
       <!-- 回复列表 -->
       <section class="questionDetail-reply">
-        <replyList :replyData="replyData"></replyList>
+        <replyList :questionData="questionData" :replyData="replyData" @handleReject="handleReject"></replyList>
       </section>
     </div>
 
@@ -42,7 +42,9 @@
             <van-field v-if="curOperate=='cnsj'||curOperate=='sl'" required v-model="formData.cnjsrq" type="textarea" label="承诺结束日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('cnjsrq')" />
             <van-field v-if="curOperate=='sl'" required v-model="formData.qwjjrq" type="textarea" label="期望解决日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('qwjjrq')" />
             <van-field v-if="curOperate=='cb'" required v-model="formData.rymc" type="textarea" label="催办人员" placeholder="请选择" is-link rows="1" autosize @click="onClick('cbry')" />
-            <van-field v-if="curOperate!='sl'" required v-model="formData.sm" type="textarea" label="说明" placeholder="请输入" rows="5"  clearable/>
+            <van-field v-if="curOperate!='sl' && curOperate!='xgcrowId'" required v-model="formData.sm" type="textarea" label="说明" placeholder="请输入" rows="5"  clearable/>
+            <van-field v-if="curOperate=='xgcrowId'" required v-model="formData.kfrwbh" type="textarea" label="开发任务编号" placeholder="请输入" rows="1" autosize clearable/>
+            <van-field v-if="curOperate=='xgcrowId'" required v-model="formData.kfgzl" type="textarea" label="开发工作量(人/天)" placeholder="请输入" rows="1"  clearable/>
         </div>
 
         <footer>
@@ -79,6 +81,7 @@
  import datePicker from '@/components/public/DatePicker';
  import { getMyDate,getMenuByCode} from '@/utils/util.js';
  import cbrylist from '@/components/question/cbryList';
+ import {mapState,mapMutations,mapGetters} from 'vuex';
 
  export default {
    data () {
@@ -96,17 +99,21 @@
             qwjjrq:'',
             sm:'',
             rymc:'',
-            rybh:''
+            rybh:'',
+            kfrwbh:'',
+            kfgzl:0
         },
         replyData:[],//回复列表
         scrollTop:''
      }
    },
-   mounted(){
-     this.queryQuestion();
-     this.queryAnswers();
+   activated(){
+    this.queryQuestion();
+    this.queryAnswers();
    },
    methods:{
+    
+    
      handleScroll(){
        this.scrollTop = this.$refs.questionDetail.scrollTop
      },
@@ -116,9 +123,7 @@
      },
     //  按钮操作
      handleClick(data){
-        console.log(data);
         if(data=='cnsj'||data=='cb'){
-          this.curOperate = data;
           this.operateShow = !this.operateShow;
           if(data=='cnsj'){
             this.operateTitle = '修改承诺结束日期';
@@ -130,13 +135,18 @@
         }else if(data=='gb'){
           this.$router.push({path:'/closequestion'});
         }else if(data=='sl'){
-          this.curOperate = data;
           this.operateTitle = '受理';
           this.operateShow = !this.operateShow; 
           // this.$router.push({name:'addQuestion',query:{sl:1}});
         }else if(data=='sqjs'){
           this.$router.push({name:'applyClose'});
+        }else if(data=='zf'){
+          return;
+          this.$router.push({name:'QuestionForward',query:{wid:this.$route.query.wid}});
+        }else if(data=='xgcrowId'){
+          this.operateShow = true;
         }
+        this.curOperate = data;
      },
      //弹出选择日期，催办人员  
      onClick(data){
@@ -183,16 +193,23 @@
        console.log(this.formData);
        this.cbryShow = false;
      },
-     
+     //  驳回(申请关闭)
+     handleReject(params,index){
+       console.log(params,index)
+       this.replyData[index].sfbh = 1
+     },
      // 获取单个问题
      queryQuestion(){
+       this.$store.dispatch("chnageLoing", true);
        this.$get(this.API.queryQuestion,{
          wid:this.$route.query.wid
        }).then(res=>{
          if(res.state == 'success'){
            this.questionData = res.data
            this.getCode(res.data.wtlb);
+           this.$store.dispatch("chnageLoing", false);
          }else{
+           this.$store.dispatch("chnageLoing", false);
            this.$toast(!res.msg?'系统超时，请稍后再试~':res.msg);
          }
        })
@@ -200,14 +217,17 @@
     
     // 获取回复列表
     queryAnswers(){
+      this.$store.dispatch("chnageLoing", true);
       this.$get(this.API.queryAnswers,{
         wid:this.$route.query.wid,
         isSolution:''
       }).then(res=>{
         if(res.state == 'success'){
           this.replyData = res.data
+          this.$store.dispatch("chnageLoing", false);
         }else{
           this.$toast(!res.msg?'系统超时，请稍后再试~':res.msg);
+          this.$store.dispatch("chnageLoing", false);
         }
       })
     },
@@ -218,9 +238,17 @@
        })
      }
    },
+   computed: { //监听state mark的变化 做页面处理
+      ...mapGetters([
+        'mark',
+      ])
+   },
    watch:{
       operateShow(n,o){
         this.formData.rymc = this.formData.rybh = this.formData.sm = this.formData.cnjsrq = this.formData.qwjjrq = '';
+      },
+      mark(n,o){
+        console.log(n);
       }
    },
    components: {replyList,btnGroup,datePicker,cbrylist}

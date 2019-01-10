@@ -82,7 +82,6 @@ export default {
   },
   watch:{
     type(n,o){
-      console.log(n)
       switch (n) {
         case 'nycd':
           this.actionSheetTitle = '难易程度';

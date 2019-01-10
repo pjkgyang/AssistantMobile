@@ -19,6 +19,11 @@ export default {
     };
   },
   components:{loading},
+  watch:{
+     '$route':(from,to)=>{
+        // this.$store.dispatch("chnageLoing", false);
+     }
+  },
   beforeCreate() {
     // console.log(this.$store.state.loadingShow)
     // window.openId = getQueryStringByName("openId");
@@ -49,6 +54,7 @@ export default {
             this.$toast(res.msg);
           }
         })
+       this.$store.dispatch("adduser", JSON.parse(sessionStorage.getItem("userInfo")));
     //   } else {
     //     this.$router.push({ path: "/login" });
     //     // window.location.href = 'http://careful.wisedu.com/emap/sys/etender/wx/index.html#/login'

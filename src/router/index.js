@@ -9,6 +9,10 @@ import reply from "@/views/Question/reply.vue";
 import closeQuestion from "@/views/Question/questionClose.vue";
 import applyClose from "@/views/Question/applyClose.vue";
 import questionProcess from "@/views/Question/questionProcess.vue";
+import questionForward from "@/views/Question/transpond.vue";
+import sqgbList from "@/views/Question/closingPannel.vue";
+
+
 
 
 export default new Router({
@@ -185,6 +189,18 @@ export default new Router({
       name: 'QuestionProcess',
       meta:{title:'问题进度'},
       component: questionProcess
+    },
+    {
+      path: '/questionForward',
+      name: 'QuestionForward',
+      meta:{title:'问题进度'},
+      component: questionForward
+    },
+    {
+      path: '/sqgbList',
+      name: 'sqgbList',
+      meta:{title:'问题进度'},
+      component: sqgbList
     }
   ]
 })
