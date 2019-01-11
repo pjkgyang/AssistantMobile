@@ -2,31 +2,34 @@
     <div>
       <div>
         <van-cell-group>
+          <!--query.sl == 1 （受理）userInfo.unitType == 1（学校用户） -->
             <van-field required v-model="questionData.xmmc" type="textarea" label="项目名称" placeholder="请选择" is-link rows="1" autosize @click="onClick('xm')" />
             <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionmcData.wtlx" type="textarea" label="问题类型" placeholder="请选择" is-link rows="1" autosize @click="onClick('wtlx')" />
             <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionmcData.wtjb" type="textarea" label="问题级别" placeholder="请选择" is-link rows="1" autosize @click="onClick('wtjb')" />
             <van-field required v-model="questionmcData.sfjj" type="textarea" label="是否紧急" placeholder="请选择" is-link rows="1" autosize @click="onClick('sfjj')" />
+            <van-field required v-model="questionmcData.sfbug" type="textarea" label="是否bug" placeholder="请选择" is-link rows="1" autosize @click="onClick('sfbug')" />
             <van-field required v-model="questionmcData.cpmc" type="textarea" label="产品" placeholder="请选择" is-link rows="1" autosize @click="onClick('cp')" />
             <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionmcData.yxfw" type="textarea" label="影响范围" placeholder="请选择" is-link rows="1" autosize @click="onClick('yxfw')" />
             <van-field required v-model="questionData.qwjjrq" type="textarea" label="期望结束日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('qwjjrq')" />
+            <van-field v-if="$route.query.sl == 1" required v-model="questionData.cnjjrq" type="textarea" label="承诺解决日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('cnjjrq')" />
             <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionData.bbh" type="textarea"  label="版本号" placeholder="请输入"  rows="1" autosize  />
-            <van-field required v-model="questionData.bt" type="textarea" label="标题" placeholder="请输入" rows="2" autosize />
-            <van-field required v-model="questionData.nr" type="textarea" label="详情" placeholder="请输入" rows="5" clearable />
+            <van-field v-if="$route.query.sl != 1" required v-model="questionData.bt" type="textarea" label="标题" placeholder="请输入" rows="2" autosize />
+            <van-field v-if="$route.query.sl != 1" required v-model="questionData.nr" type="textarea" label="详情" placeholder="请输入" rows="5" clearable />
         </van-cell-group>
 
-        <div class="addquestion-detail">
+        <div class="addquestion-detail" v-if="$route.query.sl != 1">
           <div class="detail-label">
              <span>上传图片</span>
           </div>
           <div class="detail-content">
-              <uploadImg></uploadImg>
+              <uploadImg @handleOnReadImgs="handleOnReadImgs"></uploadImg>
           </div>
         </div>
        </div> 
 
         <footer>
             <van-button size="normal" type="default" @click="handleClose">取消</van-button>
-            <van-button :loading="$store.state.btnloading" class="commitButton" size="normal" type="primary" @click="handleCommit">提交</van-button>
+            <van-button  class="commitButton" size="normal" type="primary" @click="handleCommit">提交</van-button>
         </footer>
 
         <!-- 选择项目 -->
@@ -78,21 +81,17 @@ export default {
         xmbh:'',
         wtlx:'',//问题类型
         sfjj:'',//是否紧急
+        sfbug:'',
         wtjb:'',//问题级别
         cpbh:'',
         yxfw:'',
         bbh:'',
         qwjjrq:'',
+        cnjjrq:'',
         nr:'',
         bt:'',
       },
-      questionmcData:{
-        wtlx:'',
-        wtjb:'',
-        sfjj:'',
-        yxfw:'',
-        cpmc:''
-      },
+      questionmcData:{},//显示字段
 
       type:'',//记录选择cell
       optionList:{},//列表数据
@@ -102,30 +101,56 @@ export default {
       sfjjList:{0:'否',1:'是'},//是否紧急
       yxfwList:{0:'影响局部',1:'影响整体'},//影响范围
       sgbugList:{0:'否',1:'是'},//是否bug
+
+      imgStr:""
     };
   },
   methods:{
+   handleCommit(){
+     let wtnr ='<p>'+this.questionData.nr+'</p>'+this.imgStr;
+     if(!this.validDate()) return;
+     this.$toast.loading({mask: true,message: '提交中...',duration:0});
+   },
+   // 选择图片
+   handleOnReadImgs(params){
+      this.imgStr = '';
+      if(!!params.length){
+       params.forEach(ele=>{
+         this.imgStr += '<img src='+ele+ '>'
+       })
+     }
+   },
    onClick(params,e){
      document.activeElement.blur();
      if(params=='xm'){
        this.projectlistShow = true;
-     }else if(params=='qwjjrq'){
+     }else if(params=='qwjjrq' || params=='cnjjrq'){
        this.pickerKsrqShow = true;
      }else{
        this.wtlxShow = true;    
-       this.type = params;
      }
+     this.type = params;
    },
-  //  关闭项目弹出层
+
+   //  关闭项目弹出层
    handleCloseXMPop(){
      this.projectlistShow = false;
    },
-  //  选择项目
+   //  选择项目
    handleChooseItem(data){
      console.log(data);
      this.questionData.xmmc = data.xmmc;
      this.questionData.xmbh = data.xmbh;
      this.projectlistShow = false;
+   },
+   //  选择日期
+   handleChangeDate(data){
+     if(this.type == 'qwjjrq'){
+        this.questionData.qwjjrq = getMyDate(data);
+     }else{
+        this.questionData.cnjjrq = getMyDate(data);
+     }
+     this.pickerKsrqShow = false;
    },
    handleClose(){
      this.$router.go(-1);
@@ -145,6 +170,10 @@ export default {
           this.questionmcData.sfjj = value;
           this.questionData.sfjj = key;
           break;
+        case 'sfbug':
+          this.questionmcData.sfbug = value;
+          this.questionData.sfbug = key;
+          break;
         case 'yxfw':
           this.questionmcData.yxfw = value;
           this.questionData.yxfw = key;
@@ -157,16 +186,6 @@ export default {
           break;
      }
      this.wtlxShow = false;
-   },
-   //  选择日期
-   handleChangeDate(data){
-     this.questionData.qwjjrq = getMyDate(data);
-     this.pickerKsrqShow = false;
-   },
-   handleCommit(){
-     console.log(this.questionData)
-     if(!this.validDate()) return;
-     this.$store.dispatch("chnageBtnloing", true);
    },
 
   // 获取枚举
@@ -204,6 +223,10 @@ export default {
      }
      if(!this.questionData.sfjj){
        this.$toast('请选择是否紧急');
+       return false;
+     }
+     if(!this.questionData.sfbug){
+       this.$toast('请选择是否bug');
        return false;
      }
      if(!this.questionData.cpbh){
@@ -254,6 +277,10 @@ export default {
           break;
         case 'sfjj':
           this.actionSheetTitle = '是否紧急';
+          this.optionList = this.sfjjList;
+          break;
+        case 'sfjj':
+          this.actionSheetTitle = '是否bug';
           this.optionList = this.sfjjList;
           break;
         case 'yxfw':

@@ -5,22 +5,27 @@
                 <div class="close-label">
                     <h4>服务质量：</h4>
                 </div>
-                <div>
-                    <van-rate size="16" v-model="closeData.zlpf" />
+                <div class="close-star">
+                    <van-rate size="16" v-model="closeData.zlpf" /> &#x3000;<span>{{closeData.zlpf}}分</span>
                 </div>
             </div>
             <!-- 服务质量小于等于填写说明 -->
             <van-cell-group v-if="closeData.zlpf<=3">
-                <van-field required v-model="closeData.sm" type="textarea" label="评价说明" placeholder="请输入" rows="3"  />
+                    <van-field required v-model="closeData.sm" type="textarea" label="评价说明" placeholder="我们的服务给您带来不便，深表歉意。为了更好的为您服务，请填写评价说明！" rows="3"  />
             </van-cell-group>
             <div class="close-hjgxr">
-                 <p class="tip">说明：请认定贡献人工时，谢谢您的支持!</p>
                  <h5>合计贡献人:</h5>
+                 <p class="tip">说明：请认定贡献人工时，谢谢您的支持!</p>
                  <div>
-                     <section v-for="item in 3">
-                        <p>张三</p> 
+                     <section class="hjgxr-head">
+                        <p>姓名</p> 
+                        <p>工时(小时)</p> 
+                     </section>
+                     <section v-for="item in gxrgsList">
+                        <p>{{item.fbrxm}}</p> 
                         <p>
-                          <van-field style="padding:5px 10px;border-left:1px solid #eee;" v-model="value" placeholder="" />   
+                          {{item.qrgs}}  
+                          <!-- <van-field disabled style="padding:5px 10px;border-left:1px solid #eee;" v-model="item.gs" />    -->
                         </p> 
                      </section>
                  </div>
@@ -39,7 +44,7 @@
         </div>
         <footer>
             <van-button size="normal" type="default" @click="handleClose">取消</van-button>
-            <van-button class="commitButton" size="normal" type="primary" @click="handleCommit">提交</van-button>
+            <van-button  class="commitButton" size="normal" type="primary" @click="handleCommit">提交</van-button>
         </footer>
     </div>
 </template>
@@ -53,14 +58,57 @@ export default {
         sm: "",
         gssfrk:'1'
       },
-        value:0
+      value:0,
+      gxrgsList:[{
+          xm:'张三',
+          qrgs:'0.5'
+      },{
+          xm:'张三',
+          qrgs:'0.15'
+      }], //贡献人工时列表
     };
   },
+  activated(){
+     this.queryrReferenceHour(); 
+  },
   methods: {
+    //  返回
     handleClose() {
       this.$router.go(-1);
     },
-    handleCommit() {}
+    queryrReferenceHour(){
+        this.$get(this.API.queryrReferenceHour,{
+          wid:this.$route.query.wid  
+        }).then(res=>{
+            if(res.state == 'success'){
+                this.gxrgsList = res.data;
+                this.gxrgsList.forEach((ele, i, arr) => {
+                    ele.qrgs = ele.confirmH.replace("/^.(d+)/", "0.");
+                }); 
+            }else{
+                this.$toast(!res.msg ? "系统超时，请稍后再试~":res.msg); 
+            }
+        })
+    },
+
+
+    handleCommit() {
+        this.$toast.loading({mask: true,message: '提交中...',duration:0});
+        if(!this.validDate()) return;
+    },
+
+
+    validDate(){
+        if(!this.closeData.zlpf){
+            this.$toast("请选择质量评分"); 
+            return false;
+        }
+        if(this.closeData.zlpf <= 3 && !this.closeData.sm){
+            this.$toast("请填写评价说明"); 
+            return false;
+        }
+        return true;
+    }
   },
   components: {}
 };
@@ -81,14 +129,25 @@ export default {
           }
       >div{
           section{
-              p{
+               p{
                   width: 50%;
                   text-align: center;
                   font-size:@fontSize12;
-                 
-              }
-              border: 1px solid #eee;
+                  padding: 0.5rem 0;
+                }
+                p:nth-child(1){
+                border-right:1px solid  #eee;
+                }
+               border: 1px solid #eee;
               .flex(@col:center);
+          }
+          .hjgxr-head{
+              font-weight: 700;
+            //   p:nth-child(1){
+            //     width: 51%;
+            //     padding: 0.5rem 0;
+            //     border-right:1px solid  #eee;
+            //   }
           }
       }
   }
@@ -104,6 +163,10 @@ export default {
     font-size: 14px;
     color: #f44;
   }
+}
+.close-star{
+    .flex();
+    font-size: @fontSize14;
 }
 .close-grid {
   .flex(@col:center);

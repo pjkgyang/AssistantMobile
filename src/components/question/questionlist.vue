@@ -23,6 +23,7 @@
               <van-icon name="arrow" />
           </section>
         </div>
+        <!-- 类型申请关闭，处理中 && question.sqgbCount > 0  && question.fbzt != 1-->
         <div v-if="isCloseShow" class="btn-reject-close">
           <van-button size="small" type="warning" @click.stop="handleCloseOrReject('reject',question)">驳回</van-button>
           <van-button size="small" type="danger"  @click.stop="handleCloseOrReject('close',question)">关闭</van-button>
@@ -47,8 +48,8 @@
        this.$emit('handleCheckDetail',params);
      },
      //  
-     handleCloseOrReject(params){
-       this.$emit('handleCloseOrReject',params);
+     handleCloseOrReject(type,params){
+       this.$emit('handleCloseOrReject',type,params);
      }
    },
    props:{

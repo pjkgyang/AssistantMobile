@@ -32,7 +32,7 @@ export default {
        }else{
             this.imgs.push(file.content);
        }
-       this.$emit(this.imgs);
+       this.$emit('handleOnReadImgs',this.imgs);
     },
     handleCheckimgs(index){
        ImagePreview({images:this.imgs,startPosition:index});
@@ -40,6 +40,7 @@ export default {
     //删除图片
     deleteImg: function(index) {
       this.imgs.splice(index, 1);
+      this.$emit('handleOnReadImgs',this.imgs);
     },
   },
   mounted() {},

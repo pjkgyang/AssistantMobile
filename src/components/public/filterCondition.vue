@@ -4,7 +4,7 @@
        <div  class="filter-pop">
         <div class="assistant-filtercondition">
            <section v-for="(filter,index) in filterList">
-               <h5>{{filter.name}}</h5>
+               <h5><span>●</span>&nbsp;{{filter.name}}</h5>
                <div class="assistant-filtercondition-list">
                    <van-tag :plain="!!filter.cpbh" :color="!filter.cpbh?'#00c1de':''" :style="{'color':!filter.cpbh?'#fff !important':'#555 !important'}"
                    @click.native="hanleChoosefilter('',index)">全部</van-tag>
@@ -15,7 +15,7 @@
         </div>
         <footer>
             <van-button size="normal" type="default" @click="handleClose">取消</van-button>
-            <van-button class="commitButton" size="normal" type="primary" @click="handleCommit">筛选</van-button>
+            <van-button  class="commitButton" size="normal" type="primary" @click="handleCommitFilter">筛选</van-button>
         </footer>
         </div>
      </van-popup>
@@ -51,6 +51,11 @@
    handleClose(){
        this.$emit('handleClose','')
    },
+   
+   // 筛选
+   handleCommitFilter(){
+     
+   },
     // 获取枚举
    getDictEnum(){
     if(!getSession('cp')){
@@ -77,18 +82,33 @@
     height: 100vh;
 }
 .assistant-filtercondition{
-    height:calc(100vh - 68px);
-    width: 90vw;
+    height:calc(100vh - 60px);
+    width: 93vw;
+    overflow-y: auto;
     background: #fff;
     h5{
         font-size: @fontSize14;
         border-bottom: 1.5px solid rgb(236, 235, 235);
-        padding:0.2rem 0.3rem ;
+        padding:0.5rem 0.3rem ;
         margin-bottom: 0.3rem;
+        span{
+            color: @baseColor;
+        }
     }
     .assistant-filtercondition-list{
+        .flex();
+        flex-wrap: wrap;
         .van-tag{
-            margin: 0.2rem ;
+            margin: 0.2rem 0 0.2rem 0.2rem ;
+            padding: 0.2rem 0.4rem !important;
+            width: 32%;
+            text-align: center;
+            height: 2.2rem;
+            background: rgba(182, 181, 181, 0.2);
+            .flex(center,center);
+            .van-hairline--surround::after{
+               border: none !important;
+            }
         }
     }
 }

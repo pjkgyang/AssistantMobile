@@ -11,7 +11,7 @@
 
         <footer>
             <van-button size="normal" type="default" @click="handleClose">取消</van-button>
-            <van-button class="commitButton" size="normal" type="primary" @click="handleCommit">提交</van-button>
+            <van-button  class="commitButton" size="normal" type="primary" @click="handleCommit">提交</van-button>
         </footer>
       </div>
 
@@ -73,8 +73,31 @@ export default {
    },
  
    handleCommit(){
-
+     if(!this.validDate()) return;
    },
+
+   validDate(){
+     if(!this.questionmcData.nycd){
+       this.$toast('请选择难易程度');
+       return false;
+     }
+     if(!this.questionmcData.sfjj){
+       this.$toast('请选择是否紧急');
+       return false;
+     }
+     if(!this.questionmcData.sfbug){
+       this.$toast('请选择是否bug');
+       return false;
+     }
+     if(!/^\d+(\.\d+)?$/.test(this.questionmcData.gs)){
+       this.$toast('请填写工时');
+       return false;
+     }
+     if(!this.questionmcData.sm){
+       this.$toast('请填写说明内容');
+       return false;
+     }
+   }
 
   },
   mounted(){

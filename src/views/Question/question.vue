@@ -142,38 +142,29 @@
      handleCheckFilter(){
        this.filterShow = !this.filterShow;
      },
-    // 添加问题
+     
+    // 添加问题(判断是否有申请关闭)；
      handleAddQuestion(){
-       this.$dialog.confirm({
+       this.$post(this.API.canSubmitQuestion,{}).then(res=>{
+         if(res.state == 'success'){
+           if(res.data >= 1){
+            this.$dialog.confirm({
               title: '提示',
               confirmButtonText:'前去处理',
               cancelButtonText:'暂不处理',
-              message:  "您有 " + 1 +" 个问题申请关闭，请根据问题处理情况驳回或者关闭，处理之后可以继续提问，谢谢支持!",
-            }).then(() => {
-               this.$router.push({name:'sqgbList'});
-            }).catch(() => {
-              
-            });
-       return;
-       this.$get(this.API.canSubmitQuestion,{}).then(res=>{
-         if(res.state == 'success'){
-           if(res.data >= 1){
-             this.$toast.confirm({
-              title: '提示',
-              confirmButtonText:'前去处理',
-              cancelButtonText:'不处理',
               message:  "您有" + res.data +"个问题申请关闭，请根据问题处理情况驳回或者关闭，处理之后可以继续提问，谢谢支持",
             }).then(() => {
-               
-            }).catch(() => {
-              
-            });
+               this.$router.push({name:'sqgbList'});
+            }).catch(() => {});
            }else{
-              this.$router.push({path:'/addquestion'});
+               this.$router.push({path:'/addquestion'});
            }
+         }else{
+             this.$toast(!res.msg?'系统超时，请稍后再试~':res.msg);
          }
        })
      },
+
 /**
  *   问题列表操作
  */

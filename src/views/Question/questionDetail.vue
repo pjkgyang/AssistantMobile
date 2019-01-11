@@ -37,7 +37,7 @@
     </div>
 
     <van-actionsheet v-model="operateShow" :title="operateTitle">
-      <div class="questionDetail-operate">
+      <div class="actionsheet-operate">
         <div>
             <van-field v-if="curOperate=='cnsj'||curOperate=='sl'" required v-model="formData.cnjsrq" type="textarea" label="承诺结束日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('cnjsrq')" />
             <van-field v-if="curOperate=='sl'" required v-model="formData.qwjjrq" type="textarea" label="期望解决日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('qwjjrq')" />
@@ -104,7 +104,7 @@
             kfgzl:0
         },
         replyData:[],//回复列表
-        scrollTop:''
+        scrollTop:'',
      }
    },
    activated(){
@@ -112,8 +112,7 @@
     this.queryAnswers();
    },
    methods:{
-    
-    
+
      handleScroll(){
        this.scrollTop = this.$refs.questionDetail.scrollTop
      },
@@ -135,9 +134,9 @@
         }else if(data=='gb'){
           this.$router.push({path:'/closequestion'});
         }else if(data=='sl'){
-          this.operateTitle = '受理';
-          this.operateShow = !this.operateShow; 
-          // this.$router.push({name:'addQuestion',query:{sl:1}});
+          this.isgcXmtdbyWt();
+
+          
         }else if(data=='sqjs'){
           this.$router.push({name:'applyClose'});
         }else if(data=='zf'){
@@ -231,6 +230,23 @@
         }
       })
     },
+    // 是否项目团队
+    isgcXmtdbyWt(){
+       this.$get(this.API.isgcXmtdbyWt,{
+         wid:this.$route.query.wid,
+       }).then(res=>{
+          if(res.state == 'success'){
+            if(!res.data){
+              this.operateTitle = '受理';
+              this.operateShow = !this.operateShow; 
+            }else{
+              this.$router.push({name:'addQuestion',query:{sl:1}});
+            }
+          }else{
+             this.$toast(!res.msg?'系统超时，请稍后再试~':res.msg);
+          }
+       })
+    },
     //  通过code获取名称
      getCode(code){
        getMenuByCode('ProblemType',code).then(data=>{
@@ -291,15 +307,7 @@
     }
   }
 }
-// 修改承诺结束日期
-.questionDetail-operate{
-   height: 40vh;
-  footer{
-    width: 100vw;
-    position: absolute;
-    bottom: 0;
-  }
-}
+
 .questionDetail-bottom{
   position: absolute;
   bottom:0;

@@ -10,7 +10,7 @@
 
         <footer>
             <van-button size="normal" type="default" @click="handleClose">取消</van-button>
-            <van-button :loading="$store.state.btnloading" class="commitButton" size="normal" type="primary" @click="handleCommit">提交</van-button>
+            <van-button  class="commitButton" size="normal" type="primary" @click="handleCommit">提交</van-button>
         </footer>
       </div>
 
@@ -96,7 +96,6 @@
  
    handleCommit(){
      if(!this.validDate()) return;
-     this.$store.dispatch("chnageBtnloing", true);
    },
    
    // 转发对象
