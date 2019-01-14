@@ -1,12 +1,7 @@
 <template>
     <div class="developing">
         <h3>
-            <span>正</span>
-            <span>在</span>
-            <span>开</span>
-            <span>发</span>
-            <span>中</span>
-            <span>...</span>
+           开发中。。。
         </h3>
     </div>
 </template>
@@ -31,7 +26,7 @@ h3 span {
   float: left;
   position: relative;
 }
-
+/* 
 h3 span:nth-child(1) {
   animation: jump 1s linear 0s infinite alternate;
 }
@@ -68,5 +63,5 @@ h3 span:nth-child(6) {
     top: 8px;
     color: rgb(129, 36, 12);
   }
-}
+} */
 </style>

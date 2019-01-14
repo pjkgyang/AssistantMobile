@@ -25,10 +25,10 @@
       </div>
       
       <!-- 问题列表 -->
-      <div class="layout-scroll">
+      <div class="layout-scroll" >
         <mu-container ref="container" class="demo-loadmore-content" >
           <mu-load-more @refresh="refresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
-            <div class="layout-scroll-center">
+            <div class="layout-scroll-center" >
                 <questionlist :questionList="questionList" @handleCheckDetail="handleCheckDetail"></questionlist>
             </div>
           </mu-load-more>
@@ -43,7 +43,7 @@
       <!-- 添加问题 -->
       <addButton @handleAdd="handleAddQuestion" :bottom="'18vw'"></addButton>
       <!-- 筛选条件 -->
-      <filterCondition :show="filterShow" @handleClose="handleCheckFilter"></filterCondition>
+      <filterCondition :show="filterShow" @handleClose="handleCheckFilter" @hanleChoosefilter="hanleChoosefilter"></filterCondition>
 
       <van-popup v-model="wtflPopshow" position='bottom' >
         <van-picker show-toolbar title="问题分类" :columns="wtflList" @cancel="handleCancel" @confirm="hadnleWtflConfirm" />
@@ -91,13 +91,18 @@
        isLoading:false,
        loading:false,
        finished:false,
-
+       
+       filterData:{}
      }
    },
    mounted(){
      this.init();
    },
+   activated(){
+  
+   },
    methods:{
+
     //  查看问题详情
      handleCheckDetail(params){
        this.$router.push({path:'questiondetail',query:{wid:params.wid,lc:params.lcMc}})
@@ -142,7 +147,13 @@
      handleCheckFilter(){
        this.filterShow = !this.filterShow;
      },
-     
+    //  产品筛选（暂时）
+     hanleChoosefilter(params){
+       this.filterData.cp = params;
+       this.init();
+       this.filterShow = false;
+     },
+
     // 添加问题(判断是否有申请关闭)；
      handleAddQuestion(){
        this.$post(this.API.canSubmitQuestion,{}).then(res=>{
@@ -175,11 +186,11 @@
     },
     // 上啦刷新
     refresh () {
-      this.isLoading = true;
-      this.$refs.container.scrollTop = 0;
+      // this.isLoading = true;
+      // this.$refs.container.scrollTop = 0;
       setTimeout(() => {
         this.init();
-      }, 1500)
+      },500)
     },
     // 异步更新数据
     onLoad() {
@@ -203,7 +214,7 @@
          zt:this.wtzt,//问题状态
          wtfl:this.wtfl,
          sqgb:this.sqgb,
-         cp:'',
+         cp:!this.filterData.cp?'':this.filterData.cp,
          keyword:this.keyword
        }).then(res=>{
          if (res.state == "success") {

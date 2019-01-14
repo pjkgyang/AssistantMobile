@@ -5,6 +5,7 @@ export default {
     sendCode:WINDOW_CONFIG__BASEURL +'verify/sendCode.do',//发送验证码
     verifyCode:WINDOW_CONFIG__BASEURL +'verify/verifyCode.do',//校验验证码
     getDictEnum:WINDOW_CONFIG__BASEURL +'dict/getDictEnum.do',//获取枚举
+    uploadBase64:WINDOW_CONFIG__BASEURL +'attachment/uploadBase64.do',//图片base64换地址
 
     getLoginUser:WINDOW_CONFIG__BASEURL +'sys/getLoginUser.do',
     wxLogin:WINDOW_CONFIG__BASEURL +'wx/wxLogin.do',  //微信登录
@@ -70,4 +71,7 @@ export default {
     forwardLabel:WINDOW_CONFIG__BASEURL +'question/forwardLabel.do',//获取转发对象
     applyDismiss:WINDOW_CONFIG__BASEURL +'question/applyDismiss.do',//驳回申请关闭
     isgcXmtdbyWt:WINDOW_CONFIG__BASEURL +'personnel/isgcXmtdbyWt.do',//
+
+
+
 }

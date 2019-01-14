@@ -52,9 +52,9 @@
         zfdx:''
       },
       
-      optionList:null,//列表数据
-      cpList:{},//产品列表
-      zfdxList:[]//转发对象
+      optionList:null, // 列表数据
+      cpList:{},       // 产品列表
+      zfdxList:[]      // 转发对象
     };
   },
   methods:{
@@ -78,8 +78,9 @@
       this.pickerDateShow = false;
    },
    
-   // 关闭
+   // 返回
    handleClose(){
+     this.$store.dispatch('chnageMark',true);//标识
      this.$router.go(-1);
    },
    // 选择
@@ -96,6 +97,23 @@
  
    handleCommit(){
      if(!this.validDate()) return;
+     this.$toast.loading({mask: true,message: '提交中...',duration:0});
+     this.$psot(this.API.saveForward,{
+        wid:this.$route.query.wid,
+        bh: this.questionData.zfdx,
+        nr: this.questionData.sm,
+        cpbh: this.questionData.zfdx == 11 ? this.questionData.cpbh : "",
+        qwjjrq: this.questionData.qwjjrq
+     }).then(res=>{
+       if(res.state == 'success'){
+         this.$toast.clear();
+         this.$toast({message:'提交成功',duration:1500});
+         this.$router.go(-1);
+       }else{
+         this.$toast.clear();
+         this.$toast(!res.msg?'系统超时，请稍后再试~':res.msg);
+       }
+     })
    },
    
    // 转发对象

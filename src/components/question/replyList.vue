@@ -4,7 +4,7 @@
             <div class="reply-state"> 
                 <div>
                   <van-tag size="large" :color="reply.hflx == 3?'rgb(255, 68, 68)':'rgb(57, 147, 243)'">
-                      {{reply.hflx == 1?'回复':reply.hflx == 2?'转发':reply.hflx == 3?'申请':reply.hflx == 4?'受理':reply.hflx == 5?'取消':reply.hflx == 6?'指定责任人':reply.hflx == 7?'催办':reply.hflx == 99?'运营':reply.hflx == 10?'待验':reply.hflx == 11?'标签':reply.hflx == 12?'集成':reply.hflx == 13?'运营':'开发'}}
+                      {{reply.hflx == 1?'回复':reply.hflx == 2?'转发':reply.hflx == 3?'申请':reply.hflx == 4?'受理':reply.hflx == 5?'取消':reply.hflx == 6?'指定':reply.hflx == 7?'催办':reply.hflx == 99?'运营':reply.hflx == 10?'待验':reply.hflx == 11?'标签':reply.hflx == 12?'集成':reply.hflx == 13?'运营':'开发'}}
                   </van-tag>
                 </div>
                 <div>

@@ -66,11 +66,11 @@ export default {
     },
     // 上啦刷新
     refresh() {
-      this.isLoading = true;
-      this.$refs.container.scrollTop = 0;
+      // this.isLoading = true;
+      // this.$refs.container.scrollTop = 0;
       setTimeout(() => {
         this.init();
-      }, 1500);
+      }, 500);
     },
     // 异步更新数据
     onLoad() {

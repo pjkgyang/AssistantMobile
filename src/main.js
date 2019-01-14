@@ -29,10 +29,11 @@ Vue.use(BottomNav);
 Vue.use(TextField);
 Vue.use(LoadMore);
 
-import { Swipeout, SwipeoutItem, SwipeoutButton} from 'vux'
-Vue.component('swipeout', Swipeout)
-Vue.component('swipeout-item', SwipeoutItem)
-Vue.component('swipeout-button', SwipeoutButton)
+import { Swipeout, SwipeoutItem, SwipeoutButton,Previewer } from 'vux'
+Vue.component('swipeout', Swipeout);
+Vue.component('swipeout-item', SwipeoutItem);
+Vue.component('swipeout-button', SwipeoutButton);
+Vue.component('previewer', Previewer);
 
 
 router.beforeEach((to, from, next) => {

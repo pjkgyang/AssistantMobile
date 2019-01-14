@@ -15,7 +15,7 @@
         </div>
         <footer>
             <van-button size="normal" type="default" @click="handleClose">取消</van-button>
-            <van-button  class="commitButton" size="normal" type="primary" @click="handleCommitFilter">筛选</van-button>
+            <!-- <van-button  class="commitButton" size="normal" type="primary" @click="handleCommitFilter">筛选</van-button> -->
         </footer>
         </div>
      </van-popup>
@@ -45,17 +45,16 @@
    methods:{
     //  选择筛选
    hanleChoosefilter(params,index){
-       console.log(index,params);
        this.filterList[index].cpbh = params;
+       this.$emit('hanleChoosefilter',params);
    },
    handleClose(){
        this.$emit('handleClose','')
    },
-   
-   // 筛选
-   handleCommitFilter(){
+//    // 筛选
+//    handleCommitFilter(){
      
-   },
+//    },
     // 获取枚举
    getDictEnum(){
     if(!getSession('cp')){

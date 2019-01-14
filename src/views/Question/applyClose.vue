@@ -54,7 +54,9 @@ export default {
      this.type = params;
      this.actionSheetShow = true;
    },
+   // 返回
    handleClose(){
+     this.$store.dispatch('chnageMark',true);//标识
      this.$router.go(-1);
    },
    // 选择

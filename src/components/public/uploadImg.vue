@@ -21,16 +21,19 @@ export default {
   data() {
     return {
       imgs: [],
+      imgArr:[]
     };
   },
   methods: {
     onRead(file){
        if(!!file.length){
            file.forEach(ele=>{
-             this.imgs.push(ele.content);    
+              // this.imgs.push(ele.content);   
+              this.uploadBase64(ele.content); 
            })
        }else{
-            this.imgs.push(file.content);
+          this.uploadBase64(file.content);
+          // this.imgs.push(file.content);
        }
        this.$emit('handleOnReadImgs',this.imgs);
     },
@@ -42,6 +45,20 @@ export default {
       this.imgs.splice(index, 1);
       this.$emit('handleOnReadImgs',this.imgs);
     },
+
+    
+    // 上传图片
+    uploadBase64(content){
+      this.$post(this.API.uploadBase64,{
+        base64:content
+      }).then(res=>{
+        if(res.state == 'success'){
+          this.imgs.push(res.data);
+        }else{
+          this.$toast('图片上传失败，请稍后再试~');
+        }
+      })
+    }
   },
   mounted() {},
   created() {},

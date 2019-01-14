@@ -4,7 +4,7 @@
         <van-cell-group>
           <!--query.sl == 1 （受理）userInfo.unitType == 1（学校用户） -->
             <van-field required v-model="questionData.xmmc" type="textarea" label="项目名称" placeholder="请选择" is-link rows="1" autosize @click="onClick('xm')" />
-            <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionmcData.wtlx" type="textarea" label="问题类型" placeholder="请选择" is-link rows="1" autosize @click="onClick('wtlx')" />
+            <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionmcData.wtlb" type="textarea" label="问题类型" placeholder="请选择" is-link rows="1" autosize @click="onClick('wtlb')" />
             <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionmcData.wtjb" type="textarea" label="问题级别" placeholder="请选择" is-link rows="1" autosize @click="onClick('wtjb')" />
             <van-field required v-model="questionmcData.sfjj" type="textarea" label="是否紧急" placeholder="请选择" is-link rows="1" autosize @click="onClick('sfjj')" />
             <van-field required v-model="questionmcData.sfbug" type="textarea" label="是否bug" placeholder="请选择" is-link rows="1" autosize @click="onClick('sfbug')" />
@@ -26,8 +26,8 @@
           </div>
         </div>
        </div> 
-
-        <footer>
+          
+       <footer>
             <van-button size="normal" type="default" @click="handleClose">取消</van-button>
             <van-button  class="commitButton" size="normal" type="primary" @click="handleCommit">提交</van-button>
         </footer>
@@ -45,7 +45,7 @@
 
         <!-- <van-actionsheet v-model="wtlxShow" :actions="actions" @select="onSelect"/> -->
         <van-actionsheet v-model="wtlxShow" :title="'选择'+actionSheetTitle" >
-           <ul :class="{'actionsheet_list':true,'height40':type=='wtlx'||type=='cp','height20':type!='wtlx'&&type!='cp'}" > 
+           <ul :class="{'actionsheet_list':true,'height40':type=='wtlb'||type=='cp','height20':type!='wtlb'&&type!='cp'}" > 
                 <li v-for="(value,key) in optionList" @click="handleOnSelect(key,value)">{{value}}</li>
            </ul>
         </van-actionsheet>
@@ -79,7 +79,7 @@ export default {
       questionData: {
         xmmc:'',
         xmbh:'',
-        wtlx:'',//问题类型
+        wtlb:'',//问题类型
         sfjj:'',//是否紧急
         sfbug:'',
         wtjb:'',//问题级别
@@ -109,7 +109,30 @@ export default {
    handleCommit(){
      let wtnr ='<p>'+this.questionData.nr+'</p>'+this.imgStr;
      if(!this.validDate()) return;
+     return;
      this.$toast.loading({mask: true,message: '提交中...',duration:0});
+     this.$post(this.API.saveQuestion,{
+      wtlb:this.questionData.wtlb,
+      jjyf:this.questionData.sfjj,
+      cpbh:this.questionData.cpbh,
+      yxfw:this.questionData.yxfw,
+      sfbg:this.questionData.sfbug,
+      bbh:this.questionData.bbh,
+      bt:this.questionData.bt,
+      qwjjrq:this.questionData.qwjjrq,
+      xmmc:this.questionData.xmmc,
+      xmbh:this.questionData.xmbh,
+      nr:wtnr
+    }).then(res=>{
+      if(res.state == 'success'){
+         this.$toast.clear();
+         this.$toast({message:'提交成功',duration:1500});
+         this.$router.go(-1);
+      }else{
+         this.$toast.clear();
+         this.$toast(!res.msg?'系统超时，请稍后再试~':res.msg);
+      }
+    })
    },
    // 选择图片
    handleOnReadImgs(params){
@@ -158,9 +181,9 @@ export default {
    // 选择
    handleOnSelect(key,value){
      switch (this.type) {
-        case 'wtlx':
-          this.questionmcData.wtlx = value;
-          this.questionData.wtlx = key;
+        case 'wtlb':
+          this.questionmcData.wtlb = value;
+          this.questionData.wtlb = key;
           break;
         case 'wtjb':
           this.questionmcData.wtjb = value;
@@ -213,7 +236,7 @@ export default {
        this.$toast('请选择项目名称');
        return false;
      }
-     if(!this.questionData.wtlx && this.$store.state.userInfo.unitType != 1){
+     if(!this.questionData.wtlb && this.$store.state.userInfo.unitType != 1){
        this.$toast('请选择问题类型');
        return false;
      }
@@ -267,7 +290,7 @@ export default {
     type(n,o){
       console.log(n)
       switch (n) {
-        case 'wtlx':
+        case 'wtlb':
           this.actionSheetTitle = '问题类型';
           this.optionList = this.wtlxList;
           break;

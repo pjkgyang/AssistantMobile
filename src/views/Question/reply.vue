@@ -18,18 +18,19 @@
                     <van-radio name="0">否</van-radio>
                 </van-radio-group>
             </div>
-            <div class="hf-radio hf-nr">
+             <van-cell-group>
+                <van-field required v-model="hfData.nr" type="textarea" label="内容" placeholder="请输入" rows="7"  />
+            </van-cell-group>
+        <!-- <div class="hf-radio hf-nr">
                 <div class="hf-label">
                     <span>内容</span>
                 </div>
                 <div class="hf-content">
-                    <uploadImg></uploadImg><br>
                     <div class="xq-textarea">
                        <van-field style="padding:0" v-model="hfData.nr" type="textarea" placeholder="请输入" rows="7"  />
                     </div>
                 </div>
-            </div>
-
+            </div> -->
         </div>
         <footer>
             <van-button size="normal" type="default" @click="handleClose">取消</van-button>
@@ -40,7 +41,7 @@
 
 <script>
  import uploadImg from '@/components/public/uploadImg';
-export default {
+ export default {
   data() {
     return {
       hfData: {
@@ -53,11 +54,48 @@ export default {
   },
   methods:{
       handleClose(){
+        this.$store.dispatch('chnageMark',true);
         this.$router.go(-1);  
       },
       handleCommit(){
-          
+        if(!this.validDate()) return;
+        this.$toast.loading({mask: true,message: '提交中...',duration:0});
+        this.$post(this.API.saveAnswer,{
+           zbwid:this.$route.query.wid,
+           gs:this.hfData.gs,
+           nr:this.hfData.nr,
+           sfbug:this.hfData.sfbug,
+           tztwr:this.hfData.tztwr,
+           hflx:1,
+        }).then(res=>{
+            if(res.state == 'success'){
+               this.$toast.clear();
+               this.$toast({message:'回复成功',duration:1500});
+               this.$router.go(-1);
+            }else{
+               this.$toast.clear();
+               this.$toast(!res.msg?'请求超时，请稍后再试~':res.msg); 
+            }
+        })
+      },
+      
+      validDate(){
+          if(!/^\d+(\.\d+)?$/.test(this.hfData.gs) || this.hfData.gs > 8){
+            this.$toast("请输入正确工时且单次工时不能超过8小时,大于8小时请分多个回复!");
+            return false;
+          }
+          if(/^[\s]*$/.test(this.hfData.nr)){
+            this.$toast("请输入回复内容!");
+            return false;  
+          }
+          return true;
       }
+  },
+  activated(){
+    this.hfData.gs = 0;
+    this.hfData.nr = '';
+    this.hfData.sfbug = '0';
+    this.hfData.tztwr = '1';
   },
   components: {uploadImg}
 };
@@ -68,21 +106,21 @@ export default {
 .question-reply {
   background: #fff;
 }
-.hf-nr{
-    align-items: flex-start !important;
-   .hf-label {
-    width: 90px;
-    font-size: @fontSize14;
-    font-weight: 700;
-      &::before{
-       content:'*';
-       position:absolute;
-       left: 7px;
-       font-size:14px;
-       color: #f44;
-     }
-  } 
-}
+// .hf-nr{
+//     align-items: flex-start !important;
+//    .hf-label {
+//     width: 90px;
+//     font-size: @fontSize14;
+//     font-weight: 700;
+//       &::before{
+//        content:'*';
+//        position:absolute;
+//        left: 7px;
+//        font-size:14px;
+//        color: #f44;
+//      }
+//   } 
+// }
 .hf-radio {
   .flex(@col:center);
   padding: 10px 15px;

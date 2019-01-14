@@ -1,14 +1,13 @@
 <template>
  <div class="question-remind-ry">
      <div>
-         <searchInput :place="'搜索责任人姓名/编号'"></searchInput>
+         <searchInput :place="'搜索责任人姓名/编号'"  @handleSearchKeyword="handleSearchKeyword"></searchInput>
      </div>
      <div class="remind-rylist">
          <van-checkbox-group v-model="result">
             <van-checkbox  v-for="(item, index) in ryList" :key="index" :name="item">
                 <div>
-                    <p>{{item.name}}</p>
-                    <p>{{item.tel}}</p>
+                    <p>{{item.nickname}}&#x3000;( {{item.userbh}} )</p>
                 </div>
             </van-checkbox>
           </van-checkbox-group>
@@ -35,23 +34,54 @@
            {name:'张三xia4',tel:'13aad2'},
            
        ],
-       result:[]
+       result:[],
+       keyword:''
      }
    },
    props:{
        show:{
            type:Boolean,
            default:false
+       },
+       wid:{
+           type:String,
+           default:''
        }
+   },
+   mounted(){
+       this.queryCbRy();
    },
    methods:{
        handleCommit(){
            this.$emit('handleChooseCbry',this.result);
        },
+       handleSearchKeyword(val){
+           this.keyword = val;
+           this.queryCbRy();
+       },
       // 返回
        handleClose(){
            this.result = [];
            this.$emit('handleClose','')
+       },
+       queryCbRy(){
+          this.$get(this.API.queryCbRy,{
+              wid:this.wid,
+              keyword:this.keyword
+          }).then(res=>{
+              if(res.state == 'success'){
+                this.ryList = res.data;
+                this.ryList.forEach((ele, i, arr) => {
+                    if (ele.username.slice(0, 1) == 1) {
+                         ele.userbh = `${ele.username.slice(0, 3)}****${ele.username.slice(-4)}`;
+                    } else {
+                         ele.userbh = ele.username;
+                    }
+                });  
+              }else{
+                 this.$toast(!res.msg?'系统超时，请稍后再试~':res.msg);  
+              }
+          })
        }
    },
    watch:{
@@ -80,7 +110,6 @@
                width: 70vw;
                .flex(space-around);
                p{
-                   width: 50%;
                    text-align: center;
                }
            }

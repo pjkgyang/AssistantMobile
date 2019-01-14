@@ -4,7 +4,6 @@
             <van-button v-for="(btn,index) in btngroupArr" :key="index" :type="btn.type" @click="handleClick(btn.en)"
             :class="{'btnClasshf':!btn.type && btn.name=='回复','btnClassqt':!btn.type && btn.name!='回复'}">{{btn.name}}</van-button>
 
-
             <van-button type="warning" v-if="btnArrs.length > 2" @click="handleCheckMore">更多</van-button>
         </div>
         <mu-expand-transition>
@@ -33,46 +32,26 @@ export default {
             {name:'申请关闭',type:'',en:'sqjs'},
             {name:'转发问题',type:'',en:'zf'},
             {name:'修改承诺时间',type:'',en:'cnsj'},
-            {name:'关联开发任务',type:'',en:'xgcrowId'},
+            {name:'关联开发任务',type:'',en:'xgcrowId'}
         ],
-        btngroup:[],//记录btn
+        btngroup:[],    //记录btn
         btngroupArr:[],
-        btnArrs:[],//可现实按钮
-        btnAuth:{}
+        btnArrs:[],     //可现实按钮
     };
   },
-  mounted(){
-      this.btnAuth = {
-            cb: true,
-            cnsj: true,
-            fsxx: false,
-            gb: true,
-            hf: true,
-            qwjjrq: "2019-01-08",
-            sl: true,
-            sqdyz: false,
-            sqjs: true,
-            xgcrowId: true,
-            yyjl: false,
-            yyzf: false,
-            zdr: false,
-            zf: true
-        }
-      this.btnArr.forEach(ele=>{
-         ele.show = this.btnAuth[ele.en]
-      })  
-      this.btnArr.forEach((value, index, array)=> {
-            if(value.show){
-                  this.btngroup.push(value);
-                  this.btnArrs.push(value);
-            }
-      });
-      if(this.btngroup.length > 2){
-          this.btngroupArr = this.btngroup.splice(0,2);
-      }else{
-          this.btngroupArr = this.btngroup;
+  props:{
+      wid:{
+          type:String,
+          default:''
       }
   },
+  activated(){
+    if (!this.$store.state.mark) {
+       this.queryBtnAuth();
+    }
+    // this.$store.dispatch("chnageMark", false);
+  },
+  mounted(){},
   methods:{
       handleCheckMore(){
          this.show = !this.show;   
@@ -80,7 +59,47 @@ export default {
       handleClick(data){
           this.$emit('handleClick',data);
           this.show = false; 
-      }
+      },
+    // 获取按钮权限
+    queryBtnAuth() {
+        this.btngroup = [];
+        this.btngroupArr  = [];
+        this.btnArrs = [];
+      this.$get(this.API.queryBtnAuth, {
+        wid: this.wid
+      }).then(res => {
+        if (res.state == "success") {
+            this.btnArr.forEach(ele=>{
+                ele.show = res.data[ele.en];
+            })  
+            this.btnArr.forEach((value, index, array)=> {
+                    if(value.show){
+                        this.btngroup.push(value);
+                        this.btnArrs.push(value);
+                    }
+            });
+            if(this.btngroup.length > 2){
+                this.btngroupArr = this.btngroup.splice(0,2);
+            }else{
+                this.btngroupArr = this.btngroup;
+            }
+          if (
+            !res.data["hf"] &&
+            !res.data["zf"] &&
+            !res.data["sl"] &&
+            !res.data["gb"] &&
+            !res.data["cb"] &&
+            !res.data["cnsj"] &&
+            !res.data["xgcrowId"] &&
+            !res.data["sqjs"]
+          ) {
+            this.$emit('BtnAuthFalse','');
+          }
+        } else {
+          this.$toast(!res.msg ? "系统超时，请稍后再试~" : res.msg);
+        }
+      });
+    },
   },
   components: {}
 };
@@ -103,6 +122,7 @@ export default {
         width: 33.33333%;
         float: right;
         box-shadow: 0 0 5px rgb(211, 203, 203);
+        background: #fff;
         li{
           width: 100%;
           button{

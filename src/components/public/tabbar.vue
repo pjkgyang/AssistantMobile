@@ -6,10 +6,10 @@
         <mu-container class="tabbar">
             <mu-bottom-nav :value.sync="active" @change="handleChangePannel">
                 <mu-bottom-nav-item value="project" title="项目" icon="layers"></mu-bottom-nav-item>
-                <mu-bottom-nav-item value="question" title="问题" icon="help"></mu-bottom-nav-item>
                 <mu-bottom-nav-item value="more" title="工作台" icon="menu"></mu-bottom-nav-item>
-                <mu-bottom-nav-item value="message" title="通知" icon="textsms"></mu-bottom-nav-item>
-                <mu-bottom-nav-item value="contact" title="我的" icon="person"></mu-bottom-nav-item>
+                <mu-bottom-nav-item value="question" title="问题" icon="help"></mu-bottom-nav-item>
+                <!-- <mu-bottom-nav-item value="message" title="通知" icon="textsms"></mu-bottom-nav-item> -->
+                <!-- <mu-bottom-nav-item value="contact" title="我的" icon="person"></mu-bottom-nav-item> -->
             </mu-bottom-nav>
         </mu-container>
     </div>

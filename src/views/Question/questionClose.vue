@@ -28,6 +28,9 @@
                           <!-- <van-field disabled style="padding:5px 10px;border-left:1px solid #eee;" v-model="item.gs" />    -->
                         </p> 
                      </section>
+                     <section class="no-content" v-if="gxrgsList.length == 0">
+                        暂无贡献人
+                     </section>
                  </div>
             </div>
             <div class="close-grid">
@@ -59,23 +62,20 @@ export default {
         gssfrk:'1'
       },
       value:0,
-      gxrgsList:[{
-          xm:'张三',
-          qrgs:'0.5'
-      },{
-          xm:'张三',
-          qrgs:'0.15'
-      }], //贡献人工时列表
+      gxrgsList:[], //贡献人工时列表
     };
   },
   activated(){
      this.queryrReferenceHour(); 
   },
   methods: {
-    //  返回
+    // 返回
     handleClose() {
+      this.$store.dispatch('chnageMark',true);//标识
       this.$router.go(-1);
     },
+    
+    // 
     queryrReferenceHour(){
         this.$get(this.API.queryrReferenceHour,{
           wid:this.$route.query.wid  
@@ -140,6 +140,11 @@ export default {
                 }
                border: 1px solid #eee;
               .flex(@col:center);
+          }
+          .no-content{
+              padding: 0.5rem 0;
+             justify-content: center;
+             font-size:@fontSize12;
           }
           .hjgxr-head{
               font-weight: 700;

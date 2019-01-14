@@ -29,8 +29,8 @@
           <van-button size="small" type="danger"  @click.stop="handleCloseOrReject('close',question)">关闭</van-button>
         </div>
         <hr>
-        <aside :class="{'active-color-orange':question.fbzt==0,'active-color-green':question.fbzt==1}">
-          {{question.fbzt==0?'处理中':'已关闭'}}
+        <aside :class="{'active-color-orange':question.fbzt!=1,'active-color-green':question.fbzt==1}">
+          {{question.fbzt==1?'已关闭':'处理中'}}
         </aside>
       </div>
   </div>

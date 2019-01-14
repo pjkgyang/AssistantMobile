@@ -257,7 +257,7 @@ export default {
       this.$refs.container.scrollTop = 0;
       setTimeout(() => {
         this.init();
-      }, 1500);
+      }, 500);
     },
     onLoad() {
       // 异步更新数据

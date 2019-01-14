@@ -51,7 +51,7 @@
 <style lang="less" scoped>
 @import "../../index.less";
 .assistant_more_swipe {
-  height: 15vh;
+  height: 18vh;
   .van-swipe-item {
     background: #ccc;
     height: 100%;
