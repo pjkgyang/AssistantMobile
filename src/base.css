@@ -44,6 +44,7 @@ ul{
 .mu-bottom-nav{
     height: 48px;
     font-size: 0.5rem;
+    box-shadow: 0 0 5px #afaeae;
 }
 .mu-bottom-nav-shift-wrapper{
     display: flex;
@@ -121,14 +122,11 @@ ul{
 }
 
 
-
-
 /* ping fen */
 .reply-close-fwzl .van-icon{
     color: rgb(247, 186, 42) !important;
     font-size: 16px !important; 
 }
-
 
 
 /*
@@ -148,4 +146,11 @@ ul{
 /* 设置内容 img */
 .question-content img{
    max-width: 100%;
+}
+/* loading 
+ */
+.van-toast--default{
+    width:90px !important;
+    min-height: 90px !important;
+    padding: 5px !important;
 }

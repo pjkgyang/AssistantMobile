@@ -9,9 +9,13 @@ export default {
     chnageMark(state, n) {
         state.mark = n;
     },
+    changeBtnshow(state, n) {
+        state.btnShow = n;
+    },
     addUser(state, n) {
         state.userInfo = n;
     },
+
 
     saveMonthValue(state, n) {
         state.weekMonthvalue = n;

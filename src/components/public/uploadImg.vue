@@ -73,8 +73,9 @@ export default {
   flex-wrap: wrap;
   .imgs {
     margin:0 0.6rem 0 0;
-    border: 1px solid #ccc;
     position: relative;
+    border-radius: 6px;
+    overflow: hidden;
     .img-area{
       width: 16vw;
       height:16vw;
@@ -88,11 +89,11 @@ export default {
         text-align: right; 
         position: absolute;
         right: 0;
-        width: 15px;
-        height: 15px;
+        width: 16px;
+        height: 16px;
         line-height: 15px;
         text-align: center;
-        background: #f00;
+        background: rgba(117, 117, 117,0.3);
         color: #fff;
         border-radius: 50px;
     }

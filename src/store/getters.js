@@ -22,4 +22,7 @@ export const mark = (state) => {
 export const userInfo = (state) => {
     return state.userInfo
 }
+export const btnShow = (state) => {
+    return state.btnShow
+}
 

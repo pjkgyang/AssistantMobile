@@ -91,7 +91,8 @@ export default {
         yhbh:this.yhbh
       }).then(res=>{
          if(res.state == 'success'){
-            this.$toast.success({message:'提交成功',duration:1500});
+            this.$toast.clear();
+            this.$toast('添加成功~');
             this.$router.push({ name: "weekAdd", params: { bid:1} });
          }else{
            this.$toast(res.msg);

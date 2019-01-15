@@ -199,10 +199,8 @@ export default {
         wid: !this.xmInfo.wid ? "" : this.xmInfo.wid
       }).then(res => {
         if (res.state == "success") {
-          this.$toast.success({
-            message: !this.xmInfo.wid ? "添加成功" : "修改成功",
-            duration: 1500
-          });
+          this.$toast.clear();
+          this.$toast(!this.xmInfo.wid ? "添加成功~" : "修改成功~");
           this.commitloanind = false;
           this.$router.push({ name: "TaskLog", params: { bid: "1" } });
         } else {

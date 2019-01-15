@@ -70,8 +70,6 @@ export default {
     canClose:WINDOW_CONFIG__BASEURL +'question/canClose.do',//问题是否可以关闭
     forwardLabel:WINDOW_CONFIG__BASEURL +'question/forwardLabel.do',//获取转发对象
     applyDismiss:WINDOW_CONFIG__BASEURL +'question/applyDismiss.do',//驳回申请关闭
-    isgcXmtdbyWt:WINDOW_CONFIG__BASEURL +'personnel/isgcXmtdbyWt.do',//
-
-
-
+    isgcXmtdbyWt:WINDOW_CONFIG__BASEURL +'personnel/isgcXmtdbyWt.do',// 获取是否是项目团队
+    saveCb:WINDOW_CONFIG__BASEURL +'question/saveCb.do',//保存催办
 }

@@ -7,7 +7,7 @@
             <van-button type="warning" v-if="btnArrs.length > 2" @click="handleCheckMore">更多</van-button>
         </div>
         <mu-expand-transition>
-        <div class="reply-btngroup-more" v-show="show">
+        <div class="reply-btngroup-more" v-if="show">
             <ul>
                 <li v-for="(btn,index) in btngroup">
                    <van-button  :key="index" :type="btn.type" @click="handleClick(btn.en)"
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { mapState, mapMutations, mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -49,12 +50,22 @@ export default {
     if (!this.$store.state.mark) {
        this.queryBtnAuth();
     }
-    // this.$store.dispatch("chnageMark", false);
+    this.show = false;
   },
   mounted(){},
+  computed: {
+    ...mapGetters(["btnShow"])
+  },
+  watch:{
+      btnShow(n,o){
+          if(!n){
+              this.show = false;
+          }
+      }
+  },
   methods:{
       handleCheckMore(){
-         this.show = !this.show;   
+         this.show = !this.show 
       },
       handleClick(data){
           this.$emit('handleClick',data);

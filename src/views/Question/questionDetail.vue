@@ -1,6 +1,6 @@
 <template>
-  <div class="questionDetail">
-    <div :class="{'questionDetail-top':true,'no-btn-height':!btnShow}" @scroll="handleScroll" ref="questionDetail" :scroll-top.prop="scrollTop">
+  <div class="questionDetail" @click="handleCloseBtnshow">
+    <div :style="{'height':$store.state.clienHeight - 50+'px'}" :class="{'questionDetail-top':true,'no-btn-height':!btnShow}" @scroll="handleScroll" ref="questionDetail" :scroll-top.prop="scrollTop">
       <section class="questionDetail-desc">
         <div class="questionDetail-detail">
           <h4>{{questionData.bt}}</h4>
@@ -10,7 +10,7 @@
               <van-tag round color="#29BE1E">{{$route.query.lc}}</van-tag>
 
               <a href="javaScript:;;" @click="handleCheckProcess(questionData.wid)">
-                <van-tag plain round>查看进度</van-tag>
+                <van-tag size="large" plain round>查看进度</van-tag>
               </a>
               <!-- <van-button size="mini" round @click="handleCheckProcess(questionData.wid)">查看进度</van-button> -->
             </div>
@@ -60,7 +60,7 @@
 
     <!-- 操作按钮 -->
     <div class="questionDetail-bottom">
-      <btnGroup :wid="$route.query.wid" @handleClick="handleClick" @BtnAuthFalse="BtnAuthFalse"></btnGroup>
+      <btnGroup  :wid="$route.query.wid" @handleClick="handleClick" @BtnAuthFalse="BtnAuthFalse"></btnGroup>
     </div>
 
     <van-actionsheet v-model="operateShow" :title="operateTitle">
@@ -68,7 +68,7 @@
         <div>
           <van-field v-if="curOperate=='cnsj'||curOperate=='sl'" required v-model="formData.cnjsrq" type="textarea" label="承诺结束日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('cnjsrq')" />
           <van-field v-if="curOperate=='sl'" required v-model="formData.qwjjrq" type="textarea" label="期望解决日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('qwjjrq')" />
-          <van-field v-if="curOperate=='cb'" required v-model="formData.rymc" type="textarea" label="催办人员" placeholder="请选择" is-link rows="1" autosize @click="onClick('cbry')" />
+          <van-field v-if="curOperate=='cb' && showCbry" required v-model="formData.rymc" type="textarea" label="催办人员" placeholder="请选择" is-link rows="1" autosize @click="onClick('cbry')" />
           <van-field v-if="curOperate!='sl' && curOperate!='xgcrowId'" required v-model="formData.sm" type="textarea" label="说明" placeholder="请输入" rows="5" clearable/>
           <van-field v-if="curOperate=='xgcrowId'" required v-model="formData.kfrwbh" type="textarea" label="开发任务编号" placeholder="请输入" rows="1" autosize clearable/>
           <van-field v-if="curOperate=='xgcrowId'" required v-model="formData.kfgzl" type="textarea" label="开发工作量(人/天)" placeholder="请输入" rows="1" clearable/>
@@ -83,7 +83,7 @@
 
     <div class="datePop">
       <van-popup v-model="pickerKsrqShow">
-        <datePicker @handleChangeDatePicker="handleChangeDate"></datePicker>
+        <datePicker @handleChangeDatePicker="handleChangeDate" :dateDisable="dateDisable" :cphs="cphs"></datePicker>
       </van-popup>
     </div>
 
@@ -115,16 +115,18 @@ export default {
     return {
       operateShow: false,
       pickerKsrqShow: false, //承诺日期
-      cbryShow: false, //催办人员
+      cbryShow: false, //催办人员list
+      showCbry:false,//是否显示催办人员
+      dateDisable:false, //日期选择范围禁用
       curOperate: "", //当前按钮
       dateType: "",
       operateTitle: "",
       questionData: {}, //单个问题详情
       // 修改（承诺结束日期,受理）
       formData: {
-        cnjsrq: "",
+        cnjsrq: "123123",
         qwjjrq: "",
-        sm: "",
+        sm: "123123",
         rymc: "",
         rybh: "",
         kfrwbh: "",
@@ -134,7 +136,8 @@ export default {
       imgList: [], //图片预览列表
       btnGroupData: {}, //按钮组
       btnShow:true, //按钮有按钮
-      scroll: 0
+      scroll: 0,
+      cphs:0,
     };
   },
   mounted() {},
@@ -146,21 +149,28 @@ export default {
     this.$store.dispatch("chnageMark", false);
   },
   methods: {
+
+    handleCloseBtnshow(){
+      this.$store.dispatch('changeBtnshow',!this.$store.state.btnShow);
+    },
+    // 提交
     handleCommit() {
       if (!this.validDate()) return;
       let argumentObj = {
           wid: this.$route.query.wid,
           nr: this.formData.sm
         },
-        urlApi = "";
+      urlApi = "";
+       //受理
       if (this.curOperate == "sl") {
-        //受理
         argumentObj.cnjsrq = this.formData.cnjsrq;
         argumentObj.qwjjrq = this.formData.qwjjrq;
         argumentObj.Guid = ""; //工时
         urlApi = this.API.customerQuestion;
       } else if (this.curOperate == "cnsj") {
         //修改承诺结束日期
+        delete argumentObj.nr;
+        argumentObj.sm = this.formData.sm;
         argumentObj.cnjsrq = this.formData.cnjsrq;
         urlApi = this.API.changeCommitmentDate;
       } else if (this.curOperate == "cb") {
@@ -172,14 +182,11 @@ export default {
         urlApi = this.API.addOrUpdateCrowdId;
         delete argumentObj.nr;
       }
-
-      console.log(argumentObj);
-      return;
-      this.$toast.loading({ mask: true, message: "提交中...", duration: 0 });
       this.$post(urlApi, argumentObj).then(res => {
         if (res.state == "success") {
           this.$toast.clear();
-          this.$toast({ message: "提交成功", duration: 1500 });
+          this.$toast({ message: "提交成功~", duration: 1500 });
+          this.queryAnswers();
           this.operateShow = false;
         } else {
           this.$toast.clear();
@@ -219,12 +226,13 @@ export default {
     //  按钮操作
     handleClick(data) {
       if (data == "cnsj" || data == "cb") {
-        this.operateShow = !this.operateShow;
         if (data == "cnsj") {
           this.operateTitle = "修改承诺结束日期";
         } else {
+          this.showCbCondition();
           this.operateTitle = "催办";
         }
+        this.operateShow = !this.operateShow;
       } else if (data == "hf") {
         this.$router.push({
           path: "/reply",
@@ -257,27 +265,25 @@ export default {
     onClick(data) {
       document.activeElement.blur();
       this.dateType = data;
-      switch (data) {
-        case "cnjsrq":
+      if(data == 'cnjsrq'){
           this.pickerKsrqShow = !this.pickerKsrqShow;
-          break;
-        case "qwjjrq":
+          if(this.curOperate != 'sl'){
+            this.dateDisable = true;
+          }else{
+            this.dateDisable = false;
+          }
+       }else if(data == 'qwjjrq'){
           this.pickerKsrqShow = !this.pickerKsrqShow;
-          break;
-        case "cbry":
+          this.dateDisable = false;
+       }else if(data == 'cbry'){
           this.cbryShow = !this.cbryShow;
-          break;
-        default:
-          break;
-      }
+       }
     },
     //  选择日期
     handleChangeDate(data) {
       if (this.dateType == "cnjsrq") {
         this.formData.cnjsrq = getMyDate(data);
-      } else if (this.dateType == "qwjjrq") {
-        this.formData.qwjjrq = getMyDate(data);
-      }
+      } 
       this.pickerKsrqShow = !this.pickerKsrqShow;
     },
 
@@ -298,11 +304,13 @@ export default {
       this.formData.rybh = bhArr.join("|");
       this.cbryShow = false;
     },
+
     //  驳回(申请关闭)
     handleReject(params, index) {
       console.log(params, index);
       this.replyData[index].sfbh = 1;
     },
+
     // 获取单个问题
     queryQuestion() {
       this.questionData = {};
@@ -312,6 +320,7 @@ export default {
       }).then(res => {
         if (res.state == "success") {
           this.questionData = res.data;
+          this.cphs = Number(res.data.cphs);          
           if (!!res.data.wtlb) {
             this.getCode(res.data.wtlb);
           }
@@ -350,10 +359,11 @@ export default {
             this.operateTitle = "受理";
             this.operateShow = !this.operateShow;
           } else {
-            this.$router.push({ name: "addQuestion", query: { sl: 1 } });
+            this.$router.push({ name: "addQuestion", query: { sl: 1 },params: { data: this.questionData } });
           }
         } else {
           this.$toast(!res.msg ? "系统超时，请稍后再试~" : res.msg);
+          return;
         }
       });
     },
@@ -362,6 +372,23 @@ export default {
       getMenuByCode("ProblemType", code).then(data => {
         this.questionData.wtlx_display = data;
       });
+    },
+    //获取催办权限(是否选择催办人员)
+    showCbCondition(){
+      this.$get(this.API.showCbCondition,{
+        wid:this.$route.query.wid
+      }).then(res=>{
+        if(res.state == 'success'){
+          if(res.data == 1){
+             this.showCbry = true;
+          }else{
+             this.showCbry = false;
+          }
+        }else{
+          this.$toast(!res.msg?'请求超时，请稍后再试~':res.msg);
+          return ;
+        }
+      })
     },
     //  获取按钮权限
     queryBtnAuth() {
@@ -399,7 +426,7 @@ export default {
         }
       }
       if (this.curOperate == "cb") {
-        if (!this.formData.rybh) {
+        if (this.showCbry && !this.formData.rybh) {
           this.$toast("请选择催办人员");
           return false;
         }
@@ -438,9 +465,13 @@ export default {
   },
   watch: {
     operateShow(n, o) {
-      this.formData.rymc = this.formData.rybh = this.formData.sm = this.formData.cnjsrq = this.formData.qwjjrq = this.formData.kfrwbh =
-        "";
+      this.formData.rymc = this.formData.rybh = this.formData.sm =  this.formData.qwjjrq = this.formData.kfrwbh = "";
       this.formData.kfgzl = 0;
+      if(this.curOperate == 'cnsj'){
+        this.formData.cnjsrq = !this.questionData.cnjsrq?'':this.questionData.cnjsrq;
+      }else{
+        this.formData.cnjsrq  = '';
+      }
     },
     $route(from, to) {
       if (from.name == "Question") {
@@ -458,7 +489,6 @@ export default {
 @import "../../index.less";
 
 .questionDetail-top {
-  height: calc(100vh - 50px);
   overflow-y: auto;
   .questionDetail-desc {
     background: #fff;

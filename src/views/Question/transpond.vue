@@ -97,7 +97,6 @@
  
    handleCommit(){
      if(!this.validDate()) return;
-     this.$toast.loading({mask: true,message: '提交中...',duration:0});
      this.$psot(this.API.saveForward,{
         wid:this.$route.query.wid,
         bh: this.questionData.zfdx,

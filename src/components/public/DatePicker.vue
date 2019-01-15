@@ -3,7 +3,7 @@
         <mu-container>
             <mu-flex justify-content="between" align-items="end" wrap="wrap">
                 <mu-paper :z-depth="1" class="demo-date-picker">
-                    <mu-date-picker :date.sync="date" @change="handleChangeDatePicker"></mu-date-picker>
+                    <mu-date-picker :should-disable-date="dateDisable?allowedDates:''" :date.sync="date" @change="handleChangeDatePicker"></mu-date-picker>
                 </mu-paper>
             </mu-flex>
         </mu-container>
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { GetNextDate } from '@/utils/util'
 export default {
   data() {
     return {
@@ -18,11 +19,23 @@ export default {
     };
   },
   props: {
-    
+    dateDisable:{
+      type:Boolean,
+      default:false
+    },
+    cphs:{
+      type:Number,
+      default:0
+    }
   },
   methods: {
     handleChangeDatePicker(date) {
       this.$emit("handleChangeDatePicker", date);
+    },
+    allowedDates(date){
+      let laterDate = GetNextDate(new Date(),this.cphs+1);
+      let beforeDate = GetNextDate(new Date(),0);
+      return new Date(date) < new Date(beforeDate) || new Date(date) >= new Date(laterDate);
     }
   },
   components: {}

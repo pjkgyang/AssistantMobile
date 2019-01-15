@@ -37,6 +37,9 @@ Vue.component('previewer', Previewer);
 
 
 router.beforeEach((to, from, next) => {
+  if(to.name == 'More'){
+    store.dispatch("chnageLoing", false);
+  }
   if(JSON.stringify(to.meta) != '{}'){
     document.title = to.meta.title
   }else{

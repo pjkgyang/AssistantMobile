@@ -59,7 +59,6 @@
       },
       handleCommit(){
         if(!this.validDate()) return;
-        this.$toast.loading({mask: true,message: '提交中...',duration:0});
         this.$post(this.API.saveAnswer,{
            zbwid:this.$route.query.wid,
            gs:this.hfData.gs,
@@ -70,7 +69,7 @@
         }).then(res=>{
             if(res.state == 'success'){
                this.$toast.clear();
-               this.$toast({message:'回复成功',duration:1500});
+               this.$toast({message:'回复成功~',duration:1500});
                this.$router.go(-1);
             }else{
                this.$toast.clear();
@@ -92,10 +91,10 @@
       }
   },
   activated(){
-    this.hfData.gs = 0;
-    this.hfData.nr = '';
-    this.hfData.sfbug = '0';
-    this.hfData.tztwr = '1';
+      this.hfData.gs = 0;
+      this.hfData.nr = '';
+      this.hfData.sfbug = '0';
+      this.hfData.tztwr = '1';
   },
   components: {uploadImg}
 };

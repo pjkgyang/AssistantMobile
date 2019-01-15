@@ -17,6 +17,9 @@ export default {
     chnageMark({commit},n){
         commit('chnageMark',n);
     },
+    changeBtnshow({commit},n){
+        commit('changeBtnshow',n);
+    },
     adduser({commit},n){
         commit('addUser',n);
     },

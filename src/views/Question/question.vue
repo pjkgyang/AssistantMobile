@@ -96,13 +96,25 @@
      }
    },
    mounted(){
-     this.init();
+       window.addEventListener("popstate", this.historyChange);
+   },
+   beforeDestroy () {
+       window.removeEventListener("popstate", this.historyChange);
    },
    activated(){
-  
+     if(!this.$store.state.mark){
+       this.init();
+     }
+     this.$store.dispatch("chnageMark", false);
    },
    methods:{
-
+     // 监听返回
+     historyChange(){
+       if(this.filterShow){
+         history.pushState("", null, "#/question");
+         this.filterShow = false;
+       }
+     },
     //  查看问题详情
      handleCheckDetail(params){
        this.$router.push({path:'questiondetail',query:{wid:params.wid,lc:params.lcMc}})
@@ -241,6 +253,8 @@
           this.$store.dispatch("chnageLoing", false);
           this.$toast(!res.msg?'系统超时，请稍后再试~':res.msg);
         }
+       }).catch(error=>{
+        
        })
      }
    },

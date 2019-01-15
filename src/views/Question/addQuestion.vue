@@ -5,13 +5,13 @@
           <!--query.sl == 1 （受理）userInfo.unitType == 1（学校用户） -->
             <van-field required v-model="questionData.xmmc" type="textarea" label="项目名称" placeholder="请选择" is-link rows="1" autosize @click="onClick('xm')" />
             <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionmcData.wtlb" type="textarea" label="问题类型" placeholder="请选择" is-link rows="1" autosize @click="onClick('wtlb')" />
-            <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionmcData.wtjb" type="textarea" label="问题级别" placeholder="请选择" is-link rows="1" autosize @click="onClick('wtjb')" />
+            <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionData.wtjb" type="textarea" label="问题级别" placeholder="请选择" is-link rows="1" autosize @click="onClick('wtjb')" />
             <van-field required v-model="questionmcData.sfjj" type="textarea" label="是否紧急" placeholder="请选择" is-link rows="1" autosize @click="onClick('sfjj')" />
-            <van-field required v-model="questionmcData.sfbug" type="textarea" label="是否bug" placeholder="请选择" is-link rows="1" autosize @click="onClick('sfbug')" />
+            <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionmcData.sfbug" type="textarea" label="是否bug" placeholder="请选择" is-link rows="1" autosize @click="onClick('sfbug')" />
             <van-field required v-model="questionmcData.cpmc" type="textarea" label="产品" placeholder="请选择" is-link rows="1" autosize @click="onClick('cp')" />
-            <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionmcData.yxfw" type="textarea" label="影响范围" placeholder="请选择" is-link rows="1" autosize @click="onClick('yxfw')" />
-            <van-field required v-model="questionData.qwjjrq" type="textarea" label="期望结束日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('qwjjrq')" />
-            <van-field v-if="$route.query.sl == 1" required v-model="questionData.cnjjrq" type="textarea" label="承诺解决日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('cnjjrq')" />
+            <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionData.yxfw" type="textarea" label="影响范围" placeholder="请选择" is-link rows="1" autosize @click="onClick('yxfw')" />
+            <van-field required v-model="questionData.qwjjrq" type="textarea" label="期望结束日期" placeholder="请选择" :disabled="$route.query.sl?true:false" :is-link="$route.query.sl?false:true" rows="1" autosize  @click="onClick('qwjjrq')" />
+            <van-field v-if="$route.query.sl == 1" required v-model="questionData.cnjsrq" type="textarea" label="承诺解决日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('cnjsrq')" />
             <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionData.bbh" type="textarea"  label="版本号" placeholder="请输入"  rows="1" autosize  />
             <van-field v-if="$route.query.sl != 1" required v-model="questionData.bt" type="textarea" label="标题" placeholder="请输入" rows="2" autosize />
             <van-field v-if="$route.query.sl != 1" required v-model="questionData.nr" type="textarea" label="详情" placeholder="请输入" rows="5" clearable />
@@ -39,7 +39,7 @@
 
         <div class="datePop">
           <van-popup v-model="pickerKsrqShow">
-            <datePicker @handleChangeDatePicker="handleChangeDate"></datePicker>
+            <datePicker @handleChangeDatePicker="handleChangeDate" :dateDisable="dateDisable" :cphs="cphs"></datePicker>
           </van-popup>
         </div>
 
@@ -65,6 +65,7 @@ export default {
       projectlistShow:false,
       pickerKsrqShow:false,
       wtlxShow:false,
+      dateDisable:false,//日期选择范围禁用
       actionSheetTitle:'',
       actions: [
         {
@@ -87,7 +88,7 @@ export default {
         yxfw:'',
         bbh:'',
         qwjjrq:'',
-        cnjjrq:'',
+        cnjsrq:'',
         nr:'',
         bt:'',
       },
@@ -102,31 +103,77 @@ export default {
       yxfwList:{0:'影响局部',1:'影响整体'},//影响范围
       sgbugList:{0:'否',1:'是'},//是否bug
 
-      imgStr:""
+      imgStr:"",
+      cphs:0
     };
   },
+  mounted(){
+    this.getDictEnum();
+  },
+  activated(){
+    if(this.$route.query.sl){
+       this.cphs = Number(this.$route.params.data.cphs)
+       this.questionData.xmmc = this.$route.params.data.xmmc;
+       this.questionData.xmbh = this.$route.params.data.xmbh;
+       this.questionData.wtlb = this.$route.params.data.wtlb; //问题类别
+       this.questionData.wtjb = this.$route.params.data.wtjb; //问题级别
+       this.questionData.sfjj = this.$route.params.data.jjyf;
+       this.questionData.sfbug = this.$route.params.data.sfbg;
+       this.questionData.cpbh = this.$route.params.data.cpbh;
+       this.questionData.yxfw = this.$route.params.data.yxfw;
+       this.questionData.qwjjrq = this.$route.params.data.qwjjrq;
+       this.questionData.cnjsrq = this.$route.params.data.cnjsrq;
+       this.questionData.bbh = this.$route.params.data.bbh;
+       
+       this.questionmcData.wtlb = this.$route.params.data.wtlx_display; 
+       this.questionmcData.cpmc = this.$route.params.data.cpmc
+       this.questionmcData.sfjj = this.$route.params.data.jjyf==0?'否':'是';
+       this.questionmcData.sfbug = this.$route.params.data.sfbg==0?'否':'是';
+    }else{
+      this.questionData = {};
+      this.questionmcData = {};
+    }
+  },  
   methods:{
    handleCommit(){
      let wtnr ='<p>'+this.questionData.nr+'</p>'+this.imgStr;
-     if(!this.validDate()) return;
-     return;
-     this.$toast.loading({mask: true,message: '提交中...',duration:0});
-     this.$post(this.API.saveQuestion,{
-      wtlb:this.questionData.wtlb,
+     let paramsData = {
+      wtlb:!this.questionData.wtlb?'':this.questionData.wtlb,
+      wtjb:!this.questionData.wtjb?'':this.questionData.wtjb,
       jjyf:this.questionData.sfjj,
       cpbh:this.questionData.cpbh,
-      yxfw:this.questionData.yxfw,
+      yxfw:!this.questionData.yxfw?'':this.questionData.yxfw,
       sfbg:this.questionData.sfbug,
-      bbh:this.questionData.bbh,
+      bbh:!this.questionData.bbh?'':this.questionData.bbh,
       bt:this.questionData.bt,
       qwjjrq:this.questionData.qwjjrq,
+      cnjsrq:this.questionData.cnjsrq,
       xmmc:this.questionData.xmmc,
       xmbh:this.questionData.xmbh,
       nr:wtnr
-    }).then(res=>{
+     };
+     if(this.$store.state.userInfo.unitType == 1){  // 老师
+        delete paramsData.wtlb;
+        delete paramsData.wtjb;
+        delete paramsData.yxfw;
+        delete paramsData.bbh;
+        delete paramsData.sfbg;
+     }else if(this.$route.query.sl){  // 受理
+        delete paramsData.nr;
+        delete paramsData.bt;
+        paramsData.wid = this.$route.params.data.wid;
+     }else{    
+        delete paramsData.cnjsrq; 
+     }
+
+     if(!this.validDate()) return;
+     this.$post(this.$route.query.sl||this.$store.state.userInfo.unitType == 1?
+         this.API.customerQuestion:
+         this.API.saveQuestion,paramsData
+     ).then(res=>{
       if(res.state == 'success'){
          this.$toast.clear();
-         this.$toast({message:'提交成功',duration:1500});
+         this.$toast(this.$route.query.sl?'受理成功~':'提交成功~');
          this.$router.go(-1);
       }else{
          this.$toast.clear();
@@ -147,7 +194,12 @@ export default {
      document.activeElement.blur();
      if(params=='xm'){
        this.projectlistShow = true;
-     }else if(params=='qwjjrq' || params=='cnjjrq'){
+     }else if(params=='cnjsrq' || params=='qwjjrq' ){
+       if(params=='cnjsrq'){
+         this.dateDisable = true;
+       }else{
+         this.dateDisable = false;
+       }
        this.pickerKsrqShow = true;
      }else{
        this.wtlxShow = true;    
@@ -171,11 +223,13 @@ export default {
      if(this.type == 'qwjjrq'){
         this.questionData.qwjjrq = getMyDate(data);
      }else{
-        this.questionData.cnjjrq = getMyDate(data);
+        this.questionData.cnjsrq = getMyDate(data);
      }
      this.pickerKsrqShow = false;
    },
+   // 返回
    handleClose(){
+     this.$store.dispatch('chnageMark',true);
      this.$router.go(-1);
    },
    // 选择
@@ -186,8 +240,7 @@ export default {
           this.questionData.wtlb = key;
           break;
         case 'wtjb':
-          this.questionmcData.wtjb = value;
-          this.questionData.wtjb = key;
+          this.questionData.wtjb = value;
           break;
         case 'sfjj':
           this.questionmcData.sfjj = value;
@@ -198,8 +251,7 @@ export default {
           this.questionData.sfbug = key;
           break;
         case 'yxfw':
-          this.questionmcData.yxfw = value;
-          this.questionData.yxfw = key;
+          this.questionData.yxfw = value;
           break;
         case 'cp':
           this.questionmcData.cpmc = value;
@@ -248,7 +300,7 @@ export default {
        this.$toast('请选择是否紧急');
        return false;
      }
-     if(!this.questionData.sfbug){
+     if(!this.questionData.sfbug && this.$store.state.userInfo.unitType != 1){
        this.$toast('请选择是否bug');
        return false;
      }
@@ -264,28 +316,26 @@ export default {
        this.$toast('请选择期望结束日期');
        return false;
      }
+     if(!this.questionData.cnjsrq  && this.$route.query.sl){
+       this.$toast('请选择承诺解决日期');
+       return false;
+     }
      if(!this.questionData.bbh  && this.$store.state.userInfo.unitType != 1){
        this.$toast('请输入版本号');
        return false;
      }
-     if(!this.questionData.bt){
+     if(!this.questionData.bt && !this.$route.query.sl){ // 非受理
        this.$toast('请输入问题标题');
        return false;
      }
-     if(!this.questionData.nr){
+     if(!this.questionData.nr && !this.$route.query.sl){ // 非受理
        this.$toast('请输入问题详情');
        return false;
      }
      return true;
    }
   },
-  mounted(){
-    this.getDictEnum();
-  },
-  activated(){
-    this.questionData = {};
-    this.questionmcData = {};
-  },              
+            
   watch:{
     type(n,o){
       console.log(n)

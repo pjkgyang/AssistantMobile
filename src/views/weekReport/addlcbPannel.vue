@@ -90,11 +90,12 @@ export default {
         zxh: this.$route.query.week
       }).then(res=>{
          if(res.state == 'success'){
-            this.$toast.success({message:'提交成功',duration:1500});
+            this.$toast.clear();
+            this.$toast('添加成功~');
             // this.$router.push({ name: "weekAdd", params: { bid:1} });
             this.$router.go(-1);
          }else{
-           this.$toast(res.msg);
+           this.$toast(!res.msg?'请求超时，请稍后再试~':res.msg);
          }
       });
     },

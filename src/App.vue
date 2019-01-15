@@ -21,7 +21,7 @@ export default {
   components:{loading},
   watch:{
      '$route':(from,to)=>{
-        // this.$store.dispatch("chnageLoing", false);
+        // new Vue().$store.dispatch("chnageLoing", false);
      }
   },
   beforeCreate() {

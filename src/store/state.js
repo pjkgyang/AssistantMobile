@@ -6,7 +6,9 @@ const state = {
     loadingShow:false,
     btnloading:false,
     mark:false,
-    userInfo:{}
+    btnShow:false,
+    userInfo:{},
+    clienHeight:document.documentElement?document.documentElement.clientHeight:document.body.clientHeight
 };
 
 export default state;

@@ -110,7 +110,8 @@ export default {
         bz: this.SPvalue
       }).then(res => {
         if (res.state == "success") {
-          this.$toast.success('提交成功~');
+          this.$toast.clear();
+          this.$toast('提交成功~');
           this.commitloanind = false;
           this.$router.go(-1);
         } else {

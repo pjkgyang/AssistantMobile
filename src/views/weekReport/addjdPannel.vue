@@ -77,10 +77,11 @@ export default {
             hxcs:this.form.sfwc?'':this.form.hxcs
         }).then(res=>{
             if(res.state == 'success'){
-                this.$toast.success({message:'保存成功~',duration:2000});
+                this.$toast.clear();
+                this.$toast('添加成功~');
                 this.$router.go(-1);
             }else{
-                this.$toast.success({message:res.msg,duration:2000}); 
+                this.$toast.fail({message:res.msg,duration:2000}); 
             }
         })
     },

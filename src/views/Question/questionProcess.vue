@@ -47,11 +47,13 @@
                   this.$toast(!res.msg?'系统超时，请稍后再试~':res.msg);
                }
            })
-       }
+       },
+
    },
    activated(){
+       this.$store.dispatch('chnageMark',true); //表示
        this.queryProcess();
-       this.questionData = this.$route.params.data
+       this.questionData = this.$route.params.data;
    },
    components: {steps}
  }
