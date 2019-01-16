@@ -72,4 +72,6 @@ export default {
     applyDismiss:WINDOW_CONFIG__BASEURL +'question/applyDismiss.do',//驳回申请关闭
     isgcXmtdbyWt:WINDOW_CONFIG__BASEURL +'personnel/isgcXmtdbyWt.do',// 获取是否是项目团队
     saveCb:WINDOW_CONFIG__BASEURL +'question/saveCb.do',//保存催办
+    saveForward:WINDOW_CONFIG__BASEURL +'question/saveForward.do',//转发
+    addOrUpdateCrowdId:WINDOW_CONFIG__BASEURL +'question/addOrUpdateCrowdId.do',//关联开发任务编号
 }

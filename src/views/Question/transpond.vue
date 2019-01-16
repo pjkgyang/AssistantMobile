@@ -94,10 +94,11 @@
       }
       this.actionSheetShow = false;
    },
- 
+
+   // 转发提交
    handleCommit(){
      if(!this.validDate()) return;
-     this.$psot(this.API.saveForward,{
+     this.$post(this.API.saveForward,{
         wid:this.$route.query.wid,
         bh: this.questionData.zfdx,
         nr: this.questionData.sm,
@@ -106,7 +107,7 @@
      }).then(res=>{
        if(res.state == 'success'){
          this.$toast.clear();
-         this.$toast({message:'提交成功',duration:1500});
+         this.$toast({message:'提交成功~',duration:1500});
          this.$router.go(-1);
        }else{
          this.$toast.clear();

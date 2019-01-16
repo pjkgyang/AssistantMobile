@@ -4,7 +4,7 @@
             <van-button v-for="(btn,index) in btngroupArr" :key="index" :type="btn.type" @click="handleClick(btn.en)"
             :class="{'btnClasshf':!btn.type && btn.name=='回复','btnClassqt':!btn.type && btn.name!='回复'}">{{btn.name}}</van-button>
 
-            <van-button type="warning" v-if="btnArrs.length > 2" @click="handleCheckMore">更多</van-button>
+            <van-button type="warning" v-if="btnArrs.length > 2" @click.stop="handleCheckMore">更多</van-button>
         </div>
         <mu-expand-transition>
         <div class="reply-btngroup-more" v-if="show">
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from "vuex";
+import { mapState, mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -65,6 +65,7 @@ export default {
   },
   methods:{
       handleCheckMore(){
+         this.$store.dispatch('changeBtnshow',!this.show);
          this.show = !this.show 
       },
       handleClick(data){

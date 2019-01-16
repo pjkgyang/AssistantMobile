@@ -41,7 +41,10 @@
                     <span>{{reply.hflx==2?'转发至：':reply.hflx==7?'催办人：':reply.hflx==12||reply.hflx==13?'发送至：':'责任人：'}}</span>{{reply.sfjsr}}
                 </p>
             </div>
-            <div class="reply-content" v-html="reply.nr"></div>
+            <div>
+               <div v-if="reply.hflx != 9" class="reply-content" v-html="reply.nr + (!reply.sm?'':('<br><br><span style=color:red>'+reply.czrxm+' 于 '+reply.czsj+' 驳回了 '+reply.fbrxm+' 的申请；<br>驳回说明：'+reply.sm+'</span>'))" ></div>
+               <div v-if="reply.hflx == 9" class="reply-content" v-html="reply.nr"></div>
+            </div>
         </section>
 
         <section class="quesiton-reply" v-if="questionData.fbzt == 1">
@@ -223,8 +226,8 @@ export default {
           color: #f00;
         }
       }
-      >div{
-      padding:0 0.85rem;
+      >div {
+        padding:0 0.85rem;
       p{
         span:nth-of-type(1){
           display: inline-block;

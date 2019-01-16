@@ -25,7 +25,7 @@
       </div>
       
       <!-- 问题列表 -->
-      <div class="layout-scroll" >
+      <div class="layout-scroll" ref="layoutScroll"  @scroll="handleScroll" :scroll-top.prop="scrollTop">
         <mu-container ref="container" class="demo-loadmore-content" >
           <mu-load-more @refresh="refresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
             <div class="layout-scroll-center" >
@@ -92,22 +92,36 @@
        loading:false,
        finished:false,
        
-       filterData:{}
+       filterData:{},
+       scrollTop:0,
+       marscrollTop:0
      }
    },
    mounted(){
+       this.init();
        window.addEventListener("popstate", this.historyChange);
    },
    beforeDestroy () {
        window.removeEventListener("popstate", this.historyChange);
    },
+  //  updated:function(){
+  //   this.$nextTick(function(){
+  //     var p = document.getElementsByClassName('layout-scroll')[0];
+  //     p.scrollTop = 200;
+  //   })
+  // },
    activated(){
-     if(!this.$store.state.mark){
-       this.init();
-     }
-     this.$store.dispatch("chnageMark", false);
+    var p = document.getElementsByClassName('layout-scroll')[0];
+    this.$nextTick(function(){
+       p.scrollTop = this.scrollTop;
+    })
    },
    methods:{
+     handleScroll(){
+      this.$nextTick(() => {
+       this.scrollTop = this.$refs.layoutScroll.scrollTop
+      })
+     },
      // 监听返回
      historyChange(){
        if(this.filterShow){
@@ -209,7 +223,7 @@
       this.loading = true;
       setTimeout(() => {
         this.getQuestionList();
-      }, 800);
+      }, 300);
     },
     // 上拉刷新初始化
     init() {

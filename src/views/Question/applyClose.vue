@@ -76,10 +76,38 @@ export default {
  
    handleCommit(){
      if(!this.validDate()) return;
-
-     
+     this.$post(this.API.saveAnswer,{
+        zbwid: this.$route.query.wid,
+        nr: !this.questionData.sm? "申请关闭" : this.questionData.sm,
+        nycd: this.questionData.nycd,
+        gs: this.questionData.gs,
+        sfbg: this.questionData.sfbug,
+        jjyf: this.questionData.sfjj,
+        hflx: 3
+     }).then(res=>{
+       if(res.state == 'success'){
+          this.$toast.clear();
+          this.$toast('提交成功~');
+          this.$router.go(-1);
+       }else{
+          this.$toast.clear();
+          this.$toast(!res.msg?"系统超时，请稍后再试~":res.msg); 
+       }
+     })
    },
-
+   
+   queryrHfHour(){
+     this.$get(this.API.queryrHfHour,{
+          wid: this.$route.query.wid
+        }).then(res=>{
+            if(res.state == 'success'){
+            this.questionData.gs = res.data;   
+        }else{
+            this.$toast(!res.msg?"系统超时，请稍后再试~":res.msg); 
+        }
+      }) 
+   },
+       
    validDate(){
      if(!this.questionmcData.nycd){
        this.$toast('请选择难易程度');
@@ -94,7 +122,7 @@ export default {
        return false;
      }
      if(!/^\d+(\.\d+)?$/.test(this.questionmcData.gs)){
-       this.$toast('请填写工时');
+       this.$toast('请填写正确工时');
        return false;
      }
      if(!this.questionmcData.sm){
@@ -104,8 +132,9 @@ export default {
    }
 
   },
-  mounted(){
-  
+  mounted(){},
+  activated(){
+    this.queryrHfHour();
   },
   watch:{
     type(n,o){

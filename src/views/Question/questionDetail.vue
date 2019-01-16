@@ -93,6 +93,7 @@
       </van-popup>
     </div>
 
+    
     <!-- <mu-fade-transition>
     <aside v-if="scrollTop > 350">
       <h4>{{questionData.bt}}</h4>
@@ -149,9 +150,8 @@ export default {
     this.$store.dispatch("chnageMark", false);
   },
   methods: {
-
     handleCloseBtnshow(){
-      this.$store.dispatch('changeBtnshow',!this.$store.state.btnShow);
+      this.$store.dispatch('changeBtnshow',false);
     },
     // 提交
     handleCommit() {
@@ -246,7 +246,7 @@ export default {
       } else if (data == "sl") {
         this.isgcXmtdbyWt();
       } else if (data == "sqjs") {
-        this.$router.push({ name: "applyClose" });
+        this.canApplyClose();
       } else if (data == "zf") {
         this.$router.push({
           name: "QuestionForward",
@@ -367,6 +367,24 @@ export default {
         }
       });
     },
+    // 是否可以关闭
+    canApplyClose(){
+      this.$get(this.API.canApplyClose,{
+        wid: this.$route.query.wid
+      }).then(res=>{
+        if(res.state == 'success'){
+          if(res.data){
+            this.$router.push({ name: "applyClose" , query: { wid: this.$route.query.wid }});
+          }else{
+            this.$toast("不可重复申请关闭，可驳回已有的再重新申请!");
+            return;
+          }
+        }else{
+            this.$toast(!res.msg?"系统超时，请稍后再试~":res.msg);
+        }
+      })
+    },
+    
     //  通过code获取名称
     getCode(code) {
       getMenuByCode("ProblemType", code).then(data => {

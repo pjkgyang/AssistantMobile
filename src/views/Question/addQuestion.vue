@@ -112,6 +112,7 @@ export default {
   },
   activated(){
     if(this.$route.query.sl){
+       console.log(this.$route.params.data)
        this.cphs = Number(this.$route.params.data.cphs)
        this.questionData.xmmc = this.$route.params.data.xmmc;
        this.questionData.xmbh = this.$route.params.data.xmbh;
