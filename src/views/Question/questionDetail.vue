@@ -1,18 +1,16 @@
 <template>
   <div class="questionDetail" @click="handleCloseBtnshow">
-    <div :style="{'height':$store.state.clienHeight - 50+'px'}" :class="{'questionDetail-top':true,'no-btn-height':!btnShow}" @scroll="handleScroll" ref="questionDetail" :scroll-top.prop="scrollTop">
+    <div :style="{'height':$store.state.clienHeight - 50+'px'}" :class="{'questionDetail-top':true,'no-btn-height':!btnShow}" @scroll="handleScroll" ref="questionDetail" >
       <section class="questionDetail-desc">
         <div class="questionDetail-detail">
           <h4>{{questionData.bt}}</h4>
           <div class="questionDetail-desc-info">
             <div class="questionDetail-desc-tag">
               <van-tag round color="#F0871E" v-if="questionData.sqgbCount > 0 && questionData.fbzt != 1">已申请关闭</van-tag>
-              <van-tag round color="#29BE1E">{{$route.query.lc}}</van-tag>
-
+              <van-tag round color="#29BE1E" v-if="!!questionData.lcMc">{{questionData.lcMc}}</van-tag>
               <a href="javaScript:;;" @click="handleCheckProcess(questionData.wid)">
                 <van-tag size="large" plain round>查看进度</van-tag>
               </a>
-              <!-- <van-button size="mini" round @click="handleCheckProcess(questionData.wid)">查看进度</van-button> -->
             </div>
             <p>问题编号：
               <span>{{questionData.wtbh}}</span>
@@ -71,7 +69,7 @@
           <van-field v-if="curOperate=='cb' && showCbry" required v-model="formData.rymc" type="textarea" label="催办人员" placeholder="请选择" is-link rows="1" autosize @click="onClick('cbry')" />
           <van-field v-if="curOperate!='sl' && curOperate!='xgcrowId'" required v-model="formData.sm" type="textarea" label="说明" placeholder="请输入" rows="5" clearable/>
           <van-field v-if="curOperate=='xgcrowId'" required v-model="formData.kfrwbh" type="textarea" label="开发任务编号" placeholder="请输入" rows="1" autosize clearable/>
-          <van-field v-if="curOperate=='xgcrowId'" required v-model="formData.kfgzl" type="textarea" label="开发工作量(人/天)" placeholder="请输入" rows="1" clearable/>
+          <van-field v-if="curOperate=='xgcrowId'" required v-model="formData.kfgzl" type="number" label="开发工作量(人/天)" placeholder="请输入" rows="1" clearable/>
         </div>
 
         <footer>
@@ -94,6 +92,18 @@
     </div>
 
     
+    <van-actionsheet v-model="rejectShow" title="驳回">
+      <div class="actionsheet-operate">
+        <div>
+          <van-field required v-model="rejectsm" type="textarea" label="说明" placeholder="请输入" rows="9" clearable/>
+        </div>
+
+        <footer>
+          <van-button class="cancelButton" size="normal" type="default" @click="rejectShow = !rejectShow">取消</van-button>
+          <van-button class="commitButton" size="normal" type="primary" @click="handleRejectCommit">提交</van-button>
+        </footer>
+      </div>
+    </van-actionsheet>
     <!-- <mu-fade-transition>
     <aside v-if="scrollTop > 350">
       <h4>{{questionData.bt}}</h4>
@@ -115,6 +125,7 @@ export default {
   data() {
     return {
       operateShow: false,
+      rejectShow:false, //驳回说明
       pickerKsrqShow: false, //承诺日期
       cbryShow: false, //催办人员list
       showCbry:false,//是否显示催办人员
@@ -133,25 +144,75 @@ export default {
         kfrwbh: "",
         kfgzl: 0
       },
+      rejectsm:"",//驳回说明
       replyData: [], //回复列表
       imgList: [], //图片预览列表
       btnGroupData: {}, //按钮组
       btnShow:true, //按钮有按钮
       scroll: 0,
       cphs:0,
+
+      replyDetail:{}
     };
   },
   mounted() {},
   activated() {
+    this.imgList = [];
     if (!this.$store.state.mark) {
       this.queryQuestion();
       this.queryAnswers();
+      this.scroll = 0;
+    }else{
+     let oDiv = document.getElementsByClassName('questionDetail-top')[0];
+     this.$nextTick(function(){
+        oDiv.scrollTop = this.scroll;
+      }) 
     }
     this.$store.dispatch("chnageMark", false);
+  },
+  updated:function(){
+    this.$nextTick(function(){
+       let oDiv = document.getElementsByClassName('questionDetail-top')[0];
+       if(oDiv){
+          oDiv.scrollTop = this.scroll;
+       }
+    })
   },
   methods: {
     handleCloseBtnshow(){
       this.$store.dispatch('changeBtnshow',false);
+    },
+        //  驳回(申请关闭)
+    handleReject(params, index) {
+      this.replyDetail.wid = params.wid;
+      this.replyDetail.index = index;
+      console.log(params, index);
+      this.rejectShow = true;
+    },
+    // 驳回提交
+    handleRejectCommit(){
+       if(/^[\s]*$/.test(this.rejectsm)){
+          this.$toast("请输入驳回说明~"); 
+          return;
+       }
+       this.$post(this.API.applyDismiss,{
+         wid: this.replyDetail.wid,
+         zbwid: this.$route.query.wid,
+         sm: this.rejectsm
+       }).then(res=>{
+         if(res.state == 'success'){
+            this.$toast.clear();
+            this.$toast({ message: "驳回成功~", duration: 1500 });
+            this.rejectShow = false;
+            this.replyData[this.replyDetail.index].sfbh = 1;
+            this.replyData[this.replyDetail.index].nr =  this.replyData[this.replyDetail.index].nr +  "<br>驳回说明 : " + this.rejectsm;
+         }else{
+            this.$toast.clear();
+            this.$toast(!res.msg ? "系统超时，请稍后再试~" : res.msg);
+         }
+       })
+      
+
     },
     // 提交
     handleCommit() {
@@ -303,12 +364,6 @@ export default {
       this.formData.rymc = nameArr.join(",");
       this.formData.rybh = bhArr.join("|");
       this.cbryShow = false;
-    },
-
-    //  驳回(申请关闭)
-    handleReject(params, index) {
-      console.log(params, index);
-      this.replyData[index].sfbh = 1;
     },
 
     // 获取单个问题
@@ -491,13 +546,6 @@ export default {
         this.formData.cnjsrq  = '';
       }
     },
-    $route(from, to) {
-      if (from.name == "Question") {
-        this.scrollTop = 0;
-      } else {
-        this.scrollTop = this.scroll;
-      }
-    }
   },
   components: { replyList, btnGroup, datePicker, cbrylist }
 };
@@ -549,7 +597,6 @@ export default {
 .questionDetail-reply {
   margin: 0.5rem 0 0 0;
 }
-
 .no-btn-height {
   height: 100vh !important;
 }

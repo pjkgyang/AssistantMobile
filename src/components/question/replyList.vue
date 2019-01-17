@@ -4,7 +4,7 @@
             <div class="reply-state"> 
                 <div>
                   <van-tag size="large" :color="reply.hflx == 3?'rgb(255, 68, 68)':'rgb(57, 147, 243)'">
-                      {{reply.hflx == 1?'回复':reply.hflx == 2?'转发':reply.hflx == 3?'申请':reply.hflx == 4?'受理':reply.hflx == 5?'取消':reply.hflx == 6?'指定':reply.hflx == 7?'催办':reply.hflx == 99?'运营':reply.hflx == 10?'待验':reply.hflx == 11?'标签':reply.hflx == 12?'集成':reply.hflx == 13?'运营':'开发'}}
+                      {{reply.hflx == 1?'回复':reply.hflx == 2?'转发':reply.hflx == 3?'申请关闭':reply.hflx == 4?'受理':reply.hflx == 5?'取消':reply.hflx == 6?'指定':reply.hflx == 7?'催办':reply.hflx == 99?'运营':reply.hflx == 10?'待验':reply.hflx == 11?'标签':reply.hflx == 12?'集成':reply.hflx == 13?'运营':'开发'}}
                   </van-tag>
                 </div>
                 <div>
@@ -42,11 +42,14 @@
                 </p>
             </div>
             <div>
-               <div v-if="reply.hflx != 9" class="reply-content" v-html="reply.nr + (!reply.sm?'':('<br><br><span style=color:red>'+reply.czrxm+' 于 '+reply.czsj+' 驳回了 '+reply.fbrxm+' 的申请；<br>驳回说明：'+reply.sm+'</span>'))" ></div>
-               <div v-if="reply.hflx == 9" class="reply-content" v-html="reply.nr"></div>
+               <div @click="previewImage" v-if="reply.hflx != 9" class="reply-content" v-html="reply.nr + (!reply.sm?'':('<br><br><span style=color:red>'+reply.czrxm+' 于 '+reply.czsj+' 驳回了 '+reply.fbrxm+' 的申请；<br>驳回说明：'+reply.sm+'</span>'))" ></div>
+               <div @click="previewImage" v-if="reply.hflx == 9" class="reply-content" v-html="reply.nr"></div>
             </div>
         </section>
-
+            <!-- 图片预览 -->
+        <div v-transfer-dom>
+          <previewer :list="imgList" ref="previewer"></previewer>
+        </div>
         <section class="quesiton-reply" v-if="questionData.fbzt == 1">
             <div class="reply-state"> 
               <div>
@@ -95,7 +98,8 @@ export default {
   data() {
     return {
         gxrList:[], // 贡献人
-        hjgs:0
+        hjgs:0,
+        imgList:[] //图片
     };
   },
   props: {
@@ -163,7 +167,6 @@ export default {
          wid:this.questionData.wid,
        }).then(res=>{
          if(res.state == 'success'){
-           console.log(res)
            if(!!res.data){
             this.gxrList = res.data
             this.gxrList.forEach((ele, i, arr) => {
@@ -180,7 +183,24 @@ export default {
            this.$toast(!res.msg?'系统超时，请稍后再试~':res.msg);
          }
        })
-     }
+     },
+    previewImage(e) {
+      if (e.target.nodeName == "IMG") {
+        this.imgList.length = 0;
+        let imgArr = e.currentTarget.getElementsByTagName("img"),
+          url = e.target.currentSrc,
+          curIndex;
+        for (var i = 0; i < imgArr.length; i++) {
+          if (imgArr[i].currentSrc == url) {
+            curIndex = i;
+          }
+          this.imgList.push({ src: imgArr[i].currentSrc });
+        }
+        this.$refs.previewer.show(curIndex);
+      } else {
+        return;
+      }
+    },
   },
   mounted(){
      if(this.questionData.fbzt==1){

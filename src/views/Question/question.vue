@@ -119,7 +119,7 @@
    methods:{
      handleScroll(){
       this.$nextTick(() => {
-       this.scrollTop = this.$refs.layoutScroll.scrollTop
+         this.scrollTop = this.$refs.layoutScroll.scrollTop
       })
      },
      // 监听返回

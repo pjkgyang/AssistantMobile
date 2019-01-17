@@ -5,8 +5,8 @@
             <van-field required v-model="questionmcData.nycd" type="textarea" label="难易程度" placeholder="请选择" is-link rows="1" autosize @click="onClick('nycd')" />
             <van-field required v-model="questionmcData.sfjj" type="textarea" label="是否紧急" placeholder="请选择" is-link rows="1" autosize @click="onClick('sfjj')" />
             <van-field required v-model="questionmcData.sfbug" type="textarea" label="是否bug" placeholder="请选择" is-link rows="1" autosize @click="onClick('sfbug')" />
-            <van-field required v-model="questionData.gs" type="textarea" label="工时" placeholder="请输入" rows="1" autosize />
-            <van-field required v-model="questionData.bt" type="textarea" label="关闭说明" placeholder="请输入" rows="5"  />
+            <van-field required v-model="questionData.gs" type="number" label="工时" placeholder="请输入" rows="1" autosize />
+            <van-field  v-model="questionData.sm" type="textarea" label="关闭说明" placeholder="请输入" rows="5"  />
         </van-cell-group>
 
         <footer>
@@ -15,11 +15,11 @@
         </footer>
       </div>
 
-        <van-actionsheet v-model="actionSheetShow" :title="'选择'+actionSheetTitle" >
-           <ul :class="{'actionsheet_list':true}" > 
-                <li v-for="(value,key) in optionList" @click="handleOnSelect(key,value)">{{value}}</li>
-           </ul>
-        </van-actionsheet>
+      <van-actionsheet v-model="actionSheetShow" :title="'选择'+actionSheetTitle" >
+          <ul :class="{'actionsheet_list':true}" > 
+              <li v-for="(value,key) in optionList" @click="handleOnSelect(key,value)">{{value}}</li>
+          </ul>
+      </van-actionsheet>
     </div>
 </template>
 
@@ -109,26 +109,27 @@ export default {
    },
        
    validDate(){
-     if(!this.questionmcData.nycd){
+     if(!this.questionData.nycd){
        this.$toast('请选择难易程度');
        return false;
      }
-     if(!this.questionmcData.sfjj){
+     if(!this.questionData.sfjj){
        this.$toast('请选择是否紧急');
        return false;
      }
-     if(!this.questionmcData.sfbug){
+     if(!this.questionData.sfbug){
        this.$toast('请选择是否bug');
        return false;
      }
-     if(!/^\d+(\.\d+)?$/.test(this.questionmcData.gs)){
+     if(!/^\d+(\.\d+)?$/.test(this.questionData.gs)){
        this.$toast('请填写正确工时');
        return false;
      }
-     if(!this.questionmcData.sm){
-       this.$toast('请填写说明内容');
-       return false;
-     }
+     return true;
+    //  if(!this.questionmcData.sm){
+    //    this.$toast('请填写说明内容');
+    //    return false;
+    //  }
    }
 
   },

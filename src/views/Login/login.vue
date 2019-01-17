@@ -91,7 +91,7 @@ export default {
         vtype:1
       }).then(res=>{
         if(res.state == 'success'){
-           this.$toast({message:'发送成功',duration:1500}); 
+           this.$toast({message:'验证码发送成功~',duration:1500,position:'top'});
            this.isCoding = true; 
            const timer = setInterval(()=>{
             this.count -- ; 
@@ -102,7 +102,7 @@ export default {
             }
           },1000)
          }else{
-           this.$toast(res.msg); 
+           this.$toast(!res.msg?'请求超时,请稍后再试~':res.msg); 
          }
       })
     },

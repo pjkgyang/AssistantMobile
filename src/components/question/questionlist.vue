@@ -28,7 +28,7 @@
           <van-button size="small" type="warning" @click.stop="handleCloseOrReject('reject',question)">驳回</van-button>
           <van-button size="small" type="danger"  @click.stop="handleCloseOrReject('close',question)">关闭</van-button>
         </div>
-        <hr>
+        <!-- <hr> -->
         <aside :class="{'active-color-orange':question.fbzt!=1,'active-color-green':question.fbzt==1}">
           {{question.fbzt==1?'已关闭':'处理中'}}
         </aside>
@@ -40,7 +40,7 @@
  export default {
    data () {
      return {
-
+       
      }
    },
    methods:{
@@ -75,22 +75,26 @@
   background: #fff;
   position: relative;
   overflow: hidden;
+  width: 96%;
+  border-radius: 0.5rem;
+  margin: 0.3rem auto;
+  box-shadow: 0 0 10px  rgb(214, 213, 213);
   &::after{
     display: block;
     content: "";
     clear: both;
   }
   >div{
-    padding: 0 0.85rem;
+    padding: 0.5rem 0.85rem;
     .flex(@col:center);
   }
-  hr{
-    border: none;
-    border-top: 2px solid #E8E8E8;
-    width: 98%;
-    float: right;
-    margin-bottom: 0;
-  }
+  // hr{
+  //   border: none;
+  //   border-top: 2px solid #E8E8E8;
+  //   width: 98%;
+  //   float: right;
+  //   margin-bottom: 0;
+  // }
   aside{
     color: #fff;
     transform: rotate(45deg);
@@ -112,12 +116,12 @@
   // 内荣
   .question-card_info{
     width:88%;
-    h4{
-      margin: 0.3rem 0 0 0 ;
+    // h4{
+      // margin: 0.3rem 0 0 0 ;
       // text-overflow: ellipsis;
       // white-space: nowrap;
       // overflow: hidden;
-    }
+    // }
     .card-info_detail{
       font-size: @fontSize12;
       color: #999999;

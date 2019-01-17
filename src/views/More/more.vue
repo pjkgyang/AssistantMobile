@@ -2,8 +2,9 @@
   <div class="assistant_more">
     <div class="assistant_more_swipe">
       <van-swipe style="height:100%" :autoplay="3000">
-        <van-swipe-item><img src="static/img/swipe1.png" alt=""></van-swipe-item>
-        <van-swipe-item><img src="static/img/swipe2.png" alt=""></van-swipe-item>
+        <van-swipe-item><img src="static/img/progress.png" alt=""></van-swipe-item>
+        <van-swipe-item><img src="static/img/question.png" alt=""></van-swipe-item>
+        <van-swipe-item><img src="static/img/process.png" alt=""></van-swipe-item>
       </van-swipe>
     </div>
     <div class="assistant_more_content">
@@ -51,7 +52,7 @@
 <style lang="less" scoped>
 @import "../../index.less";
 .assistant_more_swipe {
-  height: 18vh;
+  height:22vh;
   .van-swipe-item {
     background: #ccc;
     height: 100%;

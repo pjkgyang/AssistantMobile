@@ -134,6 +134,7 @@ export default {
       this.questionData = {};
       this.questionmcData = {};
     }
+     this.imgStr = '';
   },  
   methods:{
    handleCommit(){
