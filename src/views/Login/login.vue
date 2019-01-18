@@ -27,7 +27,7 @@
           <p class="error-msg" v-if="failtureMsg">{{failtureMsg}}</p>
         <div>
           <mu-button  round  full-width  color="#00c1de" @click="handleLogin">登录</mu-button><br><br>
-          <p class="login_tip" v-if="loginActive==1">注：金智教育员工请使用工号登陆</p>
+          <p class="login_tip" v-if="loginActive==1">注：金智教育员工请使用工号登录</p>
         </div>
       </section>
       <section class="assisant-login-footer">
@@ -161,7 +161,7 @@ export default {
     // 统一身份认证
     handleTysfLogin() {
       window.open(
-        "http://careful.wisedu.com/emap/sys/etender/auth/idsWxLogin.do?openId=" +this.openId
+        "http://careful.wisedu.com/emap/sys/etender/auth/idsWxLogin.do?openId=" +window.openId +'&lx='+window.lx
       );
     },
   },
