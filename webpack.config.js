@@ -90,12 +90,22 @@ const webpackConfig = {
     },
     extensions: ['*', '.js', '.vue', '.json']
   },
+  // 开发配置
   devServer: {
     historyApiFallback: true,
     noInfo: true,
     overlay: true,
     host: '0.0.0.0',
-    port: 8080
+    port: 8082,
+    // proxy: {
+    //   'apis/': {
+    //     target: 'http://careful.wisedu.com:8887/emap/sys/etender/api/', // 设置你调用的接口域名和端口号
+    //     changeOrigin: true,     // 跨域
+    //     pathRewrite: {
+    //       '^apis/': '/'          
+    //     }
+    //   }
+    // },
   },
   performance: {
     hints: false
@@ -116,7 +126,8 @@ if (process.env.NODE_ENV === 'production') {
       'process.env': {
         NODE_ENV: '"production"'
       },
-      "WINDOW_CONFIG__BASEURL": '"http://careful.wisedu.com:8887/emap/sys/etender/api/"'
+      "WINDOW_CONFIG__BASEURL": '"http://careful.wisedu.com/emap/sys/etender/api/"'
+      // '"http://careful.wisedu.com:8887/emap/sys/etender/api/"'
     }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
@@ -135,7 +146,7 @@ if(process.env.NODE_ENV === 'development'){
       'process.env': {
         NODE_ENV: '"production"'
       },
-      "WINDOW_CONFIG__BASEURL": '"http://172.16.180.44:8080/emap/sys/etender/api/"'
+      "WINDOW_CONFIG__BASEURL": '"http://172.16.121.166:8080/emap/sys/etender/api/"'
     })
   ])
 }

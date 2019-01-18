@@ -24,7 +24,7 @@
               </div>
           </div>
         </div>
-          <p class="error-msg" v-if="failtureMsg">{{failtureMsg}}321313</p>
+          <p class="error-msg" v-if="failtureMsg">{{failtureMsg}}</p>
         <div>
           <mu-button  round  full-width  color="#00c1de" @click="handleLogin">登录</mu-button><br><br>
           <p class="login_tip" v-if="loginActive==1">注：金智教育员工请使用工号登陆</p>
@@ -144,14 +144,14 @@ export default {
             if (res.state == "success") {
               window.userName = res.data.nickName;
               window.userId = res.data.uid;
-              this.$store.dispatch('adduser',res.data);
-              // sessionStorage.setItem("userInfo", JSON.stringify(res.data));
+              localStorage.setItem("userInfo", JSON.stringify(res.data));
             }else{
               this.$toast(res.msg);
             }
           })
           this.$toast.clear();
-          this.$router.push({ path: "/more" });
+          this.$router.push({ path: "/" });
+          // more
         } else {
           this.$toast.clear();
           this.failtureMsg = res.msg;
@@ -171,9 +171,10 @@ export default {
       window.lx = sessionStorage.getItem("lx"); 
       window.gh = sessionStorage.getItem("gh"); 
     }
-    if(!window.lx){
+    if(window.lx != 0){
       this.loginActive = 1
     }
+     this.$toast.clear();
   },
   components: {}
 };

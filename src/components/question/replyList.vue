@@ -106,46 +106,7 @@ export default {
     replyData: {
       type: Array,
       default: () => {
-        return [
-          {
-            hflx: 1,
-            hfrxm: "陈子豪",
-            cjsj: "2018-11-13 16:55:20",
-            cnjsrq: "2018-11-19",
-            gs: "0",
-            nr: "回复内容",
-            lcbh: "项目团队受理"
-          },
-          {
-            hflx: 2,
-            hfrxm: "陈子豪",
-            cjsj: "2018-11-13 16:55:20",
-            cnjsrq: "2018-11-19",
-            gs: "0",
-            nr: "回复内容",
-            lcbh: "项目团队受理",
-            qwjjrq: "2018-11-13",
-            sfjsr: "战三,李四,ermazi"
-          },
-          {
-            hflx: 3,
-            hfrxm: "陈子豪",
-            cjsj: "2018-11-13 16:55:20",
-            cnjsrq: "2018-11-19",
-            gs: "0",
-            nr: "回复内容",
-            lcbh: "项目团队受理"
-          },
-          {
-            hflx: 4,
-            hfrxm: "陈子豪",
-            cjsj: "2018-11-13 16:55:20",
-            cnjsrq: "2018-11-19",
-            gs: "0",
-            nr: "回复内容",
-            lcbh: "项目团队受理"
-          }
-        ];
+        return [];
       }
     },
     // 问题详情
@@ -202,7 +163,7 @@ export default {
       }
     },
   },
-  mounted(){
+  activated(){
      if(this.questionData.fbzt==1){
        this.getContributionPeople();
      }

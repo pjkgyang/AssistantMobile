@@ -5,8 +5,8 @@ import Qs from 'qs';
 // axios.defaults.timeout = 5000;
 // axios.defaults.baseURL ='';
 
-//http request 拦截器
-// axios.interceptors.request.use(config => {   // const token = getCookie('名称');注意使用的时候需要引入cookie方法，推荐js-cookie                
+// http request 拦截器
+// axios.interceptors.request.use(config => {   // const token = getCookie('名称')使用的时候需要引入cookie方法，推荐js-cookie                
 //     config.data = JSON.stringify(config.data);
 //     config.headers = {
 //       'Content-Type':'application/x-www-form-urlencoded'
@@ -21,21 +21,22 @@ import Qs from 'qs';
 //   }
 // );
 
-//http response 拦截器
-// axios.interceptors.response.use(
-//   response => {
-//     if(response.data.errCode == 2){
-//       router.push({
-//         path:"/login",
-//         querry:{redirect:router.currentRoute.fullPath}//从哪个页面跳转
-//       })
-//     }
-//     return response;
-//   },
-//   error => {
-//     return Promise.reject(error)
-//   }
-// )
+// http response 拦截器
+axios.interceptors.response.use(
+  response => {
+    return response;
+  },
+  error => {
+    if(error.response){
+      switch (error.response.status) {
+        case 401:
+          sessionStorage.setItem("sign", '');
+          window.location.href = 'http://careful.wisedu.com:8887/emap/sys/etender/wx/index.html#/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+)
 
 /**
  * get  定义
@@ -51,8 +52,10 @@ export function get(url,params={}){
     }).then(response => {
       resolve(response.data);
     }).catch(err => {
-      reject(err)
-      this.$toast('请求超时，请稍后再试~');
+       reject(err)
+      if(!url.includes('getLoginUser')){
+        this.$toast('请求超时，请稍后再试~');
+      }
       this.$store.dispatch("chnageLoing", false);
     })
   })
@@ -78,9 +81,6 @@ export function get(url,params={}){
   }).then(response => {
             resolve(response.data);
             this.$toast.clear();
-            // if(!url.includes('canSubmitQuestion')){
-            //    this.$toast('提交成功~');
-            // }
           },err => {
             reject(err);
             this.$toast.clear();

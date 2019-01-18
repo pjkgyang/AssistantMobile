@@ -23,6 +23,9 @@ export default {
     adduser({commit},n){
         commit('addUser',n);
     },
+    changeState({commit},n){
+        commit('changeState',n);
+    },
 
     // saveMonthValue({commit},n){
     //     commit('saveMonthValue',n);

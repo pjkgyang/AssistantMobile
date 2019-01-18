@@ -18,50 +18,29 @@ export default {
       active: 0,
     };
   },
-  components:{loading},
+  activated(){},
   watch:{
-     '$route':(from,to)=>{
-        // new Vue().$store.dispatch("chnageLoing", false);
-     }
+    // '$route':function(from,to){
+    //     this.$store.dispatch("adduser", JSON.parse(localStorage.getItem("userInfo")));
+    // }
   },
   beforeCreate() {
-    // console.log(this.$store.state.loadingShow)
-    // window.openId = getQueryStringByName("openId");
-    // window.lx = getQueryStringByName("lx");
-
-    // if (window.openId) {
-    //   sessionStorage.setItem("openId", window.openId);
-    // } else {
-    //   window.openId = sessionStorage.getItem("openId");
-    // }
-
-    // if(window.lx){
-    //   sessionStorage.setItem("lx", window.lx);
-    // }else{
-    //   window.lx = sessionStorage.getItem("lx"); 
-    // }
-    // this.$post(this.API.wxLogin, {
-    //   openId: window.openId,
-    //   lx: window.lx
-    // }).then(res => {
-    //   if (res.state == "success") {
+      if(localStorage.getItem("userInfo")){
+         this.$store.dispatch("adduser", JSON.parse(localStorage.getItem("userInfo")));
+      }else{
         this.$get(this.API.getLoginUser,{}).then(res=>{
           if (res.state == "success") {
             window.userName = res.data.nickName;
             window.userId = res.data.uid;
-            sessionStorage.setItem("userInfo", JSON.stringify(res.data));
+            localStorage.setItem("userInfo", JSON.stringify(res.data));
+            this.$store.dispatch("adduser", JSON.parse(localStorage.getItem("userInfo")));
           }else{
             this.$toast(res.msg);
           }
         })
-       this.$store.dispatch("adduser", JSON.parse(sessionStorage.getItem("userInfo")));
-    //   } else {
-    //     this.$router.push({ path: "/login" });
-    //     // window.location.href = 'http://careful.wisedu.com/emap/sys/etender/wx/index.html#/login'
-    //   }
-    //    alert(JSON.stringify(res));
-    // });
-  }
+      }
+  },
+  components:{loading},
 };
 </script>
 <style lang="less">

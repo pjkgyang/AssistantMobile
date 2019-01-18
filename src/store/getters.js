@@ -22,6 +22,11 @@ export const mark = (state) => {
 export const userInfo = (state) => {
     return state.userInfo
 }
+
+export const changeState = (state) => {
+    return state.stateComplete
+}
+
 export const btnShow = (state) => {
     return state.btnShow
 }

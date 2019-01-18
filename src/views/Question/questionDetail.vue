@@ -155,7 +155,7 @@ export default {
       replyDetail:{}
     };
   },
-  mounted() {},
+
   activated() {
     this.imgList = [];
     if (!this.$store.state.mark) {
@@ -182,7 +182,7 @@ export default {
     handleCloseBtnshow(){
       this.$store.dispatch('changeBtnshow',false);
     },
-        //  驳回(申请关闭)
+    //  驳回(申请关闭)
     handleReject(params, index) {
       this.replyDetail.wid = params.wid;
       this.replyDetail.index = index;
@@ -546,6 +546,11 @@ export default {
         this.formData.cnjsrq  = '';
       }
     },
+    '$route':function(from,to){
+      if(from.name == 'Question'){
+        this.$store.dispatch('chnageMark',true);
+      }
+    }
   },
   components: { replyList, btnGroup, datePicker, cbrylist }
 };

@@ -7,7 +7,8 @@ const state = {
     btnloading:false,
     mark:false,
     btnShow:false,
-    userInfo:{},
+    stateComplete:true,
+    userInfo:!localStorage.getItem("userInfo")?{}:JSON.parse(localStorage.getItem("userInfo")),
     clienHeight:document.documentElement?document.documentElement.clientHeight:document.body.clientHeight
 };
 

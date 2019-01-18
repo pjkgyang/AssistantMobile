@@ -1,10 +1,10 @@
 
 
 
-let baseUrl = 'http://careful.wisedu.com:8887/emap/sys/etender/api/';
+let baseUrl = 'http://careful.wisedu.com/emap/sys/etender/api/';
 
 window.openId =  getQueryStringByName("openId");
-window.lx =  !getQueryStringByName("lx")?0:getQueryStringByName("lx");
+window.lx =  getQueryStringByName("lx")=='undefined'||getQueryStringByName("lx")=='null'?3:getQueryStringByName("lx");
 window.gh =  getQueryStringByName("gh");
 
 if(window.openId){
@@ -13,7 +13,7 @@ if(window.openId){
     window.openId = sessionStorage.getItem('openId');
 }
 
-if(window.lx){
+if(window.lx || window.lx=='0'){
     sessionStorage.setItem('lx',window.lx);
 }else{
     window.lx = sessionStorage.getItem('lx');
@@ -26,8 +26,13 @@ if(window.gh){
 }
 
 if(!sessionStorage.getItem('sign')){
-    wxLogin(window.openId,window.lx,window.gh);
+    if(window.lx != 3 || window.lx == '0'){ //非web登录
+        wxLogin(window.openId,window.lx,window.gh);
+    }else{
+        getLoginUser(); //web登录
+    }
 }
+
 
 //获取用户
 function wxLogin(openId,lx,gh) {
@@ -42,11 +47,11 @@ function wxLogin(openId,lx,gh) {
         },
         success: function (data) {
             if (data.state == "success") {
-                if(!sessionStorage.getItem('sign')){
+                if(window.lx != 3 && !sessionStorage.getItem('sign')){   //非Web登录
                     getLoginUser();  
                 }
             }else{
-                window.location.href = 'http://careful.wisedu.com:8887/emap/sys/etender/wx/cpdaily.html#/login' 
+                window.location.href = 'http://careful.wisedu.com/emap/sys/etender/wx/index.html#/login' 
             }
         }
     });
@@ -62,11 +67,20 @@ function getLoginUser(){
             if (data.state == "success") {
               window.userName = data.data.nickName;
               window.userId = data.data.uid;
-              sessionStorage.setItem("userInfo", JSON.stringify(data.data));
+              localStorage.setItem("userInfo", JSON.stringify(data.data));
               sessionStorage.setItem("sign", 1);
-              window.location.href = 'http://careful.wisedu.com:8887/emap/sys/etender/wx/cpdaily.html'
+              window.location.href = 'http://careful.wisedu.com/emap/sys/etender/wx/index.html'
             }else{
-              alert(data.msg);
+                if(window.lx == 3){  //web登录
+                    wxLogin();
+                }else{
+                    alert(data.msg);
+                }
+            }
+        },
+        error:function(error){
+            if(error.status == 401 && window.lx == 3){
+                wxLogin();
             }
         }
     });

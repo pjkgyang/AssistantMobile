@@ -112,7 +112,6 @@ export default {
   },
   activated(){
     if(this.$route.query.sl){
-       console.log(this.$route.params.data)
        this.cphs = Number(this.$route.params.data.cphs)
        this.questionData.xmmc = this.$route.params.data.xmmc;
        this.questionData.xmbh = this.$route.params.data.xmbh;
@@ -215,7 +214,6 @@ export default {
    },
    //  选择项目
    handleChooseItem(data){
-     console.log(data);
      this.questionData.xmmc = data.xmmc;
      this.questionData.xmbh = data.xmbh;
      this.projectlistShow = false;

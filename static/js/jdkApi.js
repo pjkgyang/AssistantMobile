@@ -1,11 +1,14 @@
-jdkInit();
+
+if(window.lx == "0"){
+    jdkInit();
+};
 
 //获取jsapi sign
 function getTicketInfo(){
     var result;
     $.ajax({
         type: "GET",
-        url: WINDOW_CONFIG__BASEURL+ "wx/getSign.do?url=" + location.href.replace(/&/g,"__"),
+        url: "http://careful.wisedu.com/emap/sys/etender/api/wx/getSign.do?url=" + location.href.replace(/&/g,"__"),
         async: false,
         success: function (data) {
             if ("success" == data.state) {

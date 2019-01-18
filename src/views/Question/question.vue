@@ -98,7 +98,6 @@
      }
    },
    mounted(){
-       this.init();
        window.addEventListener("popstate", this.historyChange);
    },
    beforeDestroy () {
@@ -111,6 +110,10 @@
   //   })
   // },
    activated(){
+    if (!this.$store.state.mark) {
+       this.init();
+    }
+    this.$store.dispatch("chnageMark", false);
     var p = document.getElementsByClassName('layout-scroll')[0];
     this.$nextTick(function(){
        p.scrollTop = this.scrollTop;
@@ -131,7 +134,7 @@
      },
     //  查看问题详情
      handleCheckDetail(params){
-       this.$router.push({path:'questiondetail',query:{wid:params.wid,lc:params.lcMc}})
+       this.$router.push({path:'questiondetail',query:{wid:params.wid}})
      },
     //  关闭pop
      handleCancel(){

@@ -63,36 +63,28 @@
           this.yPum = this.dy+this.ny;
 
 
-         if(this.xPum <= 0 && document.body.scrollHeight-56 > this.yPum > 0){
-           console.log('88888xxvxcvxcvxv')
+         if(this.xPum <= 0 && this.yPum >0 && this.yPum < document.body.scrollHeight - 56){
             moveDiv.style.left = 0;
             moveDiv.style.top = this.yPum +"px";
-         }else if(this.xPum > document.body.scrollWidth - 56 && this.yPum > 0){
-            console.log('88888')
+         }else if(this.xPum > document.body.scrollWidth - 56 && this.yPum > 0 && this.yPum < document.body.scrollHeight-56){
             moveDiv.style.left = (document.body.scrollWidth - 56) +"px"; 
             moveDiv.style.top = this.yPum + 'px';
-         }else if(this.yPum <= 0 && this.xPum < document.body.scrollWidth - 56){
-           console.log('3222222233adasd')
+         }else if(this.yPum <= 0 && this.xPum > 0 && this.xPum < document.body.scrollWidth - 56){
             moveDiv.style.left = this.xPum+"px";
             moveDiv.style.top = 0;
-         }else if(this.yPum > document.body.scrollHeight - 56 && this.xPum < document.body.scrollWidth-56){
-           console.log('3222222233');
+         }else if(this.yPum > document.body.scrollHeight - 56 && this.xPum > 0 && this.xPum < document.body.scrollWidth-56){
             moveDiv.style.left = this.xPum+"px";
             moveDiv.style.top = (document.body.scrollHeight - 56) + "px";
          }else if(this.xPum <= 0 && this.yPum <= 0){
-            console.log('333');
             moveDiv.style.left = 0;
             moveDiv.style.top = 0;
          }else if(this.xPum > document.body.scrollWidth-56 && this.yPum <= 0){
-           console.log('444');
             moveDiv.style.left = (document.body.scrollWidth-56)+'px';
             moveDiv.style.top = 0;
          }else if(this.xPum <= 0 && this.yPum > document.body.scrollHeight -  56){
-           console.log('aaaaa');
             moveDiv.style.left = 0;
             moveDiv.style.top = (document.body.scrollHeight -  56)+ 'px';
          }else if(this.xPum > document.body.scrollWidth - 56 && this.yPum > document.body.scrollHeight - 56){
-           console.log('aaaaabbbdsfssdf');
            moveDiv.style.left = (document.body.scrollWidth - 56) + "px";
             moveDiv.style.top = (document.body.scrollHeight - 56) + 'px';
          }else{

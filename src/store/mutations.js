@@ -15,7 +15,10 @@ export default {
     addUser(state, n) {
         state.userInfo = n;
     },
-
+    changeState(state, n) {
+        state.stateComplete = n;
+    },
+    
 
     saveMonthValue(state, n) {
         state.weekMonthvalue = n;
