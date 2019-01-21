@@ -13,8 +13,8 @@
 export const loadingShow = (state) => {
     return state.loadingShow
 }
-export const btnloading = (state) => {
-    return state.btnLoading
+export const queryBtn = (state) => {
+    return state.queryBtn
 }
 export const mark = (state) => {
     return state.mark

@@ -3,8 +3,8 @@ export default {
     chnageLoing(state, n) {
         state.loadingShow = n;
     },
-    chnageBtnloing(state, n) {
-        state.btnloading = n;
+    chnageBtn(state, n) {
+        state.queryBtn = n;
     },
     chnageMark(state, n) {
         state.mark = n;

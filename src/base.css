@@ -20,6 +20,9 @@ ul{
     margin: 0;
     padding: 0;
 }
+.question-content p,.reply-content p{
+    word-break:break-all;
+}
 /* 暂无内容 */
 .empty-content-tip{
     color: #999;

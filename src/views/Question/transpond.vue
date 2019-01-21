@@ -106,9 +106,12 @@
         qwjjrq: this.questionData.qwjjrq
      }).then(res=>{
        if(res.state == 'success'){
+         let keysArr = Object.keys(res.data);
+         if(keysArr[0]=='true'){
+           this.$router.go(-1);
+         }
          this.$toast.clear();
-         this.$toast({message:'提交成功~',duration:1500});
-         this.$router.go(-1);
+         this.$toast({message:keysArr[0]=='true'?res.data.true:res.data.false,duration:2000});
        }else{
          this.$toast.clear();
          this.$toast(!res.msg?'系统超时，请稍后再试~':res.msg);
@@ -138,12 +141,6 @@
       }else{
         this.cpList = getSession('kycp');
     } 
-    
-    if(!getSession('zfdx')){
-       this.forwardLabel();
-    }else{
-       this.zfdxList = getSession('zfdx'); 
-    }
    },
   
    // 提交校验
@@ -171,6 +168,10 @@
   mounted(){
     this.getDictEnum();
   },
+  activated(){
+    this.forwardLabel();
+  },
+
   components: {datePicker}
 };
 </script>

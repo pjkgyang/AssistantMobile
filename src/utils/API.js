@@ -74,4 +74,7 @@ export default {
     saveCb:WINDOW_CONFIG__BASEURL +'question/saveCb.do',//保存催办
     saveForward:WINDOW_CONFIG__BASEURL +'question/saveForward.do',//转发
     addOrUpdateCrowdId:WINDOW_CONFIG__BASEURL +'question/addOrUpdateCrowdId.do',//关联开发任务编号
+    queryResponsibleProduct:WINDOW_CONFIG__BASEURL +'question/queryResponsibleProduct.do',//产品项目产品
+    getCrowdRwzt:WINDOW_CONFIG__BASEURL +'external/getCrowdRwzt.do',//获取crowd
+    getCrowdRwxx:WINDOW_CONFIG__BASEURL +'external/getCrowdRwxx.do',//获取crowd
 }

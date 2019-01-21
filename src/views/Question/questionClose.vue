@@ -95,6 +95,30 @@ export default {
     handleCommit() {
         this.$toast.loading({mask: true,message: '提交中...',duration:0});
         if(!this.validDate()) return;
+        let gxrArr = [];
+        if (this.gxrgsList.length != 0) {
+                this.gxrgsList.forEach((ele, i, arr) => {
+                gxrArr.push(ele.fbrxm + "," + ele.fbrbh + "," + ele.qrgs);
+            });
+        }
+        this.$post(this.API.closeQuestion,{
+            wid:this.$route.query.wid,
+            zlpf: this.closeData.zlpf,
+            gxrData: gxrArr.join("|"),
+            sfjj:"",
+            jjsm:"",
+            cpsm: this.closeData.zlpf <= 3 ? this.closeData.sm : "",
+            gssfrk: this.closeData.gssfrk
+        }).then(res=>{
+            if(res.state == 'success'){
+                this.$toast.clear();
+                this.$toast({message:'问题关闭成功~',duration:1500});
+                this.$router.go(-1);
+            }else{
+               this.$toast.clear(); 
+               this.$toast(res.msg);
+            }
+        })
     },
 
 

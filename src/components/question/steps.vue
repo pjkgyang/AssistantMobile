@@ -1,8 +1,13 @@
 <template>
     <div>
-        <ul v-if="list.length">
-            <li v-for="(process,index) in list" :key="index" :class="{'active':process.flag == 2}">
-                {{process.mc}}
+        <ul v-if="list.length" :style="{'counter-reset':type=='process'?'step':'step ' + (list.length+1)}">
+            <li v-for="(process,index) in list" :key="index" 
+            :class="{'crowdBefore':type=='crowd','active':process.flag == 2,'active-1':process.flag == 1}">
+                <div v-if="type == 'process'">{{process.mc}}</div>
+                <div v-else class="crowd">
+                     <p><span>{{process.czrxm}}</span>&#x3000;{{process.czsj}}&#x3000;<van-tag round type="primary">{{process.ztDisplay}}</van-tag></p>
+                     <p>审核意见:<span>{{process.shyy}}</span></p>  
+                </div>
             </li>
         </ul>
         <div v-else class="empty">
@@ -19,6 +24,10 @@ export default {
       }
   },
   props: {
+    type:{
+      type:String,
+      default:'process'
+    },
     list: {
       type: Array,
       default: function() {
@@ -37,13 +46,11 @@ export default {
   ul {
     position: relative;
     margin-bottom: 30px;
-    counter-reset: step; 
     li {
       list-style-type: none;
       font-size: 0.9rem;
       position: relative;
-      padding: 0 0 0 1.8rem;
-      height: 2.5rem;
+      padding: 0 0 1rem 1.8rem;
       z-index: 2;
       color: #999;
       &::before {
@@ -73,7 +80,17 @@ export default {
         top: 16px;
         z-index: 2; 
       }
+      .crowd{
+           span:nth-child(1){
+             color: #333;
+           }
+      }
     }
+  }
+
+  li.crowdBefore::before{
+    content: counter(step);
+    counter-increment:step -1;
   }
   li.active{
       color: #4b0;
@@ -82,6 +99,15 @@ export default {
   ul li.active::after {
     background-color: #4b0;
   }
+
+  li.active-1{
+    color: rgb(226, 28, 28);
+  }
+  ul li.active-1::before,
+  ul li.active-1::after {
+    background-color: #f00;
+  }
+
   ul li.active::before{
       content:'✔';
   }

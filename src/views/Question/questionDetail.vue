@@ -39,6 +39,7 @@
             <p>承诺结束日期：
               <span>{{questionData.cnjsrq}}</span>
             </p>
+             <p>解决责任人：<span>{{questionData.jjzrr}}</span></p>
           </div>
         </div>
         <div class="questionDetail-desc-nr">
@@ -47,7 +48,7 @@
       </section>
       <!-- 回复列表 -->
       <section class="questionDetail-reply">
-        <replyList :questionData="questionData" :replyData="replyData" @handleReject="handleReject"></replyList>
+        <replyList :questiondata="questionData" :replyData="replyData" @handleReject="handleReject"></replyList>
       </section>
     </div>
 
@@ -58,14 +59,14 @@
 
     <!-- 操作按钮 -->
     <div class="questionDetail-bottom">
-      <btnGroup  :wid="$route.query.wid" @handleClick="handleClick" @BtnAuthFalse="BtnAuthFalse"></btnGroup>
+      <btnGroup   :wid="$route.query.wid" @handleClick="handleClick" @BtnAuthFalse="BtnAuthFalse"></btnGroup>
     </div>
 
     <van-actionsheet v-model="operateShow" :title="operateTitle">
       <div class="actionsheet-operate">
         <div>
+          <van-field v-if="curOperate=='sl'" required v-model="formData.qwjjrq" type="textarea" label="期望解决日期" placeholder="请选择"  rows="1" autosize @click="onClick('qwjjrq')" />
           <van-field v-if="curOperate=='cnsj'||curOperate=='sl'" required v-model="formData.cnjsrq" type="textarea" label="承诺结束日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('cnjsrq')" />
-          <van-field v-if="curOperate=='sl'" required v-model="formData.qwjjrq" type="textarea" label="期望解决日期" placeholder="请选择" is-link rows="1" autosize @click="onClick('qwjjrq')" />
           <van-field v-if="curOperate=='cb' && showCbry" required v-model="formData.rymc" type="textarea" label="催办人员" placeholder="请选择" is-link rows="1" autosize @click="onClick('cbry')" />
           <van-field v-if="curOperate!='sl' && curOperate!='xgcrowId'" required v-model="formData.sm" type="textarea" label="说明" placeholder="请输入" rows="5" clearable/>
           <van-field v-if="curOperate=='xgcrowId'" required v-model="formData.kfrwbh" type="textarea" label="开发任务编号" placeholder="请输入" rows="1" autosize clearable/>
@@ -136,9 +137,9 @@ export default {
       questionData: {}, //单个问题详情
       // 修改（承诺结束日期,受理）
       formData: {
-        cnjsrq: "123123",
+        cnjsrq: "",
         qwjjrq: "",
-        sm: "123123",
+        sm: "",
         rymc: "",
         rybh: "",
         kfrwbh: "",
@@ -151,7 +152,6 @@ export default {
       btnShow:true, //按钮有按钮
       scroll: 0,
       cphs:0,
-
       replyDetail:{}
     };
   },
@@ -161,6 +161,7 @@ export default {
     if (!this.$store.state.mark) {
       this.queryQuestion();
       this.queryAnswers();
+      this.queryBtnAuth();
       this.scroll = 0;
     }else{
      let oDiv = document.getElementsByClassName('questionDetail-top')[0];
@@ -186,7 +187,6 @@ export default {
     handleReject(params, index) {
       this.replyDetail.wid = params.wid;
       this.replyDetail.index = index;
-      console.log(params, index);
       this.rejectShow = true;
     },
     // 驳回提交
@@ -211,8 +211,6 @@ export default {
             this.$toast(!res.msg ? "系统超时，请稍后再试~" : res.msg);
          }
        })
-      
-
     },
     // 提交
     handleCommit() {
@@ -247,7 +245,12 @@ export default {
         if (res.state == "success") {
           this.$toast.clear();
           this.$toast({ message: "提交成功~", duration: 1500 });
+          if(this.curOperate == 'sl'){
+            this.queryQuestion();
+          }
           this.queryAnswers();
+          // 查询按钮组是否显示
+          this.$store.dispatch("chnageBtn",!this.$store.state.queryBtn);
           this.operateShow = false;
         } else {
           this.$toast.clear();
@@ -300,10 +303,21 @@ export default {
           query: { wid: this.$route.query.wid }
         });
       } else if (data == "gb") {
-        this.$router.push({
-          path: "/closequestion",
-          query: { wid: this.$route.query.wid }
-        });
+        this.$get(this.API.canClose,{
+           wid:this.$route.query.wid
+        }).then(res=>{
+          if(res.state == 'success'){
+           if (!res.data) {
+             this.$toast('该问题未处理完成，不能关闭！')
+           }else{
+             this.$router.push({
+              path: "/closequestion",
+              query: { wid: this.$route.query.wid }
+            });
+           }
+          }
+        })
+        
       } else if (data == "sl") {
         this.isgcXmtdbyWt();
       } else if (data == "sqjs") {
@@ -328,17 +342,21 @@ export default {
       this.dateType = data;
       if(data == 'cnjsrq'){
           this.pickerKsrqShow = !this.pickerKsrqShow;
-          if(this.curOperate != 'sl'){
+          if(this.curOperate == 'sl'){
             this.dateDisable = true;
           }else{
             this.dateDisable = false;
           }
-       }else if(data == 'qwjjrq'){
-          this.pickerKsrqShow = !this.pickerKsrqShow;
-          this.dateDisable = false;
        }else if(data == 'cbry'){
           this.cbryShow = !this.cbryShow;
        }
+
+
+      //  else if(data == 'qwjjrq'){
+      //     this.pickerKsrqShow = !this.pickerKsrqShow;
+      //     this.dateDisable = false;
+      //  }
+
     },
     //  选择日期
     handleChangeDate(data) {
@@ -368,7 +386,6 @@ export default {
 
     // 获取单个问题
     queryQuestion() {
-      this.questionData = {};
       this.$store.dispatch("chnageLoing", true);
       this.$get(this.API.queryQuestion, {
         wid: this.$route.query.wid
@@ -412,6 +429,7 @@ export default {
         if (res.state == "success") {
           if (!res.data) {
             this.operateTitle = "受理";
+            this.formData.qwjjrq = !this.btnGroupData.qwjjrq?'':this.btnGroupData.qwjjrq;
             this.operateShow = !this.operateShow;
           } else {
             this.$router.push({ name: "addQuestion", query: { sl: 1 },params: { data: this.questionData } });
@@ -538,13 +556,16 @@ export default {
   },
   watch: {
     operateShow(n, o) {
-      this.formData.rymc = this.formData.rybh = this.formData.sm =  this.formData.qwjjrq = this.formData.kfrwbh = "";
-      this.formData.kfgzl = 0;
+      if(!n){
+        this.formData.rymc = this.formData.rybh = this.formData.sm =  this.formData.kfrwbh = "";
+        this.formData.kfgzl = 0;
+      }
       if(this.curOperate == 'cnsj'){
         this.formData.cnjsrq = !this.questionData.cnjsrq?'':this.questionData.cnjsrq;
       }else{
         this.formData.cnjsrq  = '';
       }
+
     },
     '$route':function(from,to){
       if(from.name == 'Question'){

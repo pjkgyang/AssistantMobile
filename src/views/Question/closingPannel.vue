@@ -68,7 +68,6 @@ export default {
 
     // 驳回或关闭
     handleCloseOrReject(type, params) {
-      console.log(params);
       if (type == "reject") {
           this.operateShow = true;
       } else {
@@ -80,7 +79,6 @@ export default {
     },
     // 提交
     handleCommit(){
-      return;
       if(!this.validDate()) return;
         this.$dialog.confirm({
             title: '提示',

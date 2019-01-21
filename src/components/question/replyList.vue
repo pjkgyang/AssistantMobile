@@ -16,7 +16,7 @@
                     <span>{{reply.fbrxm}}&#x3000;</span>
                     <span>{{reply.fbsj}}</span>
                     <!-- 申请关闭 驳回-->
-                    <span v-if="(reply.hflx == 3||reply.hflx == 10) && questionData.fbzt != 1">
+                    <span v-if="(reply.hflx == 3||reply.hflx == 10) && questiondata.fbzt != 1">
                        <span class="floatRight" v-if="reply.sfbh == 0">
                          <van-button size="mini" type="danger" @click="handleReject(reply,index)">驳回</van-button>
                         </span>
@@ -43,14 +43,14 @@
             </div>
             <div>
                <div @click="previewImage" v-if="reply.hflx != 9" class="reply-content" v-html="reply.nr + (!reply.sm?'':('<br><br><span style=color:red>'+reply.czrxm+' 于 '+reply.czsj+' 驳回了 '+reply.fbrxm+' 的申请；<br>驳回说明：'+reply.sm+'</span>'))" ></div>
-               <div @click="previewImage" v-if="reply.hflx == 9" class="reply-content" v-html="reply.nr"></div>
+               <div @click="handleCheckCrowd(reply.crowdid)" v-if="reply.hflx == 9" class="reply-content reply_crowd" v-html="reply.nr"></div>
             </div>
         </section>
             <!-- 图片预览 -->
         <div v-transfer-dom>
           <previewer :list="imgList" ref="previewer"></previewer>
         </div>
-        <section class="quesiton-reply" v-if="questionData.fbzt == 1">
+        <section class="quesiton-reply" v-if="questiondata.fbzt == 1">
             <div class="reply-state"> 
               <div>
                   <van-tag size="large" color="rgb(255, 68, 68)">
@@ -60,15 +60,18 @@
             </div>
             <div class="reply-header">
                 <p class="fontColorb">
-                    <span>{{questionData.wtgbr}}&#x3000;</span>
-                    <span>{{questionData.gbsj}}</span>
+                    <span>{{questiondata.wtgbr}}&#x3000;</span>
+                    <span>{{questiondata.gbsj}}</span>
                 </p>
             </div>
             <div class="reply-content">
                 <section>
                    <h4>服务评价</h4>
                    <div class="reply-close-fwzl">
-                     <span>服务质量：</span><van-rate v-model="questionData.zlpf"  disabled />&#x3000;{{questionData.zlpf}} 分
+                     <span>服务质量：</span><van-rate v-model="questiondata.zlpf"  disabled />&#x3000;{{questiondata.zlpf}} 分
+                   </div>
+                   <div  v-if="questiondata.zlpf<=3 && !!questiondata.cpsm">
+                     <span>服务评价说明：</span>{{questiondata.cpsm}}
                    </div>
                 </section>
                 <section>
@@ -83,10 +86,10 @@
                 </section>
                 <section>
                    <h4>解决说明</h4>
-                   <div v-html="!questionData.jjsm?'无':questionData.jjsm"></div>
+                   <div v-html="!questiondata.jjsm?'无':questiondata.jjsm"></div>
                 </section>
                 <section>
-                   <h4>是否认可工时：<span>{{questionData.gssfrk==1?'是':'否'}}</span></h4>
+                   <h4>是否认可工时：<span>{{questiondata.gssfrk==1?'是':'否'}}</span></h4>
                 </section>
             </div>
         </section>
@@ -110,31 +113,35 @@ export default {
       }
     },
     // 问题详情
-    questionData:{
+    questiondata:{
       type:Object,
       default:()=>{
         return {}
       }
     }
   },
-
+  watch: {
+     questiondata: function (val) {
+      if(val.fbzt == 1){
+       this.getContributionPeople();
+      }
+    }
+  },
   methods:{
     handleReject(params,index){
-      this.$emit('handleReject',params,index)
+      this.$emit('handleReject',params,index);
     },
     // 获取贡献人
      getContributionPeople(){
+       this.hjgs = 0;
        this.$get(this.API.queryContributionPeople,{
-         wid:this.questionData.wid,
+         wid:this.questiondata.wid,
        }).then(res=>{
          if(res.state == 'success'){
            if(!!res.data){
             this.gxrList = res.data
             this.gxrList.forEach((ele, i, arr) => {
-                if (ele.gs.split(".")[0] == "") {
-                  ele.gs = 0 + ele.gs;
-                }
-                this.hjgs += parseFloat(ele.gs);
+             this.hjgs += Number(ele.gs);
             });
            }else{
              this.gxrList = [];
@@ -162,11 +169,15 @@ export default {
         return;
       }
     },
+    // 查看crowd
+    handleCheckCrowd(data){
+      this.$router.push({path:'/crowd',query:{crowdid:data}})  
+    }
+  },
+  mounted(){
   },
   activated(){
-     if(this.questionData.fbzt==1){
-       this.getContributionPeople();
-     }
+     
   },
   components: {}
 };
@@ -193,7 +204,12 @@ export default {
   .reply-state{
     .flex(space-between);
   }
-
+  .reply_crowd{
+    color: rgb(24, 57, 129);
+    a{
+      text-decoration: underline;
+    }
+  }
   .reply-content {
     padding: 0.5rem 0;
     font-size: @fontSize14;

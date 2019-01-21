@@ -25,9 +25,9 @@ export default {
     // }
   },
   beforeCreate() {
-      if(localStorage.getItem("userInfo")){
-         this.$store.dispatch("adduser", JSON.parse(localStorage.getItem("userInfo")));
-      }else{
+      // if(localStorage.getItem("userInfo")){
+      //    this.$store.dispatch("adduser", JSON.parse(localStorage.getItem("userInfo")));
+      // }else{
         this.$get(this.API.getLoginUser,{}).then(res=>{
           if (res.state == "success") {
             window.userName = res.data.nickName;
@@ -38,7 +38,7 @@ export default {
             this.$toast(res.msg);
           }
         })
-      }
+      // }
   },
   components:{loading},
 };

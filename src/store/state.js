@@ -4,7 +4,7 @@ const state = {
     // weekStartDate:'',
     // weekEndDate:'',
     loadingShow:false,
-    btnloading:false,
+    queryBtn:false,
     mark:false,
     btnShow:false,
     stateComplete:true,

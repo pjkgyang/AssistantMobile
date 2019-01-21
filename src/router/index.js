@@ -11,7 +11,7 @@ import applyClose from "@/views/Question/applyClose.vue";
 import questionProcess from "@/views/Question/questionProcess.vue";
 import questionForward from "@/views/Question/transpond.vue";
 import sqgbList from "@/views/Question/closingPannel.vue";
-
+import crowd from "@/views/Question/crowdDetail.vue";
 
 
 
@@ -201,6 +201,12 @@ export default new Router({
       name: 'sqgbList',
       meta:{title:'问题进度'},
       component: sqgbList
+    },
+    {
+      path: '/crowd',
+      name: 'Crowd',
+      meta:{title:'开发进度跟踪'},
+      component:crowd
     }
   ]
 })

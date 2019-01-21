@@ -63,7 +63,6 @@
           })
         }
        }, 
-
       handleClose(){
         this.$store.dispatch('chnageMark',true);
         this.$router.go(-1);  

@@ -11,8 +11,8 @@ export default {
     chnageLoing({commit},n){
         commit('chnageLoing',n);
     },
-    chnageBtnloing({commit},n){
-        commit('chnageBtnloing',n);
+    chnageBtn({commit},n){
+        commit('chnageBtn',n);
     },
     chnageMark({commit},n){
         commit('chnageMark',n);

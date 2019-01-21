@@ -14,6 +14,7 @@
                     <p>产品：<span>{{questionData.cpmc}}</span></p>
                     <p>期望解决日期：<span>{{questionData.qwjjrq}}</span></p>
                     <p>承诺结束日期：<span>{{questionData.cnjsrq}}</span></p>
+                    <p>解决责任人：<span>{{questionData.jjzrr}}</span></p>
                 </div> 
             </div>
         </section>
@@ -51,7 +52,7 @@
 
    },
    activated(){
-       this.$store.dispatch('chnageMark',true); //表示
+       this.$store.dispatch('chnageMark',true); //标识
        this.queryProcess();
        this.questionData = this.$route.params.data;
    },

@@ -103,6 +103,7 @@ export default {
       yxfwList:{0:'影响局部',1:'影响整体'},//影响范围
       sgbugList:{0:'否',1:'是'},//是否bug
 
+      xmInfo:{},
       imgStr:"",
       cphs:0
     };
@@ -115,20 +116,19 @@ export default {
        this.cphs = Number(this.$route.params.data.cphs)
        this.questionData.xmmc = this.$route.params.data.xmmc;
        this.questionData.xmbh = this.$route.params.data.xmbh;
-       this.questionData.wtlb = this.$route.params.data.wtlb; //问题类别
        this.questionData.wtjb = this.$route.params.data.wtjb; //问题级别
-       this.questionData.sfjj = this.$route.params.data.jjyf;
-       this.questionData.sfbug = this.$route.params.data.sfbg;
        this.questionData.cpbh = this.$route.params.data.cpbh;
        this.questionData.yxfw = this.$route.params.data.yxfw;
        this.questionData.qwjjrq = this.$route.params.data.qwjjrq;
        this.questionData.cnjsrq = this.$route.params.data.cnjsrq;
        this.questionData.bbh = this.$route.params.data.bbh;
+       this.questionData.sfjj = this.$route.params.data.jjyf;
+       this.questionData.sfbug = this.$route.params.data.sfbg;
        
        this.questionmcData.wtlb = this.$route.params.data.wtlx_display; 
        this.questionmcData.cpmc = this.$route.params.data.cpmc
-       this.questionmcData.sfjj = this.$route.params.data.jjyf==0?'否':'是';
-       this.questionmcData.sfbug = this.$route.params.data.sfbg==0?'否':'是';
+       this.questionmcData.sfjj = this.$route.params.data.jjyf=='0'?'否':this.$route.params.data.jjyf=='1'?'是':'';
+       this.questionmcData.sfbug = this.$route.params.data.sfbg=='0'?'否':this.$route.params.data.sfbg=='1'?'是':'';
     }else{
       this.questionData = {};
       this.questionmcData = {};
@@ -214,9 +214,26 @@ export default {
    },
    //  选择项目
    handleChooseItem(data){
+     this.xmInfo = data;
      this.questionData.xmmc = data.xmmc;
      this.questionData.xmbh = data.xmbh;
      this.projectlistShow = false;
+     this.queryResponsibleProduct(data.xmbh);
+   },
+   queryResponsibleProduct(xmbh){ 
+      this.cpList = [];
+      this.$get(this.API.queryResponsibleProduct,{
+        xmbh: xmbh
+      }).then(res => {
+        if (res.state == "success") {
+          // 2018.12.18 修改
+          if (JSON.stringify(res.data) == "{}") {
+            this.$toast(" 您选择的项目没有可提问产品，请联系项目经理 ( " + this.xmInfo.yfzrrxm +")添加负责业务。");
+          } else {
+           this.cpList = res.data;
+          }
+        }
+      });
    },
    //  选择日期
    handleChangeDate(data){
@@ -265,13 +282,13 @@ export default {
 
   // 获取枚举
    getDictEnum(){
-    if(!getSession('kycp')){
-      getMenu('kycp',true).then(data=>{
-          this.cpList = data;
-        });
-      }else{
-        this.cpList = getSession('kycp');
-      } 
+    // if(!getSession('kycp')){
+    //   getMenu('kycp',true).then(data=>{
+    //       this.cpList = data;
+    //     });
+    //   }else{
+    //     this.cpList = getSession('kycp');
+    //   } 
 
       if(!getSession('ProblemType')){
       getMenu('ProblemType','').then(data=>{
