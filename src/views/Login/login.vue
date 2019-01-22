@@ -145,12 +145,19 @@ export default {
               window.userName = res.data.nickName;
               window.userId = res.data.uid;
               localStorage.setItem("userInfo", JSON.stringify(res.data));
+              this.$toast.clear();
+              
+              // 临时增加权限
+              if(res.data.userGroupTag.includes('JYGL')){
+                  this.$router.push({ path: "/" });
+              }else{
+                  this.$router.push({ path: "/taskLog" });
+              }
             }else{
+              this.$toast.clear();
               this.$toast(res.msg);
             }
           })
-          this.$toast.clear();
-          this.$router.push({ path: "/" });
           // more
         } else {
           this.$toast.clear();

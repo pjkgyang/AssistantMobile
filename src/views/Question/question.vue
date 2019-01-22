@@ -119,6 +119,7 @@
        p.scrollTop = this.scrollTop;
     })
    },
+   
    methods:{
      handleScroll(){
       this.$nextTick(() => {

@@ -25,7 +25,7 @@
 
         <div class="datePop">
           <van-popup v-model="pickerDateShow">
-            <datePicker @handleChangeDatePicker="handleChangeDate"></datePicker>
+            <datePicker @handleChangeDatePicker="handleChangeDate" :dateDisable="dateDisable" :beforeDisabled="beforeDisabled"></datePicker>
           </van-popup>
         </div>
     </div>
@@ -40,6 +40,8 @@
     return {
       actionSheetShow:false,
       pickerDateShow:false, //日期选择
+      dateDisable:false, //日期格式化
+      beforeDisabled:false,//日期格式化（）
       actionSheetTitle:'',
       questionData: {
         cpbh:'',//
@@ -68,6 +70,8 @@
         this.optionList = this.cpList; 
      }else if(params == 'qwjjrq'){
         this.pickerDateShow = true;
+        this.dateDisable = true;
+        this.beforeDisabled = true;
         return;
      }
      this.actionSheetShow = true;

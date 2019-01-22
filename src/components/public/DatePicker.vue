@@ -23,6 +23,10 @@ export default {
       type:Boolean,
       default:false
     },
+    beforeDisabled:{
+      type:Boolean,
+      default:false
+    },
     cphs:{
       type:Number,
       default:0
@@ -33,10 +37,14 @@ export default {
       this.$emit("handleChangeDatePicker", date);
     },
     allowedDates(date){
-      let laterDate = GetNextDate(new Date(),this.cphs+1);
-      let beforeDate = GetNextDate(new Date(),0);
-      return new Date(date) < new Date(beforeDate) || new Date(date) >= new Date(laterDate);
-    }
+          let laterDate = GetNextDate(new Date(),this.cphs+1);
+          let beforeDate = GetNextDate(new Date(),0);
+        if(!this.beforeDisabled){
+           return new Date(date) < new Date(beforeDate) || new Date(date) >= new Date(laterDate);
+        }else{
+           return new Date(date) < new Date(beforeDate);
+        }
+    },
   },
   components: {}
 };

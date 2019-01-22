@@ -61,7 +61,12 @@ export default {
     handleClose() {
       this.$emit("handleClose", "");
     },
+    // 选择项目
     handleChooseItem(data) {
+      if (data.ztztmc == "已过保" && data.gcfwzt == "0") {
+        this.$toast("项目已过保，请尽快联系项目经理续签维保合同");
+        return;
+      }
       this.$emit("handleChooseItem", data);
     },
     // 上啦刷新

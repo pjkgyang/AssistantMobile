@@ -1,20 +1,20 @@
 <template>
-    <div>
-        <div class="question-reply-btngroup">
-            <van-button v-for="(btn,index) in btngroupArr" :key="index" :type="btn.type" @click="handleClick(btn.en)" :class="{'btnClasshf':!btn.type && btn.name=='回复','btnClassqt':!btn.type && btn.name!='回复'}">{{btn.name}}</van-button>
+  <div>
+    <div class="question-reply-btngroup">
+      <van-button v-for="(btn,index) in btngroupArr" :key="index" :type="btn.type" @click="handleClick(btn.en)" :class="{'btnClasshf':!btn.type && btn.name=='回复','btnClassqt':!btn.type && btn.name!='回复'}">{{btn.name}}</van-button>
 
-            <van-button type="warning" v-if="btnArrs.length > 2" @click.stop="handleCheckMore">更多</van-button>
-        </div>
-        <mu-expand-transition>
-            <div class="reply-btngroup-more" v-if="show">
-                <ul>
-                    <li v-for="(btn,index) in btngroup">
-                        <van-button :key="index" :type="btn.type" @click="handleClick(btn.en)" :class="{'btnClasshf':!btn.type && btn.name=='回复','btnClassqt':!btn.type && btn.name!='回复'}">{{btn.name}}</van-button>
-                    </li>
-                </ul>
-            </div>
-        </mu-expand-transition>
+      <van-button type="warning" v-if="btnArrs.length > 2" @click.stop="handleCheckMore">更多</van-button>
     </div>
+    <mu-expand-transition>
+      <div class="reply-btngroup-more" v-if="show">
+        <ul>
+          <li v-for="(btn,index) in btngroup">
+            <van-button :key="index" :type="btn.type" @click="handleClick(btn.en)" :class="{'btnClasshf':!btn.type && btn.name=='回复','btnClassqt':!btn.type && btn.name!='回复'}">{{btn.name}}</van-button>
+          </li>
+        </ul>
+      </div>
+    </mu-expand-transition>
+  </div>
 </template>
 
 <script>
@@ -42,18 +42,17 @@ export default {
     wid: {
       type: String,
       default: ""
-    },
+    }
   },
   activated() {
     if (!this.$store.state.mark) {
-       this.queryBtnAuth();
+      this.queryBtnAuth();
     }
     this.show = false;
   },
-  mounted() {
-  },
+  mounted() {},
   computed: {
-    ...mapGetters(["btnShow","queryBtn"]),
+    ...mapGetters(["btnShow", "queryBtn"])
   },
   watch: {
     btnShow(n, o) {
@@ -61,8 +60,8 @@ export default {
         this.show = false;
       }
     },
-    queryBtn(n, o){
-       this.queryBtnAuth();
+    queryBtn(n, o) {
+      this.queryBtnAuth();
     }
   },
   methods: {
@@ -83,20 +82,6 @@ export default {
         wid: this.wid
       }).then(res => {
         if (res.state == "success") {
-          this.btnArr.forEach(ele => {
-            ele.show = res.data[ele.en];
-          });
-          this.btnArr.forEach((value, index, array) => {
-            if (value.show) {
-              this.btngroup.push(value);
-              this.btnArrs.push(value);
-            }
-          });
-          if (this.btngroup.length > 2) {
-            this.btngroupArr = this.btngroup.splice(0, 2);
-          } else {
-            this.btngroupArr = this.btngroup;
-          }
           if (
             !res.data["hf"] &&
             !res.data["zf"] &&
@@ -107,7 +92,23 @@ export default {
             !res.data["xgcrowId"] &&
             !res.data["sqjs"]
           ) {
-            this.$emit("BtnAuthFalse", "");
+            this.$emit("BtnAuthFalse",res.data.qwjjrq, false);
+          } else {
+            this.btnArr.forEach(ele => {
+              ele.show = res.data[ele.en];
+            });
+            this.btnArr.forEach((value, index, array) => {
+              if (value.show) {
+                this.btngroup.push(value);
+                this.btnArrs.push(value);
+              }
+            });
+            if (this.btngroup.length > 2) {
+              this.btngroupArr = this.btngroup.splice(0, 2);
+            } else {
+              this.btngroupArr = this.btngroup;
+            }
+            this.$emit("BtnAuthFalse", res.data.qwjjrq,true); 
           }
         } else {
           this.$toast(!res.msg ? "系统超时，请稍后再试~" : res.msg);

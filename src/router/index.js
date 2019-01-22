@@ -193,13 +193,13 @@ export default new Router({
     {
       path: '/questionForward',
       name: 'QuestionForward',
-      meta:{title:'问题进度'},
+      meta:{title:'问题转发'},
       component: questionForward
     },
     {
       path: '/sqgbList',
       name: 'sqgbList',
-      meta:{title:'问题进度'},
+      meta:{title:'申请关闭列表'},
       component: sqgbList
     },
     {

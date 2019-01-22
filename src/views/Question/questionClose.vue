@@ -11,7 +11,7 @@
             </div>
             <!-- 服务质量小于等于填写说明 -->
             <van-cell-group v-if="closeData.zlpf<=3">
-                    <van-field required v-model="closeData.sm" type="textarea" label="评价说明" placeholder="我们的服务给您带来不便，深表歉意。为了更好的为您服务，请填写评价说明！" rows="3"  />
+                <van-field required v-model="closeData.sm" type="textarea" label="评价说明" placeholder="我们的服务给您带来不便，深表歉意。为了更好的为您服务，请填写评价说明！" rows="3"  />
             </van-cell-group>
             <div class="close-hjgxr">
                  <h5>合计贡献人:</h5>
@@ -43,7 +43,10 @@
                         <van-radio name="0">否</van-radio>
                    </van-radio-group>
                 </div> 
-            </div>    
+            </div>   
+            <van-cell-group >
+                <van-field  v-model="closeData.jjsm" type="textarea" label="解决说明" placeholder="请输入" rows="3"  />
+            </van-cell-group> 
         </div>
         <footer>
             <van-button size="normal" type="default" @click="handleClose">取消</van-button>
@@ -58,7 +61,8 @@ export default {
     return {
       closeData: {
         zlpf:5,
-        sm: "",
+        sm:"",
+        jjsm:"",//解决说明
         gssfrk:'1'
       },
       value:0,
@@ -74,7 +78,6 @@ export default {
       this.$store.dispatch('chnageMark',true);//标识
       this.$router.go(-1);
     },
-    
     // 
     queryrReferenceHour(){
         this.$get(this.API.queryrReferenceHour,{
@@ -106,7 +109,7 @@ export default {
             zlpf: this.closeData.zlpf,
             gxrData: gxrArr.join("|"),
             sfjj:"",
-            jjsm:"",
+            jjsm:this.closeData.jjsm,
             cpsm: this.closeData.zlpf <= 3 ? this.closeData.sm : "",
             gssfrk: this.closeData.gssfrk
         }).then(res=>{
@@ -127,7 +130,7 @@ export default {
             this.$toast("请选择质量评分"); 
             return false;
         }
-        if(this.closeData.zlpf <= 3 && !this.closeData.sm){
+        if(this.closeData.zlpf <= 3 && /^[\s]*$/.test(this.questionData.sm)){
             this.$toast("请填写评价说明"); 
             return false;
         }

@@ -25,15 +25,19 @@
                         </span>
                     </span>
                 </p>
-                <p class="fontColorg" v-if="reply.hflx == 4">
+                <!-- <p class="fontColorg" v-if="reply.hflx == 4">
                     承诺结束日期：{{reply.cnjsrq}}&#x3000;工时：{{!reply.gs?0:reply.gs}}
-                </p>
-                <p class="fontColorg">
+                </p> -->
+                <p class="fontColorg" v-if="reply.fbrxm != questiondata.fbrxm && reply.hflx != 11 && reply.hflx != 12 && reply.hflx != 13">
                     <!-- 期望解决日期 （转发问题，指定责任人）-->
                     <span v-if="reply.hflx == 2||reply.hflx == 6">期望解决日期：{{reply.qwjjrq}}</span>
                     <!-- 是否bug （受理，取消，指定责任人，催办，运营记录，申请待验证）-->
                     <span v-if="reply.hflx != 6&&reply.hflx != 5&&reply.hflx != 4&&reply.hflx != 7&&reply.hflx != 9&&reply.hflx != 10">
-                        是否bug：{{reply.sfbg==0?'否':'是'}}&#x3000; 实施工时：{{!reply.gs?0:reply.gs}}
+                        是否bug：{{reply.sfbg=='0'?'否':'是'}}&#x3000;
+                        实施工时：{{!reply.gs?0:reply.gs}}<br>
+                    </span>
+                    <span v-if="reply.hflx == 4">
+                      承诺结束日期：{{reply.cnjsrq}}&#x3000;工时：{{!reply.gs?0:reply.gs}}
                     </span>
                 </p>
                 <!-- 转发责任人 （转发问题，指定责任人，催办，集成，运营）-->
@@ -50,7 +54,8 @@
         <div v-transfer-dom>
           <previewer :list="imgList" ref="previewer"></previewer>
         </div>
-        <section class="quesiton-reply" v-if="questiondata.fbzt == 1">
+
+        <section class="quesiton-reply" v-if="questiondata.fbzt == 1 && !$store.state.loadingShow">
             <div class="reply-state"> 
               <div>
                   <van-tag size="large" color="rgb(255, 68, 68)">

@@ -39,7 +39,7 @@
 
         <div class="datePop">
           <van-popup v-model="pickerKsrqShow">
-            <datePicker @handleChangeDatePicker="handleChangeDate" :dateDisable="dateDisable" :cphs="cphs"></datePicker>
+            <datePicker @handleChangeDatePicker="handleChangeDate" :dateDisable="dateDisable" :beforeDisabled="beforeDisabled" :cphs="cphs"></datePicker>
           </van-popup>
         </div>
 
@@ -66,6 +66,7 @@ export default {
       pickerKsrqShow:false,
       wtlxShow:false,
       dateDisable:false,//日期选择范围禁用
+      beforeDisabled:false,//期望解决日期小于当前不能用
       actionSheetTitle:'',
       actions: [
         {
@@ -129,6 +130,7 @@ export default {
        this.questionmcData.cpmc = this.$route.params.data.cpmc
        this.questionmcData.sfjj = this.$route.params.data.jjyf=='0'?'否':this.$route.params.data.jjyf=='1'?'是':'';
        this.questionmcData.sfbug = this.$route.params.data.sfbg=='0'?'否':this.$route.params.data.sfbg=='1'?'是':'';
+       this.queryResponsibleProduct(this.$route.params.data.xmbh);//获取产品
     }else{
       this.questionData = {};
       this.questionmcData = {};
@@ -196,10 +198,11 @@ export default {
      if(params=='xm'){
        this.projectlistShow = true;
      }else if(params=='cnjsrq' || params=='qwjjrq' ){
-       if(params=='cnjsrq'){
-         this.dateDisable = true;
+       this.dateDisable = true;
+       if(params=='qwjjrq'){
+        this.beforeDisabled = true;
        }else{
-         this.dateDisable = false;
+        this.beforeDisabled = false;
        }
        this.pickerKsrqShow = true;
      }else{
@@ -355,7 +358,6 @@ export default {
             
   watch:{
     type(n,o){
-      console.log(n)
       switch (n) {
         case 'wtlb':
           this.actionSheetTitle = '问题类型';
@@ -369,7 +371,7 @@ export default {
           this.actionSheetTitle = '是否紧急';
           this.optionList = this.sfjjList;
           break;
-        case 'sfjj':
+        case 'sfbug':
           this.actionSheetTitle = '是否bug';
           this.optionList = this.sfjjList;
           break;

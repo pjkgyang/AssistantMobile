@@ -46,6 +46,8 @@
           <div class="question-content" @click="previewImage" v-html="questionData.nr">内容</div>
         </div>
       </section>
+
+
       <!-- 回复列表 -->
       <section class="questionDetail-reply">
         <replyList :questiondata="questionData" :replyData="replyData" @handleReject="handleReject"></replyList>
@@ -152,7 +154,9 @@ export default {
       btnShow:true, //按钮有按钮
       scroll: 0,
       cphs:0,
-      replyDetail:{}
+      replyDetail:{},
+
+      qwjjrq:''//按钮组里的期望解决日期
     };
   },
 
@@ -161,7 +165,6 @@ export default {
     if (!this.$store.state.mark) {
       this.queryQuestion();
       this.queryAnswers();
-      this.queryBtnAuth();
       this.scroll = 0;
     }else{
      let oDiv = document.getElementsByClassName('questionDetail-top')[0];
@@ -298,9 +301,12 @@ export default {
         }
         this.operateShow = !this.operateShow;
       } else if (data == "hf") {
+
+
         this.$router.push({
-          path: "/reply",
-          query: { wid: this.$route.query.wid }
+          name: "Reply",
+          query: { wid: this.$route.query.wid },
+          params: {sfxs:this.questionData.fbrbh == this.$store.state.userInfo.userName?false:true}
         });
       } else if (data == "gb") {
         this.$get(this.API.canClose,{
@@ -333,8 +339,11 @@ export default {
       this.curOperate = data;
     },
     // 按钮全部不显示
-    BtnAuthFalse(){
-      this.btnShow = false;
+    BtnAuthFalse(params,data){
+      this.qwjjrq = params;
+      if(!data){
+        this.btnShow = false;
+      }
     },
     //弹出选择日期，催办人员
     onClick(data) {
@@ -342,21 +351,10 @@ export default {
       this.dateType = data;
       if(data == 'cnjsrq'){
           this.pickerKsrqShow = !this.pickerKsrqShow;
-          if(this.curOperate == 'sl'){
-            this.dateDisable = true;
-          }else{
-            this.dateDisable = false;
-          }
+          this.dateDisable = true;
        }else if(data == 'cbry'){
           this.cbryShow = !this.cbryShow;
        }
-
-
-      //  else if(data == 'qwjjrq'){
-      //     this.pickerKsrqShow = !this.pickerKsrqShow;
-      //     this.dateDisable = false;
-      //  }
-
     },
     //  选择日期
     handleChangeDate(data) {
@@ -429,7 +427,7 @@ export default {
         if (res.state == "success") {
           if (!res.data) {
             this.operateTitle = "受理";
-            this.formData.qwjjrq = !this.btnGroupData.qwjjrq?'':this.btnGroupData.qwjjrq;
+            this.formData.qwjjrq = !this.qwjjrq?'':this.qwjjrq;
             this.operateShow = !this.operateShow;
           } else {
             this.$router.push({ name: "addQuestion", query: { sl: 1 },params: { data: this.questionData } });

@@ -40,22 +40,13 @@ export default {
       loading: false,
       finished: false,
       questionList: [
-        {
-          bt: "Zyh测试1",
-          lcMc: "总部产品受理",
-          wtbh: "123123123",
-          fbrq: "2018-08-08",
-          fbrxm: "张三",
-          ssbm: "所属部门",
-          cpmc: "adssad",
-          wid: "78b93bfcfbc943e5a3124075a0ecb94f"
-        }
+
       ],
       sm: ""
     };
   },
   activated() {
-    //    this.init();
+       this.init();
   },
   methods: {
     // 查看详情

@@ -1,23 +1,26 @@
 <template>
     <div>
         <div class="question-reply">
-            <van-cell-group>
-                <van-field required v-model="hfData.gs" type="number" label="实施工时" placeholder="请输入" rows="1" autosize />
-            </van-cell-group>
-            <div class="hf-radio">
-                <h4>是否bug</h4>
-                <van-radio-group v-model="hfData.sfbug">
-                    <van-radio name="1">是</van-radio>&#x3000;&#x3000;
-                    <van-radio name="0" checked-color="#00c1de">否</van-radio>
-                </van-radio-group>
+            <div v-if="$store.state.userInfo.unitType != 1 && $route.params.sfxs" >
+                <van-cell-group>
+                    <van-field required v-model="hfData.gs" type="number" label="实施工时" placeholder="请输入" rows="1" autosize />
+                </van-cell-group>
+                <div class="hf-radio">
+                    <h4>是否bug</h4>
+                    <van-radio-group v-model="hfData.sfbug">
+                        <van-radio name="1">是</van-radio>&#x3000;&#x3000;
+                        <van-radio name="0" checked-color="#00c1de">否</van-radio>
+                    </van-radio-group>
+                </div>
+                <div class="hf-radio">
+                    <h4>通知提问人</h4>
+                    <van-radio-group v-model="hfData.tztwr">
+                        <van-radio name="1">是</van-radio>&#x3000;&#x3000;
+                        <van-radio name="0">否</van-radio>
+                    </van-radio-group>
+                </div>
             </div>
-            <div class="hf-radio">
-                <h4>通知提问人</h4>
-                <van-radio-group v-model="hfData.tztwr">
-                    <van-radio name="1">是</van-radio>&#x3000;&#x3000;
-                    <van-radio name="0">否</van-radio>
-                </van-radio-group>
-            </div>
+
              <van-cell-group>
                 <van-field required v-model="hfData.nr" type="textarea" label="内容" placeholder="请输入" rows="7"  />
             </van-cell-group>
@@ -48,8 +51,8 @@
         sfbug: "0",
         tztwr: "1",
         nr: "",
-
-        imgStr:''
+        imgStr:'',
+        sfxs:true
       }
     };
   },
@@ -74,8 +77,8 @@
            zbwid:this.$route.query.wid,
            gs:this.hfData.gs,
            nr:nr,
-           sfbug:this.hfData.sfbug,
-           tztwr:this.hfData.tztwr,
+           sfbg:this.$route.params.sfxs?this.hfData.sfbug:'',
+           tktwr:this.hfData.tztwr=='1'?true:false,
            hflx:1,
         }).then(res=>{
             if(res.state == 'success'){
@@ -107,6 +110,12 @@
       this.hfData.sfbug = '0';
       this.hfData.tztwr = '1';
       this.imgStr = '';
+    //   if(this.$route.params.sfxs){
+    //     this.sfxs = this.$route.params.sfxs;
+    //     sessionStorage.setItem('sfxs',this.$route.params.sfxs) ;
+    //   }else{
+    //     this.sfxs =  sessionStorage.getItem('sfxs');
+    //   }
   },
   components: {uploadImg}
 };
