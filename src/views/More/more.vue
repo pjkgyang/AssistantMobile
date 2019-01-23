@@ -2,9 +2,11 @@
   <div class="assistant_more">
     <div class="assistant_more_swipe">
       <van-swipe style="height:100%" :autoplay="3000">
-        <van-swipe-item><img src="static/img/progress.png" alt=""></van-swipe-item>
-        <van-swipe-item><img src="static/img/question.png" alt=""></van-swipe-item>
-        <van-swipe-item><img src="static/img/process.png" alt=""></van-swipe-item>
+        <van-swipe-item v-for="(img,index) in imgs" :key="index">
+           <img :src="img.src" alt="">
+        </van-swipe-item>
+        <!-- <van-swipe-item><img src="static/img/question.png" alt=""></van-swipe-item>
+        <van-swipe-item><img src="static/img/process.png" alt=""></van-swipe-item> -->
       </van-swipe>
     </div>
     <div class="assistant_more_content">
@@ -37,8 +39,16 @@
             {icon:'',name:'周报',route:'/weekreport',color:'#fff',bgColor:'#007AFF'},
             ]
           }
+        ],
+        imgs:[
+         {src:require("../../../static/img/progress.png")},
+         {src:require("../../../static/img/question.png")},
+         {src:require("../../../static/img/process.png")}
         ]
     };
+  },
+  computed:{
+    
   },
   methods:{
     handleRouter(params){
@@ -52,7 +62,7 @@
 <style lang="less" scoped>
 @import "../../index.less";
 .assistant_more_swipe {
-  height:22vh;
+  height:24vh;
   .van-swipe-item {
     background: #ccc;
     height: 100%;

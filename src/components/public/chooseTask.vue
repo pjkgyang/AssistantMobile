@@ -141,7 +141,6 @@ export default {
     }
   },
   activated() {
-    console.log('===')
     this.showLoading = false;
     if (this.$route.params.data) {
       this.taskLogDetail = JSON.parse(this.$route.params.data);
@@ -179,6 +178,7 @@ export default {
   methods: {
     handleSearchKeyword(val) {
       //关键字查询
+      this.keyword = val;
       this.init();
     },
     handleClosePop() {

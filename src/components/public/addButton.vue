@@ -1,11 +1,11 @@
 <template>
  <div >
-     <div class="add_button"  id="moveDiv" :style="{bottom:bottom}"
-      @mousedown="down" @touchstart="down"
-      @mousemove="move" @touchmove="move"
-      @mouseup="end" @touchend="end"
-     >
-      <mu-button fab  color="primary" class="btnBlue" @click="handleAdd">
+     <div class="add_button" >
+      <mu-button fab id="moveDiv" color="primary" class="btnBlue" @click="handleAdd" :style="{bottom:bottom}"
+        @mousedown="down" @touchstart="down"
+        @mousemove="move" @touchmove="move"
+        @mouseup="end" @touchend="end"
+      >
         <mu-icon value="add"></mu-icon>
       </mu-button>
     </div>
@@ -92,16 +92,16 @@
             moveDiv.style.top = this.yPum +"px";
          }
 
-        //阻止页面的滑动默认事件；如果碰到滑动问题，1.2 请注意是否获取到 touchmove
-          document.addEventListener("touchmove",function(event){
-           // 判断默认行为是否可以被禁用
-              if (event.cancelable) {
-                  // 判断默认行为是否已经被禁用
-                  if (!event.defaultPrevented) {
-                      event.preventDefault();
-                  }
-              }
-          },{ passive: false });
+        // //阻止页面的滑动默认事件；如果碰到滑动问题，1.2 请注意是否获取到 touchmove
+        //   document.addEventListener("touchmove",function(event){
+        //    // 判断默认行为是否可以被禁用
+        //       if (event.cancelable) {
+        //           // 判断默认行为是否已经被禁用
+        //           if (!event.defaultPrevented) {
+        //               event.preventDefault();
+        //           }
+        //       }
+        //   },{ passive: false });
         }
       },
   //鼠标释放时候的函数
@@ -115,10 +115,12 @@
 
 <style  scoped>
 .add_button {
-  position: fixed;
-  right:2vw;
   font-size:1rem;
-  z-index:100002;
-  border-radius: 50%;
+  
 }
+ .add_button button{
+    position: fixed;
+    right:2vw;
+  z-index:100002;
+  }
 </style>

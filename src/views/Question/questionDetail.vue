@@ -27,8 +27,8 @@
             <p>所属项目：
               <span>{{questionData.xmmc}}</span>
             </p>
-            <p>问题类型：
-              <span>{{questionData.wtlx_display}}</span>
+            <p>问题类别：
+              <span>{{wtlx_display}}</span>
             </p>
             <p>产品：
               <span>{{questionData.cpmc}}</span>
@@ -156,7 +156,8 @@ export default {
       cphs:0,
       replyDetail:{},
 
-      qwjjrq:''//按钮组里的期望解决日期
+      qwjjrq:'',//按钮组里的期望解决日期
+      wtlx_display:''
     };
   },
 
@@ -301,8 +302,6 @@ export default {
         }
         this.operateShow = !this.operateShow;
       } else if (data == "hf") {
-
-
         this.$router.push({
           name: "Reply",
           query: { wid: this.$route.query.wid },
@@ -459,7 +458,7 @@ export default {
     //  通过code获取名称
     getCode(code) {
       getMenuByCode("ProblemType", code).then(data => {
-        this.questionData.wtlx_display = data;
+        this.wtlx_display = data;
       });
     },
     //获取催办权限(是否选择催办人员)

@@ -189,7 +189,7 @@ export default {
       this.imgStr = '';
       if(!!params.length){
        params.forEach(ele=>{
-         this.imgStr += '<img src='+ele+ '>'
+         this.imgStr += '<img src=' + ele + '>'
        })
      }
    },

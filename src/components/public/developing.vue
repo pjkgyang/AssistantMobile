@@ -1,8 +1,6 @@
 <template>
     <div class="developing">
-        <h3>
-           开发中。。。
-        </h3>
+          <span>开发中。。。</span>
     </div>
 </template>
 
@@ -22,10 +20,7 @@ export default {
   justify-content: center;
   align-items: center;
 }
-h3 span {
-  float: left;
-  position: relative;
-}
+
 /* 
 h3 span:nth-child(1) {
   animation: jump 1s linear 0s infinite alternate;

@@ -1,6 +1,7 @@
 <template>
  <div>
-     <develop></develop>
+     <!-- <develop></develop> -->
+    <h1>开发中</h1>
  </div>
 </template>
 
@@ -17,5 +18,8 @@
 </script>
 
 <style scoped>
-
+h1{
+  text-align: center;
+  line-height: 30vh;
+}
 </style>

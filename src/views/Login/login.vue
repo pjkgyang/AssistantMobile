@@ -56,7 +56,8 @@ export default {
 
       loginActive:2, //是否登录
       count:60,
-      isCoding:false
+      isCoding:false,
+
     };
   },
   methods: {
@@ -174,11 +175,11 @@ export default {
   },
   activated() {
     if (!window.openId || !window.lx || !window.gh) {
-      window.openId = sessionStorage.getItem("openId");
+       window.openId = sessionStorage.getItem("openId");
       window.lx = sessionStorage.getItem("lx"); 
       window.gh = sessionStorage.getItem("gh"); 
     }
-    if(window.lx != 0){
+    if(window.lx != '0'){
       this.loginActive = 1
     }
      this.$toast.clear();
@@ -263,6 +264,9 @@ export default {
         }
         .flex(@row:space-between);
     }
+  }
+  .bbh{
+    text-align: center;
   }
 }
 </style>
