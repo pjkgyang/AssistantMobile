@@ -1,0 +1,42 @@
+
+  [flex] {
+    display: flex;
+  }
+  [flex-center]{
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+  }
+  [flex-col-center] {
+    display: flex;
+    align-items: center;
+  }
+  [flex-col] {
+    display: flex;
+    align-items: flex-start;
+  }
+  [flex-col-end] {
+    display: flex;
+    align-items: flex-end;
+  }
+  [spacearound]{
+    justify-content: space-around;
+  }
+  [spacebetween]{
+    justify-content: space-between;
+}
+  [text-right]{
+    text-align: right;
+  }
+  
+  [flex-column] {
+    display: flex;
+    flex-direction: column;
+  }
+  
+ @for $i from 1 to 15 {
+    [col='#{$i}'] {
+      flex: $i 0 0 !important;
+    }
+  }
+

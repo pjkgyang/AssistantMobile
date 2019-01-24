@@ -1,11 +1,11 @@
 <template>
 <div>
   <div class="assistant-question" >
-    <div class="weekReport-top-filter">
-        <div class="weekReport-filter--input">
+    <div class="question-top-filter">
+        <div class="question-filter--input">
             <searchInput @handleSearchKeyword="handleSearchKeyword" :place="'搜索学校/项目编号/项目名称/合同编号/问题编号'"></searchInput>
         </div>
-        <div class="weekReport-filter--tabs">
+        <div class="question-filter--tabs">
             <span @click="hanldeSearchFilter('wtfl')" >
               <span>{{wtflText}}</span>&nbsp;&nbsp;<van-icon name="arrow" />
             </span>
@@ -55,12 +55,10 @@
         <van-picker show-toolbar title="申请关闭" :columns="sqgbList" @cancel="handleCancel" @confirm="hadnleSqgbConfirm" />
       </van-popup>
   </div>
-  <!-- <develop></develop> -->
  </div>
 </template>
 
 <script>
- import develop from '@/components/public/developing';
  import searchInput from "@/components/public/SearchInput.vue";
  import questionlist from '@/components/question/questionlist.vue';
  import addButton from '@/components/public/addButton';
@@ -276,21 +274,21 @@
        })
      }
    },
-   components: {develop,searchInput,questionlist,addButton,filterCondition,emptyContent}
+   components: {searchInput,questionlist,addButton,filterCondition,emptyContent}
  }
 </script>
 
 <style lang="less" scoped>
 @import "../../index.less";
-.weekReport-top-filter {
+.question-top-filter {
   background: #fff;
   box-shadow: 0 2px 5px #eee;
   position: relative;
 }
-.weekReport-filter--input {
+.question-filter--input {
   padding: 0.5rem;
 }
-.weekReport-filter--tabs {
+.question-filter--tabs {
   padding: 8px 0;
  .flex(@row:space-around,@col:center);
   color: #999999;

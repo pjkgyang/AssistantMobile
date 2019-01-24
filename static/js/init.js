@@ -3,61 +3,78 @@
 
 let baseUrl = 'http://careful.wisedu.com/emap/sys/etender/api/';
 
-window.openId =  getQueryStringByName("openId");
-window.lx =  getQueryStringByName("lx")=='undefined'||getQueryStringByName("lx")=='null'?3:getQueryStringByName("lx");
-window.gh =  getQueryStringByName("gh");
 
-if(window.openId){
-    sessionStorage.setItem('openId',window.openId);
-}else{
-    window.openId = sessionStorage.getItem('openId');
-}
+if (!sessionStorage.getItem('sign')) {
+    localStorage.setItem('lx','');
 
-if(window.lx || window.lx=='0'){
-    sessionStorage.setItem('lx',window.lx);
-}else{
-    window.lx = sessionStorage.getItem('lx');
-}
-
-if(window.gh){
-    sessionStorage.setItem('gh',window.gh);
-}else{
-    window.gh = sessionStorage.getItem('gh');
-}
-
-if(!sessionStorage.getItem('sign')){
-    if(window.lx != 3 || window.lx == '0'){ //非web登录
-        wxLogin(window.openId,window.lx,window.gh);
+    window.openId = getQueryStringByName("openId");
+    
+    if(localStorage.getItem('lx') === '' || localStorage.getItem('lx') === null || localStorage.getItem('lx') === undefined){
+        let tempLx = getQueryStringByName("lx");
+        if(tempLx === ''){
+            window.lx = '3';
+        }else{
+            window.lx = tempLx;
+        }
     }else{
-        getLoginUser(); //web登录
+        window.lx = localStorage.getItem('lx');
+    }
+
+
+    window.gh = getQueryStringByName("gh");
+    
+
+    if (window.openId) {
+        sessionStorage.setItem('openId', window.openId);
+    } else {
+        window.openId = sessionStorage.getItem('openId');
+    }
+
+    if (window.lx || window.lx == '0') {
+        localStorage.setItem('lx', window.lx);
+    } else {
+        window.lx = localStorage.getItem('lx');
+    }
+
+    if (window.gh) {
+        sessionStorage.setItem('gh', window.gh);
+    } else {
+        window.gh = sessionStorage.getItem('gh');
+    }
+
+    if (window.lx == 3) { //web登录
+        getLoginUser();
+    } else {
+        wxLogin(window.openId, window.lx, window.gh);
     }
 }
 
 
 //获取用户
-function wxLogin(openId,lx,gh) {
+function wxLogin(openId, lx, gh) {
     $.ajax({
         type: "POST",
         url: baseUrl + "wx/wxLogin.do",
         async: false,
         data: {
             openId: openId,
-            lx:lx,
-            gh:gh
+            lx: lx,
+            gh: gh
         },
         success: function (data) {
             if (data.state == "success") {
-                if(window.lx != 3 && !sessionStorage.getItem('sign')){   //非Web登录
-                    getLoginUser();  
+                if (window.lx != 3 && !sessionStorage.getItem('sign')) { //非Web登录
+                    getLoginUser();
                 }
-            }else{
-                window.location.href = 'http://careful.wisedu.com/emap/sys/etender/wx/index.html#/login' 
+            } else {
+                sessionStorage.setItem('sign', 1);
+                window.location.href = 'http://careful.wisedu.com/emap/sys/etender/wx/index.html#/login';
             }
         }
     });
 }
 // 获取用户信息
-function getLoginUser(){
+function getLoginUser() {
     $.ajax({
         type: "GET",
         url: baseUrl + "sys/getLoginUser.do",
@@ -65,21 +82,21 @@ function getLoginUser(){
         data: {},
         success: function (data) {
             if (data.state == "success") {
-              window.userName = data.data.nickName;
-              window.userId = data.data.uid;
-              localStorage.setItem("userInfo", JSON.stringify(data.data));
-              sessionStorage.setItem("sign", 1);
-              window.location.href = 'http://careful.wisedu.com/emap/sys/etender/wx/index.html'
-            }else{
-                if(window.lx == 3){  //web登录
+                window.userName = data.data.nickName;
+                window.userId = data.data.uid;
+                localStorage.setItem("userInfo", JSON.stringify(data.data));
+                sessionStorage.setItem("sign", 1);
+                window.location.href = 'http://careful.wisedu.com/emap/sys/etender/wx/index.html'
+            } else {
+                if (window.lx == 3) {  //web登录
                     wxLogin();
-                }else{
+                } else {
                     alert(data.msg);
                 }
             }
         },
-        error:function(error){
-            if(error.status == 401 && window.lx == 3){
+        error: function (error) {
+            if (error.status == 401 && window.lx == 3) {
                 wxLogin();
             }
         }

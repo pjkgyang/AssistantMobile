@@ -14,6 +14,9 @@ import sqgbList from "@/views/Question/closingPannel.vue";
 import crowd from "@/views/Question/crowdDetail.vue";
 
 
+// project
+import projectDetail from "@/views/project/projectDetail.vue";
+
 
 export default new Router({
   // mode: 'history',
@@ -207,6 +210,12 @@ export default new Router({
       name: 'Crowd',
       meta:{title:'开发进度跟踪'},
       component:crowd
+    },
+    {
+      path: '/project/projectDetail',
+      name: 'projectDetail',
+      meta:{title:'项目详情'},
+      component:projectDetail
     }
   ]
 })

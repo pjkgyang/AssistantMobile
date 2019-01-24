@@ -148,7 +148,7 @@ export default {
     }
   },
   mounted(){
-    this.yhbh = window.userId
+    this.yhbh = this.$store.state.userInfo.uid;
     this.init();
   },
   components: {}

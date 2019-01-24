@@ -125,6 +125,7 @@ export default {
           return;
         }
       }
+
       this.$toast.loading({
         mask: true,
         message: "登陆中...",
@@ -176,9 +177,10 @@ export default {
   activated() {
     if (!window.openId || !window.lx || !window.gh) {
        window.openId = sessionStorage.getItem("openId");
-      window.lx = sessionStorage.getItem("lx"); 
-      window.gh = sessionStorage.getItem("gh"); 
+       window.lx = localStorage.getItem("lx"); 
+       window.gh = sessionStorage.getItem("gh"); 
     }
+
     if(window.lx != '0'){
       this.loginActive = 1
     }

@@ -2,7 +2,7 @@
     <div class="addweekprocess">
         <div>
             <van-cell-group style="height:44px;padding:10px 7px;display:flex;align-items:center" 
-            v-if="$route.params.weekActive != 1">
+            v-if="$route.query.weekActive != 1">
                 <span class="switch_title">是否完成</span>
                 <van-switch v-model="form.sfwc" size="20px" />
             </van-cell-group>
@@ -10,7 +10,7 @@
             <van-cell-group>
                 <van-field required v-model="form.gznr" label="工作内容" type="textarea" placeholder="请输入工作内容" rows="3" autosize />
             </van-cell-group>
-            <div v-if="!form.sfwc && $route.params.weekActive != 1">
+            <div v-if="!form.sfwc && $route.query.weekActive != 1">
                 <van-cell-group>
                     <van-field required v-model="form.wwcyy" label="未完成原因" type="textarea" placeholder="请输入未完成原因" rows="3" autosize />
                 </van-cell-group>
@@ -110,10 +110,9 @@ export default {
   },
   mounted(){},
   activated() {
-    this.uid = window.userId;
+    this.uid = this.$store.state.userInfo.uid;
     document.title = '添加任务进度';
     if(JSON.stringify(this.$route.params) !== '{}'){
-        console.log(this.$route.params)
         if(!this.$route.params.weekActive){   //本周
            this.form.wwcyy = this.$route.params.wwcyy;
            this.form.hxcs = this.$route.params.hxcs; 
@@ -157,7 +156,7 @@ export default {
       button{
           width: 48%;
           border: none;
-          margin: 5vw 0;
+          margin: 0.5rem 0;
       }
   }
 }

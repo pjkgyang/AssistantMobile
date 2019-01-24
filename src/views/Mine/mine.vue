@@ -17,7 +17,7 @@
                 </template>
             </van-cell>
 
-            <van-cell v-if="lx == 3" style="height:3.66666rem;display:flex;align-items:center;" @click="handleEscLogin">
+            <van-cell  style="height:3.66666rem;display:flex;align-items:center;" @click="handleEscLogin">
                 <template slot="title">
                     <p class="esc-text">退出登录</p>
                 </template>
@@ -25,7 +25,7 @@
         </div>
 
         <div class="cur-bbh">
-          <p>当前版本：Jzv1.0.1</p>
+          <p>当前版本：Jzv1.0.3</p>
         </div>
     </div>
 </template>

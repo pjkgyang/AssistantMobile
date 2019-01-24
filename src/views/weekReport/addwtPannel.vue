@@ -158,7 +158,7 @@ export default {
   activated(){
     this.getlastMonthDay(Number(this.$route.query.month.split('-')[0]),Number(this.$route.query.month.split('-')[1]));
     this.init();
-    this.yhbh = window.userId
+    this.yhbh = this.$store.state.userInfo.uid;
   },
   components: {emptyContent}
 };

@@ -1,16 +1,16 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import axios from 'axios'
-import './base.css'
-import {post,get} from './utils/http'
-import api from './utils/API'
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
+import axios from 'axios';
+import './base.css';
+import {post,get} from './utils/http';
+import api from './utils/API';
 import store from './store/index.js';
 Vue.prototype.$post = post;
 Vue.prototype.$get = get;
-Vue.prototype.API = api
-Vue.config.productionTip = false
-
+Vue.prototype.API = api;
+Vue.config.productionTip = false;
+import '../src/style.scss';
 import Vant from 'vant';
 import 'vant/lib/index.css';
 Vue.use(Vant);
@@ -28,6 +28,7 @@ Vue.use(Icon);
 Vue.use(BottomNav);
 Vue.use(TextField);
 Vue.use(LoadMore);
+
 
 import { Swipeout, SwipeoutItem, SwipeoutButton,Previewer } from 'vux'
 Vue.component('swipeout', Swipeout);

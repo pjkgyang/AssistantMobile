@@ -107,13 +107,15 @@ export default {
     },
     // 添加任务进度，问题
     handleAdd(data) {
-      this.$router.push({
-        path:data == "jd"? "/addweekprocess": data == "wt" ? "/addweekquestion" : "/addweekmilestone",
-        query: {
-          // data: this.weekActive,
+      let obj = {
+          weekActive: this.weekActive,
           week: this.weeksValue,
           month: this.monthValue,
-        }
+       };
+      if(data != "jd") delete obj.weekActive;
+      this.$router.push({
+        path:data == "jd"? "/addweekprocess": data == "wt" ? "/addweekquestion" : "/addweekmilestone",
+        query:obj
       });
     },
     // tab
@@ -134,9 +136,10 @@ export default {
       if(type != 'jd'){
         this.yycsShow = true;
       }else{
-        params.weekActive = this.weekActive
+        // params.weekActive = this.weekActive
         this.$router.push({
         name:"Addweekprocess",
+        query:{weekActive:this.weekActive},
         params: params
       });
       }
@@ -231,7 +234,7 @@ export default {
         this.$toast("请填写工作内容~");
         return false;
       }
-      if (/^[\s]*$/.test(this.form.cljh) && this.weekType == "wt") {
+      if (/^[\s]*$/.test(this.form.cljh) && this.weekType == "wt" && this.weekActive == 0) {
         this.$toast("请填写处理计划~");
         return false;
       }
@@ -313,7 +316,7 @@ export default {
   },
   watch: {},
   activated() {
-    this.uid = window.userId;
+    this.uid = this.$store.state.userInfo.uid;
     this.monthValue = this.newMonth?this.newMonth:this.$route.query.month;
     this.weeksValue = this.newWeek?this.newWeek:this.$route.query.week;
     this.init();

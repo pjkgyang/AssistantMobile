@@ -34,7 +34,8 @@
       </div>
     </div>
     <!-- 添加按钮 -->
-    <add-button @handleAdd="handleAddLog"></add-button>
+    <!-- v-if="!$store.state.userInfo.userGroupTag.includes('JYGL')" -->
+    <add-button @handleAdd="handleAddLog" v-if="!$store.state.userInfo.userGroupTag.includes('JYGL')"></add-button>
 
     <van-popup v-model="statePopshow" position='bottom' >
       <van-picker show-toolbar title="填写状态" :columns="ydztList" @cancel="hadnleStateCancel" @confirm="hadnleStateConfirm" />

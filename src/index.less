@@ -25,6 +25,14 @@
     align-items: @col;
     flex-direction: @column;
 }
+.flexGrid(@column:row){
+    display:flex;
+    flex-direction: @column;  
+}
+.flex_col(@num:1){
+
+    flex: @num 0 0 !important;  
+}
 .floatRight{
     float:right;
 }
@@ -88,7 +96,7 @@ footer{
    }
  }
 
-// 滚动内容
+// 滚动内容 (xiangmu,wenti )
 .layout-scroll{
   height: calc(100vh - 155px);
   overflow-y: auto;
@@ -104,4 +112,9 @@ footer{
 }
 .active-color-green{
     background: rgb(68, 187, 0); 
+}
+
+
+.color999{
+    color: #999999;
 }
