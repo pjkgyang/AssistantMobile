@@ -51,8 +51,19 @@ export default {
       lcbbhs: "",
       currentPage: 1,
       pageSize: 10,
-      listArr: []
+      listArr: [],
     };
+  },
+  computed:{
+    sign(){
+      return this.$route.query.sign;
+    }
+  },
+  watch:{
+    sign(){
+     this.lcbbhs = [];
+     this.result = []
+    }
   },
   methods: {
     // 上啦刷新
@@ -91,7 +102,7 @@ export default {
       }).then(res=>{
          if(res.state == 'success'){
             this.$toast.clear();
-            this.$toast('添加成功~');
+            this.$toast({message:'添加成功~',duration:2000});
             // this.$router.push({ name: "weekAdd", params: { bid:1} });
             this.$router.go(-1);
          }else{
@@ -183,13 +194,6 @@ export default {
           .text-ellipsis();
         }
       }
-    }
-  }
-  footer {
-    text-align: center;
-    button {
-      width: 48%;
-      border: none;
     }
   }
 }

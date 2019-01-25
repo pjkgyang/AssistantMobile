@@ -191,9 +191,9 @@ export function getLastMonth(year,month){
     }else{
         nowMonth = month+1 
     }
-    var firstDay = year + "-" + month + "-" + "01";//上个月的第一天
+    var firstDay = year + "/" + month + "/" + "01";//上个月的第一天
     var myDate = new Date(year, month, 0);
-    var lastDay = year + "-" + month + "-" + myDate.getDate();//上个月的最后一天
+    var lastDay = year + "/" + month + "/" + myDate.getDate();//上个月的最后一天
     let lastWeekDay = new Date(lastDay).getDay();
     if(lastWeekDay<4){
         return addDate(lastDay,-(lastWeekDay-1));
@@ -262,6 +262,22 @@ export function  getPreMonth(date) {
     }
     var t2 = year2 + '-' + month2;
     return t2;
+}
+
+export function getNowFormatDate() {
+    var date = new Date();
+    var seperator1 = "-";
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = year + seperator1 + month + seperator1 + strDate;
+    return currentdate;
 }
 
 export function weekIndexInMonth(str){

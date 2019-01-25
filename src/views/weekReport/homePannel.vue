@@ -10,7 +10,10 @@
         </span>
         <span @click="hanldeSearchZs" class="weekReport-filter-week">
           <span >第{{weekValue==1?'一':weekValue==2?'二':weekValue==3?'三':weekValue==4?'四':'五'}}周 
-          <span class="week-date">{{WeekStartdate}} 至 {{WeekEnddate}}</span></span>
+          <span class="week-date">
+            {{weekDay}}
+            </span>
+          </span>
         </span>
         <span @click="hanldeSearchYDZT" class="weekReport-filter-second">
           <span>{{ydztText}}</span>
@@ -34,6 +37,7 @@
       </div>
     </div>
     <!-- 添加按钮 -->
+
     <!-- v-if="!$store.state.userInfo.userGroupTag.includes('JYGL')" -->
     <add-button @handleAdd="handleAddLog" v-if="!$store.state.userInfo.userGroupTag.includes('JYGL')"></add-button>
 
@@ -56,7 +60,8 @@
 import listcard from "@/components/weekReport/listCard.vue";
 import emptyContent from "@/components/public/empty-content.vue";
 import DatePickerMonth from "@/components/public/DatePickerMonth.vue";
-import { getMyDate,getLastMonth,getLastMonthDay,getNextMonth,getPreMonth,weekIndexInMonth,GetNextDate,getWeeks } from "../../utils/util.js";
+import { getMyDate,getLastMonth,getLastMonthDay,getNextMonth,getPreMonth,weekIndexInMonth,GetNextDate,getWeeks,
+getNowFormatDate } from "../../utils/util.js";
 import addButton from '@/components/public/addButton';
 import searchInput from "@/components/public/SearchInput.vue";
 
@@ -109,10 +114,13 @@ export default {
       weekValue:"1",   //当前选择周
       WeekStartdate:'',
       WeekEnddate:'',
+      weekStartDate:'',
+      weekEndDate:'',
       weekStart:'',//第一周周一日期(记录)
       weekEnd:'',//第一周周日日期(记录)
       weekNum:'1',
-      columns:[]
+      columns:[],
+      weekDay:'' //开始结束日期
     };
   },
   methods: {
@@ -121,6 +129,7 @@ export default {
       this.weekValue = values+1
       this.WeekStartdate = GetNextDate(this.weekStart,values*7);//当前周周一日期
       this.WeekEnddate = GetNextDate(this.weekEnd,values*7);//当前周周日日期
+      this.weekDay =  this.WeekStartdate +' 至 ' +this.WeekEnddate
       this.init();
       this.zsPopshow = false;
     },
@@ -232,19 +241,39 @@ export default {
         }
       })
     },
-
+    getWeekDate(year,month,val){ // 获取周具体日期
+       this.weekStartDate = GetNextDate(getLastMonth(year,month),(val-1)*7)
+       this.weekEndDate = GetNextDate(this.weekStartDate,6);
+       return this.weekStartDate+' 至 '+this.weekEndDate
+    },
     InitDate(){
-      this.columns = [];
-      this.year = new Date().getFullYear();
-      this.month =  new Date().getMonth();
-      this.monthValue = this.year+'-'+((this.month+1)<10?'0'+(this.month+1):this.month+1);
-      this.WeekStartdate = this.weekStart =  getLastMonth(this.year,this.month);//获取当月开始第一周周一日期
-      this.WeekEnddate = this.weekEnd = GetNextDate(this.WeekStartdate,6);//获取当月开始第一周周日日期
-      this.weekNum = getWeeks(this.year,this.month+1);  //获取当月周数
-      for(var i =1;i<=this.weekNum;i++){
-        let index = i==1?'一':i==2?'二':i==3?'三':i==4?'四':'五';
-        this.columns.push('第'+index+'周');
-      }
+       this.columns = [];
+       this.year = new Date().getFullYear();
+       this.month = new Date().getMonth(); 
+       let lastMonth = getPreMonth(this.year+'-'+(this.month+1)) //获取上个月日期
+       let Year = lastMonth.split('-')[0];
+       let Month = lastMonth.split('-')[1]-1;
+       let week = getWeeks(Year,Month+1);  //获取本月周数
+       let weekStartDate = this.weekStart = GetNextDate(getLastMonth(Year,Month),(week)*7);
+       let weekEndDate = this.weekEnd = GetNextDate(weekStartDate,6);
+       let NowDate = getNowFormatDate();
+       if(new Date(NowDate).getTime() >= new Date(weekStartDate).getTime() && 
+          new Date(NowDate).getTime() <= new Date(weekEndDate).getTime() && 
+          this.weekValue == week &&
+          new Date(GetDateStr(0)).getDay() >= 4){
+            this.weekValue =  this.weekNum =  getWeeks(Year,Month+1);
+            this.weekDay  = weekStartDate+' 至 '+weekEndDate;
+            this.monthValue = lastMonth;
+       }else{
+            this.weekValue = weekIndexInMonth(getLastMonth(this.year,this.month));
+            this.weekNum =  getWeeks(this.year,this.month+1);    //周数
+            this.weekDay  = this.getWeekDate(this.year,this.month,this.weekValue);
+            this.monthValue = this.year+'-'+((this.month+1)<10?'0'+(this.month+1):this.month+1);  
+       } 
+       for(var i =1;i<=this.weekNum;i++){
+              let index = i==1?'一':i==2?'二':i==3?'三':i==4?'四':'五';
+              this.columns.push('第'+index+'周');
+       }
     },
     
     formatDate(year,month){
@@ -258,16 +287,11 @@ export default {
            let index = i==1?'一':i==2?'二':i==3?'三':i==4?'四':'五';
            this.columns.push('第'+index+'周');
        }
+       this.weekDay  = this.WeekStartdate+' 至 '+ this.WeekEnddate;
     },
     handleScroll(){
       var scrollTop = this.$refs.weekScrollcontent.scrollTop
     }
-    // saveStore(){
-    //   this.$store.dispatch("saveMonthValue", this.monthValue);
-    //   this.$store.dispatch("saveWeekNum", this.weekNum);
-    //   this.$store.dispatch("saveStartDate", this.weekStart);
-    //   this.$store.dispatch("saveEndDate", this.weekEnd);
-    // }
   },
   computed: {
    

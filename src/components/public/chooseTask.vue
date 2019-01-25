@@ -221,11 +221,16 @@ export default {
       // 获取项目 所属产品
       this.backupsInfo.xmmc = mc;
       this.backupsInfo.xmbh = bh;
+      this.$store.dispatch("chnageLoing", true);
       this.$get(this.API.getProjectCatalog, {
         xmbh: bh
       }).then(res => {
         if (res.state == "success") {
           this.cpItems = res.data;
+          this.$store.dispatch("chnageLoing", false);
+        }else{
+          this.$store.dispatch("chnageLoing", false);
+          this.$toast(!res.msg?'请求超时,请稍后再试~':res.msg)
         }
       });
       this.cpPopShow = true;
@@ -378,7 +383,7 @@ export default {
           this.taskItems = res.data;
         }else{
           this.$store.dispatch("chnageLoing", false);
-          this.$toast(res.msg);
+          this.$toast(!res.msg?'系统繁忙,请稍后再试':res.msg);
         }
       }).catch(error=>{
         this.$store.dispatch("chnageLoing", false);

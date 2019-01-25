@@ -92,7 +92,6 @@
        
        filterData:{},
        scrollTop:0,
-       marscrollTop:0
      }
    },
    mounted(){

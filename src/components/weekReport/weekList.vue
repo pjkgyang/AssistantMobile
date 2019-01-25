@@ -8,7 +8,7 @@
             <p><span>里程碑描述：</span>{{item.lcbms}}</p>
             <p><span>承诺完成时间：</span>{{item.cnwcrq}}</p>
             <p><span>完成状态：</span><van-tag round :type="item.zt==1?'danger':'success'">{{item.zt_display}}</van-tag></p> 
-            <p><span>工作内容:</span>{{item.gzms}}</p>
+            <p><span>工作内容:</span>{{item.gznr}}</p>
             <p v-if="item.zt == 1 && !weekState"><span>未完成原因:</span>{{item.wwcyy}}</p>
             <p v-if="item.zt == 1 && !weekState"><span>后续措施:</span>{{item.hxcs}}</p>
           </div>
@@ -42,12 +42,13 @@
             <p><span>问题标题：</span>{{item.wtbt}}</p>
             <p><span>期望解决日期：</span>{{item.qwjjrq}}</p>
             <p><span>承诺解决日期：</span>{{item.cnjjrq}}</p>
-            <p><span>问题状态：</span><van-tag round :type="item.zt==0?'danger':'success'">{{item.zt==0?'计划中':'已完成'}}</van-tag></p> 
-            <p v-if="item.zt == 0 && !weekState"><span>未完成原因:</span>{{item.wwcyy}}</p>
-            <p v-if="item.zt == 0 && !weekState"><span>后续措施:</span>{{item.hxcs}}</p>
+            <p><span>问题状态：</span><van-tag round :type="item.zt==0?'danger':'success'">{{item.zt==0||item.zt==2?'处理中':'已关闭'}}</van-tag></p> 
+            <p v-if="!weekState"><span>未完成原因:</span>{{item.wwcyy}}</p>
+            <p v-if="!weekState"><span>后续措施:</span>{{item.hxcs}}</p>
+            <p v-if="weekState"><span>处理计划：</span>{{item.cljh}}</p>
           </div>
           <div slot="footer" class="btn" v-if="(!!weekState && !isNextBlock) || (!weekState && !isBlock)">
-            <van-button  v-if="item.zt==0" size="mini" @click="handleFillin(item,'wt')" style="background:#00c1de">填写原因措施</van-button>
+            <van-button  size="mini" @click="handleFillin(item,'wt')" style="background:#00c1de">{{weekState==0?'总结':'计划'}}</van-button>
             <van-button  size="mini" type="danger" @click="handleDelete(item,'wt',index)">删除</van-button>
           </div>
         </van-panel>
@@ -108,7 +109,7 @@ export default {
     padding: 3px 15px;
     &:nth-of-type(1),&:nth-of-type(3){
       span:nth-child(1){
-      width:90px;
+      width:95px;
      }
     }
   }

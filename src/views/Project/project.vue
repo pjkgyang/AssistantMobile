@@ -1,5 +1,5 @@
 <template>
-  <div v-if="false">
+  <div >
     <div class="assistant-project" >
       <div class="project-top-filter">
         <div class="project-filter--input">
@@ -21,7 +21,7 @@
             <van-icon name="arrow" />
           </span>
           丨
-          <span @click="hanldeSearchFilter('gx')">
+          <span @click="hanldeSearchFilter('sfgx')">
             <span>{{gxText}}</span>&nbsp;&nbsp;
             <van-icon name="arrow" />
           </span>
@@ -34,7 +34,7 @@
       </div>
     </div>
    
-    <!-- <div class="layout-scroll" ref="layoutScroll"  @scroll="handleScroll" :scroll-top.prop="scrollTop">
+    <div class="layout-scroll" ref="layoutScroll"  @scroll="handleScroll" :scroll-top.prop="scrollTop">
         <mu-container ref="container" class="demo-loadmore-content" >
           <mu-load-more @refresh="refresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
             <div class="layout-scroll-center" >
@@ -47,14 +47,26 @@
         <div v-if="!projectList.length && !$store.state.loadingShow">
           <emptyContent></emptyContent>
         </div>
-    </div> -->
+    </div>
 
 
+    <van-popup v-model="xmflPopshow" position='bottom' >
+        <van-picker show-toolbar title="项目分类" :columns="xmflList" @cancel="handleCancel" @confirm="hadnleXmflConfirm" />
+    </van-popup>
+    <van-popup v-model="xmztPopshow" position='bottom' >
+        <van-picker show-toolbar title="项目状态" :columns="xmztList" @cancel="handleCancel" @confirm="hadnleXmztConfirm" :defaultIndex="1"/>
+    </van-popup>
+    <van-popup v-model="xmlbPopshow" position='bottom' >
+        <van-picker show-toolbar title="项目类别" :columns="xmlbList" @cancel="handleCancel" @confirm="hadnleXmlbConfirm" />
+    </van-popup>
+    <van-popup v-model="sfgxPopshow" position='bottom' >
+        <van-picker show-toolbar title="是否购销" :columns="sfgxList" @cancel="handleCancel" @confirm="hadnleSfgxConfirm" />
+    </van-popup>
   </div>
 
-  <div v-else>
+  <!-- <div v-else>
     <h1>开发中...</h1>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -63,27 +75,174 @@
  export default {
   data() {
     return {
+      xmflPopshow:false,//项目分类
+      xmztPopshow:false,//项目状态
+      xmlbPopshow:false,//项目类别
+      sfgxPopshow:false,//是否购销
+
+
+      isLoading:false,
+      loading:false,
+      finished:false,
       xmflText:'项目分类',
       xmztText:'项目状态',
       xmlbText:'项目类别',
       gxText:'是否购销',
+
+      xmflList:['全部','收藏项目','高风险项目','我拥有的项目','我参与的项目','已关闭的项目'],
+      xmztList:['全部','在建','售后','过保','已关闭'],
+      xmlbList:['全部','软件','集成','服务'],
+      sfgxList:['全部','是','否'],
+
+      filter:{
+        xmfl:'',
+        xmzt:'',
+        xmlb:'',
+        sfgx:''
+      },
+      keyword:'',
+      currentPage:1,
+      pageSize:10,
+      total:0,
       projectList:[{
+             yh:'南京农业大学',
              xmmc:"南京农业大学学生工作信息化建设综合",
              xmbh:'UK123456',
              xmjl:'张三',
              htbh:'F342131231',
              jfzrrxm:'李四',
-         }]
+             xmjd:'已过保',
+             p_xmjd:50,
+             wid:'123123123'
+        },{
+             yh:'南京农业大学',
+             xmmc:"南京农业大学学生工作信息化建设综合",
+             xmbh:'UK123456',
+             xmjl:'张三',
+             htbh:'F342131231',
+             jfzrrxm:'李四',
+             xmjd:'建设中',
+             p_xmjd:30,
+             wid:'123123123'
+        }],
+      scrollTop:'',
     };
   },
+  mounted(){
+    this.getProject();
+  },
   methods:{
+    // 项目分类
+    hadnleXmflConfirm(picker,values){
+      this.xmflText = values==0?'项目分类':picker;
+      this.filter.xmfl = values==0?'':values;
+      this.xmflPopshow = false;
+    },
+    // 项目状态
+    hadnleXmztConfirm(picker,values){
+      this.xmztText = values==0?'项目状态':picker;
+      this.filter.xmzt = values==0?'':values;
+      this.xmztPopshow = false;
+    },
+    // 项目类别
+    hadnleXmlbConfirm(picker,values){
+      this.filter.xmlb = this.xmlbText = values==0?'项目类别':picker;
+      this.xmlbPopshow = false;
+    },
+    // 是否购销
+    hadnleSfgxConfirm(picker,values){
+      this.sfgxText = values==0?'是否购销':picker;
+      this.filter.sfgx = values==0?'':values==2?0:1;
+      this.sfgxPopshow = false;
+    },
     // 关键字筛选
-    handleSearchKeyword(){
-
+    handleSearchKeyword(val){
+      this.keyword = val;
+    },
+    handleCancel(){
+      this.xmflPopshow = this.xmztPopshow = this.xmlbPopshow = this.sfgxPopshow = false;
     },
     // 条件筛选
-    hanldeSearchFilter(){
+    hanldeSearchFilter(data){
+      switch(data){
+        case 'xmfl':
+          this.xmflPopshow = true;
+        break;
+        case 'xmzt':
+          this.xmztPopshow = true;
+        break;
+        case 'xmlb':
+          this.xmlbPopshow = true;
+        break;
+        case 'sfgx':
+          this.sfgxPopshow = true;
+        break;
+        default:
+        break;
+      }
+    },
+    handleScroll(){
+      this.$nextTick(() => {
+         this.scrollTop = this.$refs.layoutScroll.scrollTop
+      })
+     },
+        // 上啦刷新
+    refresh () {
+      // this.isLoading = true;
+      // this.$refs.container.scrollTop = 0;
+      setTimeout(() => {
+        this.init();
+      },500)
+    },
+    // 异步更新数据
+    onLoad() {
+      this.loading = true;
+      setTimeout(() => {
+        this.getProject();
+      }, 300);
+    },
 
+    init(){
+      this.currentPage = 1;
+      this.projectList = [];
+      this.$store.dispatch("chnageLoing", true);
+      this.getProject();
+    },
+    getProject(){
+      this.$get(this.API.getProjectsForMobile,{
+        curPage: this.currentPage,
+        pageSize: this.pageSize,
+        keyword: this.keyword,
+        xmzt:this.filter.xmzt,
+        xmlb: this.filter.xmlb,
+        sfgx: this.filter.sfgx,
+        pl: this.filter.xmfl
+      }).then(res=>{
+        if (res.state == "success") {
+          this.$store.dispatch("chnageLoing", false);
+          this.total = res.data.total;
+          if (this.isLoading || this.currentPage == 1) {
+            this.projectList = res.data.rows;
+          } else {
+            this.projectList = this.projectList.concat(res.data.rows);
+          }
+          if(!res.data.rows){
+            this.projectList = [];
+          }
+          // 加载状态结束
+          this.loading = false;
+          this.isLoading = false;
+          if (this.currentPage >= this.total) {
+             this.finished = true;
+          }else{
+             this.finished = false;
+          }
+          this.currentPage += 1;
+        } else {
+          this.$store.dispatch("chnageLoing", false);
+          this.$toast(!res.msg?'系统超时，请稍后再试~':res.msg);
+        }
+      })
     }
   },
   components: {searchInput,projectList}

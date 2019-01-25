@@ -77,4 +77,8 @@ export default {
     queryResponsibleProduct:WINDOW_CONFIG__BASEURL +'question/queryResponsibleProduct.do',//产品项目产品
     getCrowdRwzt:WINDOW_CONFIG__BASEURL +'external/getCrowdRwzt.do',//获取crowd
     getCrowdRwxx:WINDOW_CONFIG__BASEURL +'external/getCrowdRwxx.do',//获取crowd
+
+
+    // 项目
+    getProjectsForMobile:WINDOW_CONFIG__BASEURL +'project/getProjectsForMobile.do',//获取项目列表
 }

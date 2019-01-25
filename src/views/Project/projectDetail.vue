@@ -133,8 +133,77 @@
         </layoutCard>
 
         <layoutCard>
-            <div slot="caption">asdasd</div>
-            <div slot="detail">sadasdasdasda</div>
+            <div slot="caption" flex-col-center spacebetween>
+                <h4>实施任务</h4>
+                <p class="font12 color999">
+                   个人任务 0 条 &#x3000;未完成个人任务 0 条   
+                </p>
+            </div>
+            <div slot="detail" flex class="font12 project-ssrw-sort">
+                <p col="1">
+                    <span>123</span><br>
+                    <span class="color999">已完成数</span>
+                </p>
+                <p col="1">
+                    <span>123</span><br>
+                    <span class="color999">未完成数</span>
+                </p>
+                <p col="1">
+                    <span>123</span><br>
+                    <span class="color999">待关闭数</span>
+                </p>
+                <p col="1">
+                    <span>123</span><br>
+                    <span class="color999">已超期数</span>
+                </p> 
+            </div>
+        </layoutCard>
+
+        <layoutCard>
+            <div slot="caption" flex-col-center spacebetween>
+                <h4>甲方任务</h4>
+                <p class="font12 color999">
+                   个人任务 0 条 &#x3000;未完成个人任务 0 条   
+                </p>
+            </div>
+            <div slot="detail" flex class="font12 project-ssrw-sort">
+                 <p col="1">
+                    <span>123</span><br>
+                    <span class="color999">已完成数</span>
+                </p>
+                <p col="1">
+                    <span>123</span><br>
+                    <span class="color999">未完成数</span>
+                </p>
+                <p col="1">
+                    <span>123</span><br>
+                    <span class="color999">待关闭数</span>
+                </p>
+                <p col="1">
+                    <span>123</span><br>
+                    <span class="color999">已超期数</span>
+                </p> 
+            </div>
+        </layoutCard>
+
+        <layoutCard>
+            <div slot="caption" >
+                <h4>进度汇报</h4>
+            </div>
+            <div slot="detail" flex class="font12 project-ssrw-sort">
+                 <p col="1">
+                    <span>123</span><br>
+                    <span class="color999">日报动态</span>
+                </p>
+                <p col="1">
+                    <span>123</span><br>
+                    <span class="color999">周报动态</span>
+                </p>
+                <p col="1">
+                    <span>123</span><br>
+                    <span class="color999">月报动态</span>
+                </p>
+            </div>
         </layoutCard>
     </div>
 </template>
@@ -185,7 +254,8 @@ export default {
     padding: 0.85rem 0 0 0;
   }
   .project-lcb-sort,
-  .project-wt-sort {
+  .project-wt-sort ,
+  .project-ssrw-sort{
     p {
       text-align: center;
       margin-bottom: 0.75rem;

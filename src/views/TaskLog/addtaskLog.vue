@@ -8,7 +8,7 @@
                 <van-field v-model="gs" type="number" placeholder="请输入工时" label="工时" required/>
             </van-cell-group>
             <van-cell-group>
-                <van-field v-model="taskName" type="textarea" label="关联任务" is-link rows="1" autosize @click="onClick" required/>
+                <van-field readonly v-model="taskName" type="textarea" label="关联任务" is-link rows="1" autosize @click="onClick" required/>
             </van-cell-group>
             <van-cell-group>
                 <van-field v-model="content" type="textarea" label="内容" placeholder="请填写内容" rows="4" required/>

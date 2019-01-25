@@ -25,7 +25,7 @@
         </div>
 
         <div class="cur-bbh">
-          <p>当前版本：Jzv1.0.3</p>
+          <p>当前版本：Jzv1.0.25</p>
         </div>
     </div>
 </template>

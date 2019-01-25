@@ -92,8 +92,8 @@ export default {
       }).then(res=>{
          if(res.state == 'success'){
             this.$toast.clear();
-            this.$toast('添加成功~');
-            this.$router.push({ name: "weekAdd", params: { bid:1} });
+            this.$toast({message:'添加成功~',duration:2000});
+            this.$router.go(-1);
          }else{
            this.$toast(res.msg);
          }
@@ -120,7 +120,8 @@ export default {
         curPage:this.currentPage,
         pageSize:this.pageSize,
         cnjssj:this.lastdate,
-        keyword:this.keyword
+        keyword:this.keyword,
+        wtzt:[0,2].join(',')
       }).then(res=>{
         if(res.state == 'success'){
           this.$store.dispatch("chnageLoing", false);

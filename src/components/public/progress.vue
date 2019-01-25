@@ -1,10 +1,10 @@
 <template>
     <div class="assistant-progress">
         <div class="progress">
-            <span class="progress_activebar" :style="{'width':width+'%'}"> </span>
+            <span class="progress_activebar" :style="{'width':percentage+'%'}"> </span>
         </div>&#x3000;
         <div>
-            {{width}}%
+            {{percentage}}%
         </div>
     </div>
 </template>
@@ -15,7 +15,7 @@ export default {
     return {};
   },
   props: {
-    width: {
+    percentage: {
       type: Number,
       default: 50
     }

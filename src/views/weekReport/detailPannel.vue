@@ -1,7 +1,7 @@
 <template>
     <div class="weekReport_detail">
         <header>
-          <weekSwitch :month="$route.query.month" :week="$route.query.week" @handleChange="handleChange"></weekSwitch>
+          <weekSwitch :year="curYear" :monthY="curMonth" :month="$route.query.month" :week="$route.query.week" @handleChange="handleChange"></weekSwitch>
         </header>
         <main>
            <mu-container ref="container" class="demo-loadmore-content" v-if="dataList.length">
@@ -53,7 +53,10 @@ export default {
       dataList:[],
 
       monthValue:'',
-      weeksValue:''
+      weeksValue:'',
+
+      curYear:0,
+      month:0
 
     };
   },
@@ -132,6 +135,8 @@ export default {
   activated(){
     this.weeksValue = this.$route.query.week;
     this.monthValue = this.$route.query.month;
+    this.curYear = Number(this.monthValue.split('-')[0]);
+    this.curMonth = Number(this.monthValue.split('-')[1]);
     this.init();
 
   },

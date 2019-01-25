@@ -39,9 +39,17 @@ export default {
     };
   },
   props:{
+      year:{
+        type:Number,
+        default:0 
+      },
+      monthV:{
+        type:Number,
+        default:0 
+      },
       month:{
-          type:Number,
-          default:0
+          type:String,
+          default:''
       },
       week:{
           type:Number,
@@ -83,9 +91,10 @@ export default {
   activated(){
      this.monthValue = this.month;
      this.weeksValue = this.week;
+     console.log(this.month,this.week)
      this.getLastMonthDay(
-        this.month.split('-')[0],
-        Number(this.month.split('-')[1])
+        this.year,
+        this.monthV
     );
   },
   components: {}

@@ -19,7 +19,7 @@
                 </van-cell-group>
             </div>
             <van-cell-group>
-                <van-field required v-model="taskName" type="textarea" label="关联任务" is-link rows="1" autosize @click="onClick" />
+                <van-field readonly required v-model="taskName" type="textarea" label="关联任务" is-link rows="1" autosize @click="onClick" />
             </van-cell-group>
 
             <choose-task :parentShow="show" @handleClosePop="handleClosePop" @handletaskClick="handletaskClick"></choose-task>
@@ -78,7 +78,7 @@ export default {
         }).then(res=>{
             if(res.state == 'success'){
                 this.$toast.clear();
-                this.$toast('添加成功~');
+                this.$toast({message:'添加成功~',duration:2000});
                 this.$router.go(-1);
             }else{
                 this.$toast.fail({message:res.msg,duration:2000}); 
@@ -93,11 +93,11 @@ export default {
            this.$toast('请填写工作内容~'); 
            return false;
         }
-        if(!this.show && /^[\s]*$/.test(this.form.wwcyy) && ((this.$route.params.weekActive==0 || JSON.stringify(this.$route.query) !== '{}') && !this.form.sfwc)){
+        if( /^[\s]*$/.test(this.form.wwcyy) && this.$route.query.weekActive==0  && !this.form.sfwc){
            this.$toast('请填写未完成原因~'); 
            return false;
         }
-        if(!this.show && /^[\s]*$/.test(this.form.hxcs) && ((this.$route.params.weekActive==0 || JSON.stringify(this.$route.query) !== '{}') && !this.form.sfwc)){
+        if(/^[\s]*$/.test(this.form.hxcs) && this.$route.query.weekActive==0  && !this.form.sfwc){
            this.$toast('请填写后续措施~'); 
            return false;
         }
@@ -128,8 +128,7 @@ export default {
         this.xmInfo.rwbh = this.$route.params.rwbh;
         this.xmInfo.lcbbh = this.$route.params.lcbbh;
         this.taskName = this.$route.params.xmmc + " — " + this.$route.params.cpmc_display + " — " + this.$route.params.rwmc_display
-    }
-    if(JSON.stringify(this.$route.query) !== '{}'){
+   }else{
       this.queryData = this.$route.query;  
       this.form.sfwc = false;
       this.taskName = this.form.gznr = this.form.wwcyy = this.form.hxcs = ''

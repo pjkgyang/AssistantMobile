@@ -1,39 +1,70 @@
 <template>
   <div class="projectlist">
     <div class="project-card" v-for="(project,index) in projectList" @click="handleCheckDetail(project)">
-      <div>
-        <section class="project-card_avatar">
-         <img src="../../../static/img/logo.png" alt="">
-        </section>
+      <div flex-col-center>
         <section class="project-card_info">
-          <h4>{{project.xmmc}}</h4>
+          <div flex-col-center spacebetween class="card_info-top">
+            <section class="project-card_avatar" flex-center>
+              <img :src="!project.logo?'../../../static/img/unit2.png':project.logo" :onerror="errorImg" >
+            </section>
+            <section >
+              <h4>{{project.xmmc}}</h4>
+            </section>
+          </div>
           <div class="card-info_detail">
-            <p>项目编号：
-              <span>{{project.xmbh}}</span>
-            </p>
-            <p>合同编号：
-              <span>{{project.htbh}}</span>
-            </p>
-            <p>项目经理：
-              <span>{{project.xmjl}}</span>
-            </p>
-            <p>甲方负责人：
-              <span>{{project.jfzrrxm}}</span>
-            </p>
+            <div>
+              <p>所属单位：
+                <span>{{project.dwmc}}</span>
+              </p>
+            </div>
+            <div flex>
+              <p col="1">项目编号：
+                <span>{{project.xmbh}}</span>
+              </p>
+              <p col="1">合同编号：
+                <span>{{project.htbh}}</span>
+              </p>
+            </div>
+            <div flex>
+              <p col="1">项目经理：
+                <span>{{!project.yfzrrxm?'暂无':project.yfzrrxm}}</span>
+              </p>
+              <p col="1">甲方负责人：
+                <span>{{!project.jfzrrxm?'暂无':project.jfzrrxm}}</span>
+              </p>
+            </div>
+            <div flex spacebetween>
+              <div col="3" flex-col-center>
+                <p col="2">项目进度：</p>
+                <div col="5">
+                  <progressBar :percentage="!project.p_xmjd?0:project.p_xmjd"></progressBar>
+                </div> 
+              </div>
+              <div col="1" text-right>
+               <van-tag round :type="project.xmjd=='已终止'||project.xmjd=='已过保'?'danger':'success'">{{project.xmjd}}</van-tag>
+              </div>
+            </div>
           </div>
         </section>
         <section class="project-card_link">
           <van-icon name="arrow" />
         </section>
       </div>
+      
+       <aside  :class="{'active-color-orange':project.xmzt!='在建'&&project.xmzt!='售后','active-color-green':project.xmzt=='在建'||project.xmzt=='售后'}" >
+          {{project.xmzt}}
+        </aside>
     </div>
   </div>
 </template>
 
 <script>
+import progressBar from '@/components/public/progress'
 export default {
   data() {
-    return {};
+    return {
+      errorImg: 'this.src="' + require("../../../static/img/unit.png") + '"',
+    };
   },
   methods: {
     handleCheckDetail(params) {
@@ -56,7 +87,7 @@ export default {
       default: false
     }
   },
-  components: {}
+  components: {progressBar}
 };
 </script>
 
@@ -78,36 +109,61 @@ export default {
   }
   > div {
     padding: 0.5rem 0.85rem;
-    .flex(space-around,center);
-    .project-card_avatar {
-      width: 18%;
-      height: 15.95vw;
-      text-align: center;
-      img{
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-      }
-    }
     // link
     .project-card_link {
-      width: 10%;
+      width: 12%;
       text-align: center;
     }
     // 内荣
     .project-card_info {
-      width: 70%;
+      width: 88%;
+      p{
+        white-space: nowrap;
+        // text-overflow: ellipsis;
+        // overflow: hidden;
+      }
+      .card_info-top {
+        .project-card_avatar {
+          width: 17%;
+          height: 13.28vw;
+          padding: 0.133rem;
+          border-radius: 50%;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .project-card_avatar+section{
+          width: 82%;
+          p{
+            font-size: 12px;
+          }
+        }
+      }
       .card-info_detail {
         font-size: @fontSize12;
         color: #999999;
+        margin: 0.2222rem 0;
         span {
           color: #333;
         }
-        > div {
-          padding: 0.3rem 0;
+        >div{
+          padding: 0.1rem 0;
         }
       }
     }
+  }
+  aside{
+    color: #fff;
+    transform: rotate(45deg);
+    width: 80px;
+    height: 1.3rem;
+    position: absolute;
+    right: -21px;
+    top:8px;
+    text-align: center;
+    font-size:@fontSize12;
+    line-height: 1.3rem;
   }
   .btn-reject-close {
     display: block;
