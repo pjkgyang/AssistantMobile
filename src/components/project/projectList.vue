@@ -5,7 +5,7 @@
         <section class="project-card_info">
           <div flex-col-center spacebetween class="card_info-top">
             <section class="project-card_avatar" flex-center>
-              <img :src="!project.logo?'../../../static/img/unit2.png':project.logo" :onerror="errorImg" >
+              <img :src="!project.logo?errorImg:project.logo" :onerror="errorImg" >
             </section>
             <section >
               <h4>{{project.xmmc}}</h4>
@@ -35,14 +35,14 @@
             </div>
             <div flex spacebetween>
               <div col="3" flex-col-center>
-                <p col="2">项目进度：</p>
+                <p col="1">项目进度：</p>
                 <div col="5">
                   <progressBar :percentage="!project.p_xmjd?0:project.p_xmjd"></progressBar>
                 </div> 
               </div>
-              <div col="1" text-right>
-               <van-tag round :type="project.xmjd=='已终止'||project.xmjd=='已过保'?'danger':'success'">{{project.xmjd}}</van-tag>
-              </div>
+              <!-- <div col="1" text-right>
+               <van-tag round :type="project.xmjd=='已完成'?'danger':'success'">{{project.xmjd}}</van-tag>
+              </div> -->
             </div>
           </div>
         </section>
@@ -50,7 +50,6 @@
           <van-icon name="arrow" />
         </section>
       </div>
-      
        <aside  :class="{'active-color-orange':project.xmzt!='在建'&&project.xmzt!='售后','active-color-green':project.xmzt=='在建'||project.xmzt=='售后'}" >
           {{project.xmzt}}
         </aside>
@@ -63,7 +62,7 @@ import progressBar from '@/components/public/progress'
 export default {
   data() {
     return {
-      errorImg: 'this.src="' + require("../../../static/img/unit.png") + '"',
+      errorImg: 'this.src="' + require("../../../static/img/unit2.png") + '"',
     };
   },
   methods: {

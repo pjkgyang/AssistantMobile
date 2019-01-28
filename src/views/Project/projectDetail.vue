@@ -2,46 +2,46 @@
     <div class="assistant-projectDetail">
         <layoutCard>
             <div slot="caption">
-                <h4>南京农业大学学生工作信息化建设综合服务</h4>
+                <h4>{{projectData.xmmc}}</h4>
                 <div class="project-xm font12" flex spacearound>
-                    <div col="1">
-                        <van-tag round color="#F0871E">在建</van-tag>
+                    <div col="2">
+                        <van-tag round color="#F0871E">{{projectData.xmzt}}</van-tag>
                     </div>
-                    <div col="4" flex-col-center>
+                    <div col="6" flex-col-center>
                         <span col="2">付款进度：</span>
                         <div col="4">
-                            <progressBar></progressBar>
+                            <progressBar :percentage="projectData.dkl"></progressBar>
                         </div>
                     </div>
-                    <div col="2" text-right>
-                        <a href="javaScrip:;;">查看付款明细></a>
+                    <div col="3" text-right>
+                        <a href="javaScrip:;;" @click="handleCheckDk">查看付款明细></a>
                     </div>
                 </div>
             </div>
             <div slot="detail" class="project-detail font12">
                 <p flex>
                     <span col="1">
-                        <span class="color999">项目编号：</span>UK12354</span>
+                        <span class="color999">项目编号：</span>{{projectData.xmbh}}</span>
                     <span col="1">
-                        <span class="color999">合同编号：</span>UK12354</span>
+                        <span class="color999">合同编号：</span>{{projectData.htbh}}</span>
                 </p>
                 <p flex>
                     <span col="1">
-                        <span class="color999">项目经理：</span>张三(01118888)</span>
+                        <span class="color999">项目经理：</span>{{projectData.xmjl}}</span>
                     <span col="1">
-                        <span class="color999">甲方负责人：</span>李四</span>
+                        <span class="color999">甲方负责人：</span>{{!projectData.jfxm?'无':projectData.jfxm}}</span>
                 </p>
                 <p flex>
                     <span col="1">
-                        <span class="color999">服务开始日期：</span>2018-8-8</span>
+                        <span class="color999">服务开始日期：</span>{{!projectData.fwksrq?'无':projectData.fwksrq}}</span>
                     <span col="1">
-                        <span class="color999">服务期限：</span>2</span>
+                        <span class="color999">服务期限：</span>{{projectData.fwqx}}月</span>
                 </p>
                 <p flex>
                     <span col="1">
-                        <span class="color999">服务状态：</span>一起动</span>
+                        <span class="color999">服务状态：</span>{{projectData.gcfwzt=='0'?'已停止':'已启动'}}</span>
                     <span col="1">
-                        <span class="color999">项目状态：</span>一起动</span>
+                        <span class="color999">项目状态：</span>{{projectData.ztztmc}}</span>
                 </p>
             </div>
         </layoutCard>
@@ -49,40 +49,38 @@
         <layoutCard>
             <div slot="caption" flex-col-center spacebetween>
                 <h4>里程碑</h4>
-                <div class="font12">
+                <!-- <div class="font12">
                     <a href="javaScrip:;;">查看里程碑明细></a>
-                </div>
+                </div> -->
             </div>
             <div slot="detail">
                 <div flex-col-center class="font12">
                     <span col="2">进度：</span>
                     <div col="14">
-                        <progressBar></progressBar>
+                        <progressBar :percentage="projectData.p_xmjd"></progressBar>
                     </div>
                 </div>
                 <div flex class="project-lcb">
-                    <section col="1">
-                        <steps></steps>
+                    <section col="1" >
+                        <steps :list="projectData.jdList"></steps>
                     </section>
-                    <section col="1" class="font12 project-lcb-sort">
-                        <div flex>
-                            <p col="1">
-                                <span>100</span><br>
-                                <span class="color999">已完成数</span>
-                            </p>
-                            <p col="1">
-                                <span>100</span><br>
-                                <span class="color999">未完成数</span>
-                            </p>
+                    <section col="1" class="font12 project-lcb-sort" flex-column spacearound>
+                        <div flex-center>
+                            <van-circle v-model="currentRate" :rate="projectData.p_lcbqrl" :speed="100" layer-color="#ebedf0" color="#F0871E" size="76px" :stroke-width="60" >
+                                <div class="detail-circle" flex-column flex-row-center>
+                                 <span class="fontColorOrange">{{projectData.p_lcbqrl}}%</span>
+                                 <span>确认率</span>
+                                </div>
+                            </van-circle>
                         </div>
                         <div flex>
                             <p col="1">
-                                <span>100</span><br>
-                                <span class="color999">已完成数</span>
+                                <span>{{projectData.dqrlcbzs}}</span><br>
+                                <span class="color999">待确认数</span>
                             </p>
                             <p col="1">
-                                <span>100</span><br>
-                                <span class="color999">未完成数</span>
+                                <span>{{projectData.yqrlcbzs}}</span><br>
+                                <span class="color999">已确认数</span>
                             </p>
                         </div>
                     </section>
@@ -90,42 +88,52 @@
             </div>
         </layoutCard>
 
-        <layoutCard>
+        <!-- <layoutCard>
             <div slot="caption">
                 <h4>问题</h4>
             </div>
             <div slot="detail">
                 <section flex>
-                    <div col="1">
-                        <van-circle v-model="currentRate" :rate="90" :speed="100" layer-color="#ebedf0" color="#F0871E" size="76px" :stroke-width="60" :text="yqlText" />
+                    <div col="1" flex-center>
+                        <van-circle v-model="currentRate" :rate="projectData.p_wtyql" :speed="100" layer-color="#ebedf0" color="#F0871E" size="76px" :stroke-width="60" >
+                            <div class="detail-circle" flex-column flex-row-center>
+                                 <span class="fontColorOrange">{{projectData.p_wtyql}}%</span>
+                                 <span>延期率</span>
+                            </div>
+                        </van-circle>
                     </div>
-                    <div col="1">
-                        <van-circle v-model="currentRate" :rate="90" :speed="100" layer-color="#ebedf0" color="#29BE1E" size="76px" :stroke-width="60" :text="mydText" />
+                    <div col="1" flex-center>
+                        <van-circle v-model="currentRate" :rate="projectData.p_wtmyd" :speed="100" layer-color="#ebedf0" color="#29BE1E" size="76px" :stroke-width="60" >
+                             <div class="detail-circle" flex-column flex-row-center>
+                                 <span class="fontColorRreen">{{projectData.p_wtmyd}}%</span>
+                                 <span>满意度</span>
+                            </div>
+                        </van-circle>
                     </div>
                     <div col="1" flex-center>
                         <div class="project-wt-myd">
                             <p class="fontColorRreen">
-                                <span>满意</span>&#x3000;32</p>
+                                <span>满意</span>&#x3000;{{projectData.wtmyzs}}</p>
                             <p class="fontColorRed">
-                                <span>不满意</span>&#x3000;32</p>
+                                <span>不满意</span>&#x3000;{{projectData.wtbmyzs}}</p>
                         </div>
                     </div>
                 </section>
                 <section flex-center  class="font12 project-wt-sort">
                     <p col="1">
-                        <span>123</span><br>
+                        <span>{{projectData.wtwhfzs}}</span><br>
                         <span class="color999">未回复</span>
                     </p>
                     <p col="1">
-                        <span>123</span><br>
+                        <span>{{projectData.wtyqwhfzs}}</span><br>
                         <span class="color999">逾期未响应</span>
                     </p>
                     <p col="1">
-                        <span>123</span><br>
-                        <span class="color999">预期未完成</span>
+                        <span>{{projectData.wtyqwwczs}}</span><br>
+                        <span class="color999">逾期未完成</span>
                     </p>
                     <p col="1">
-                        <span>123</span><br>
+                        <span>{{projectData.wtwjjsjzs}}</span><br>
                         <span class="color999">无解决时间</span>
                     </p>
                 </section>
@@ -204,7 +212,7 @@
                     <span class="color999">月报动态</span>
                 </p>
             </div>
-        </layoutCard>
+        </layoutCard> -->
     </div>
 </template>
 
@@ -215,17 +223,47 @@ import steps from "@/components/project/process.vue";
 export default {
   data() {
     return {
-      currentRate: 0
+      currentRate: 0,
+      projectData:{},
+      xmbh:''
     };
   },
-  computed: {
-    yqlText() {
-      return this.currentRate.toFixed(0) + "%";
-    },
-    mydText() {
-      return this.currentRate.toFixed(0) + "%";
-    }
+  methods:{
+      handleCheckDk(){
+          this.$router.push({name:'projectDkl',query:{xmbh:this.$route.query.xmbh},params:{data:this.projectData}})
+      },
+      getProjectDetail(){
+          this.$toast.loading({
+            mask: true,
+            message: '加载中...',
+            duration:0
+           });
+          this.$get(this.API.getXmTjRT,{
+              xmbh:this.$route.query.xmbh,
+              isAll:true
+          }).then(res=>{
+              if(res.state == 'success'){
+                  if(!res.data){
+                     this.projectData = {};     
+                  }else{
+                     this.projectData = res.data;
+                     this.projectData.dkl = res.data.dkl.split('%')[0];
+                  }
+                  this.$toast.clear();
+              }else{
+                  this.$toast.clear();
+                  this.$toast(!res.msg?'请求超时，请稍后再试~':res.msg)
+              }
+          })
+      }
   },
+  activated(){
+    if (this.xmbh != this.$route.query.xmbh) {
+      this.getProjectDetail();
+    }
+    this.xmbh = this.$route.query.xmbh;
+  },
+  computed: {},
   components: { layoutCard, progressBar, steps }
 };
 </script>
@@ -234,11 +272,18 @@ export default {
 @import "../../index.less";
 .assistant-projectDetail {
   h4 {
+      position: relative;
     &::before {
       content: "";
-      border: 2px solid #007aff;
+      display:table;
       margin-right: 4px;
-      border-radius: 3px;
+      border-radius: 4px;
+      background: #007aff;
+      height: 18px;
+      width: 3px;
+      position: absolute;
+      left: -6px;
+      top: 2px;
     }
   }
   .project-xm {
@@ -261,6 +306,7 @@ export default {
       margin-bottom: 0.75rem;
       span:nth-child(1) {
         font-size: 1.3rem;
+        font-weight: 700;
       }
     }
   }
@@ -288,6 +334,17 @@ export default {
   }
   .fontColorRed {
     color: #e93546;
+  }
+  .fontColorOrange{
+      color:#F0871E;
+  }
+
+  .detail-circle{
+    height:100%;  
+    font-size: 1rem;
+    span:nth-child(2){
+        font-size:@fontSize14;
+    }
   }
 }
 </style>

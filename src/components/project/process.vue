@@ -1,15 +1,18 @@
 <template>
     <div>
-        <ul v-if="list.length" >
+        <ul v-if="list.length">
             <li v-for="(process,index) in list" :key="index" 
-            :class="{'active':process.completed == true}">
+            :class="{'active-dkl':type == 'dkl','active':process.completed == true && type == 'process'}">
                 <div v-if="type == 'process'">{{process.jdmc}}</div>
                 <div v-else class="crowd">
-                     <p><span>{{process.czrxm}}</span>&#x3000;{{process.czsj}}&#x3000;<van-tag round type="primary">{{process.ztDisplay}}</van-tag></p>
-                     <p>审核意见:<span>{{process.shyy}}</span></p>  
+                     <p><span>{{process.sj}}</span>&#x3000;{{process.sm}}&#x3000;</p>
+                     <p>金额：<span>{{process.je}}</span></p>  
                 </div>
             </li>
         </ul>
+        <div v-else text-center> 
+          {{type=='process'?'暂无进度':'暂无付款记录'}}
+        </div>
     </div>
 </template>
 <script>
@@ -27,24 +30,9 @@ export default {
     list: {
       type: Array,
       default: function() {
-        return [{
-            jdmc:'启动',
-            completed:true
-        },{
-            jdmc:'安装部署',
-            completed:true
-        },{
-            jdmc:'项目实施',
-            completed:false
-        },{
-            jdmc:'试运行',
-            completed:false
-        },{
-            jdmc:'验收',
-            completed:false
-        }];
+        return [];
       }
-    }
+    },
   },
   mounted() {
 
@@ -96,10 +84,29 @@ export default {
   li.active{
       color: #409eff;
   }
+  
   ul li.active::before,
   ul li.active::after {
     background-color: #409eff;
+    
   }
+
+  ul li.active-dkl{
+    padding: 0.2rem 0 0.5rem 1.8rem;
+    color: #333;
+  }
+  ul li.active-dkl::before {
+    background-color: #409eff;
+    width: 20px;
+    height: 20px;
+    z-index: 1000;
+  }
+  ul li.active-dkl::after{
+    background-color: #409eff;
+    left: 9px;
+  }
+
+
 
   ul li:last-child::after {
     display: none;

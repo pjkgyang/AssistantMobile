@@ -65,7 +65,7 @@ export default {
     // 切换周数
     handleChangeWeek() {
       if (this.weekActive == 1) {
-        if (this.week == this.weeksNum) {
+        if (this.week >= this.weeksNum) {
           this.monthValue = getNextMonth(this.month);
           this.weeksValue = 1;
         } else {
@@ -80,22 +80,18 @@ export default {
     },
 
      // 获取本月最后一天
-    getLastMonthDay(year, month) {
-      this.weeksNum = getWeeks(year, month);
-      this.lastMonthDay = GetNextDate(
-        GetNextDate(getLastMonth(year, month - 1), 6),
-        (this.weeksNum - 1) * 7
-      );
-    },
+    // getLastMonthDay(year, month) {
+    //   this.weeksNum = getWeeks(year, month);
+    //   // this.lastMonthDay = GetNextDate(
+    //   //   GetNextDate(getLastMonth(year, month - 1), 6),
+    //   //   (this.weeksNum - 1) * 7
+    //   // );
+    // },
   },
   activated(){
      this.monthValue = this.month;
      this.weeksValue = this.week;
-     console.log(this.month,this.week)
-     this.getLastMonthDay(
-        this.year,
-        this.monthV
-    );
+     this.weeksNum = getWeeks(this.year,this.monthV);
   },
   components: {}
 };

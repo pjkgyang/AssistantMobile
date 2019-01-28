@@ -1,7 +1,7 @@
 <template>
     <div class="weekReport_detail">
         <header>
-          <weekSwitch :year="curYear" :monthY="curMonth" :month="$route.query.month" :week="$route.query.week" @handleChange="handleChange"></weekSwitch>
+          <weekSwitch :year="curYear" :monthV="curMonth" :month="$route.query.month" :week="$route.query.week" @handleChange="handleChange"></weekSwitch>
         </header>
         <main>
            <mu-container ref="container" class="demo-loadmore-content" v-if="dataList.length">

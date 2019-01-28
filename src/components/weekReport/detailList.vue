@@ -43,10 +43,10 @@
                             <span>任务名称：</span>{{item.rwmc_display}}</p>
                         <p>
                             <span>完成状态：</span>
-                            <van-tag round :type="item.zt==1?'danger':'success'">{{item.zt==1?'计划中':'已完成'}}</van-tag>
+                            <van-tag round :type="item.zt==0?'danger':'success'">{{item.zt==0?'计划中':'已完成'}}</van-tag>
                         </p>
                         <p>
-                            <span>工作内容：</span>{{item.gznr}}</p>
+                            <span>工作内容：</span>{{item.gzms}}</p>
                         <p>
                             <span>未完成原因：</span>{{item.wwcyy}}</p>
                         <p>
@@ -107,78 +107,7 @@ export default {
     dataList:{
         type:Array,
         default:()=>{
-            return [ {
-          xmbh: "UK123456",
-          xmmc: "项目名称项目名称项目名称项目名称项目名称项目名称",
-          xmnr: "xmxmxmxmxmm",
-          lcbms: "ssssssddd",
-          cnwcrq: "2018-08-08",
-          wczt: "1",
-          cpmc: "产品名臣g",
-          rwmc: "任务名称",
-          wtbt: "张三三上哪上哪上哪啊",
-          qwjjrq: "2018-08-09",
-          cnjjrq: "2018-08-10",
-          wtzt: "1",
-          zrrxm: "张三丰",
-          cpmc: "小助手",
-          rwmc: "啊实打实大",
-          wwcyy: "请问二群翁群二无群",
-          hxcs: "请问二群翁群二无群",
-          gznr: "请问二群翁群二无群",
-          cljh: "处理计划",
-          cjrxm: "王二旺",
-          xmjl: "丁一手",
-          zddzxm: "马四王"
-        },
-        {
-          xmbh: "UK123456",
-          xmmc: "项目名称项目名称项目名称项目名称项目名称项目名称",
-          xmnr: "xmxmxmxmxmm",
-          lcbms: "ssssssddd",
-          cnwcrq: "2018-08-08",
-          wczt: "1",
-          cpmc: "产品名臣g",
-          rwmc: "任务名称",
-          wtbt: "张三三上哪上哪上哪啊",
-          qwjjrq: "2018-08-09",
-          cnjjrq: "2018-08-10",
-          wtzt: "1",
-          zrrxm: "张三丰",
-          cpmc: "小助手",
-          rwmc: "啊实打实大",
-          wwcyy: "请问二群翁群二无群",
-          hxcs: "请问二群翁群二无群",
-          gznr: "请问二群翁群二无群",
-          cljh: "处理计划",
-          cjrxm: "王二旺",
-          xmjl: "丁一手",
-          zddzxm: "马四王"
-        },
-        {
-          xmbh: "UK123456",
-          xmmc: "项目名称项目名称项目名称项目名称项目名称项目名称",
-          xmnr: "xmxmxmxmxmm",
-          lcbms: "ssssssddd",
-          cnwcrq: "2018-08-08",
-          wczt: "1",
-          cpmc: "产品名臣g",
-          rwmc: "任务名称",
-          wtbt: "张三三上哪上哪上哪啊",
-          qwjjrq: "2018-08-09",
-          cnjjrq: "2018-08-10",
-          wtzt: "1",
-          zrrxm: "张三丰",
-          cpmc: "小助手",
-          rwmc: "啊实打实大",
-          wwcyy: "请问二群翁群二无群",
-          hxcs: "请问二群翁群二无群",
-          gznr: "请问二群翁群二无群",
-          cljh: "处理计划",
-          cjrxm: "王二旺",
-          xmjl: "丁一手",
-          zddzxm: "马四王"
-        }]
+            return [ ]
         }
     }
 

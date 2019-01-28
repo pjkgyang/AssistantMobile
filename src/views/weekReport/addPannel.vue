@@ -6,7 +6,7 @@
                 <van-tab title="本周工作总结"></van-tab>
                 <van-tab title="下周工作计划"></van-tab>
             </van-tabs>
-            <van-tabs @change="handleChange" type="card" class="tabs_card">
+            <van-tabs @click="handleChange" type="card" class="tabs_card">
                 <van-tab title="里程碑工作"></van-tab>
                 <van-tab title="进度任务"></van-tab>
                 <van-tab title="问题处理"></van-tab>

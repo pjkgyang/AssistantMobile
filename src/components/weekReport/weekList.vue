@@ -89,6 +89,7 @@ export default {
       default:false
     }
   },
+
   methods:{
     handleFillin(data,type){
       this.$emit('handleFillin',data,type);

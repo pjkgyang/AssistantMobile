@@ -12,6 +12,7 @@ import questionProcess from "@/views/Question/questionProcess.vue";
 import questionForward from "@/views/Question/transpond.vue";
 import sqgbList from "@/views/Question/closingPannel.vue";
 import crowd from "@/views/Question/crowdDetail.vue";
+import projectDkl from "@/views/project/projectdkl.vue";
 
 
 // project
@@ -216,6 +217,11 @@ export default new Router({
       name: 'projectDetail',
       meta:{title:'项目详情'},
       component:projectDetail
+    },{
+      path: '/project/projectdkl',
+      name: 'projectDkl',
+      meta:{title:'到款详情'},
+      component:projectDkl
     }
   ]
 })

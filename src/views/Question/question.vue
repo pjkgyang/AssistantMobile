@@ -100,12 +100,6 @@
    beforeDestroy () {
        window.removeEventListener("popstate", this.historyChange);
    },
-  //  updated:function(){
-  //   this.$nextTick(function(){
-  //     var p = document.getElementsByClassName('layout-scroll')[0];
-  //     p.scrollTop = 200;
-  //   })
-  // },
    activated(){
     if (!this.$store.state.mark) {
        this.init();
