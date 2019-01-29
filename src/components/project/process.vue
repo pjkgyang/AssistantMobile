@@ -5,8 +5,8 @@
             :class="{'active-dkl':type == 'dkl','active':process.completed == true && type == 'process'}">
                 <div v-if="type == 'process'">{{process.jdmc}}</div>
                 <div v-else class="crowd">
-                     <p><span>{{process.sj}}</span>&#x3000;{{process.sm}}&#x3000;</p>
-                     <p>金额：<span>{{process.je}}</span></p>  
+                     <p><span>{{process.sj}}</span>&#x3000;<van-tag type="primary" round>{{process.sm}}</van-tag></p>
+                     <p><span class="color999">金额：</span>{{process.je}}</p>  
                 </div>
             </li>
         </ul>
@@ -97,13 +97,13 @@ export default {
   }
   ul li.active-dkl::before {
     background-color: #409eff;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     z-index: 1000;
   }
   ul li.active-dkl::after{
     background-color: #409eff;
-    left: 9px;
+    left: 7px;
   }
 
 

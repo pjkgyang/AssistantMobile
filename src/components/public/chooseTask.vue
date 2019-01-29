@@ -108,8 +108,8 @@ export default {
       cpPopShow: false,
       taskPopShow: false,
       datePickerShow: false,
-      curPage: 1,
-      curPage: 1,
+      currentPage: 1,
+      currentPage: 1,
       allItems: [], //项目
       loadMore: false,
       keyword: "",
@@ -261,7 +261,12 @@ export default {
       this.isLoading = true;
       this.$refs.container.scrollTop = 0;
       setTimeout(() => {
-        this.init();
+         this.currentPage = 1;
+         if (!this.tabValue) {
+          this.queryAllitems();
+        } else {
+          this.queryXMofType(this.tabValue);
+        }
       }, 500);
     },
     onLoad() {
@@ -277,7 +282,7 @@ export default {
     },
 
     init() {
-      this.curPage = 1;
+      this.currentPage = 1;
       this.allItems = [];
       this.$store.dispatch("chnageLoing", true);
       if (!this.tabValue) {
@@ -288,13 +293,13 @@ export default {
     },
 
     queryAllitems() {
-      // if(this.curPage == 1 && !this.loading){
+      // if(this.currentPage == 1 && !this.loading){
       //   this.allItems = [];
       //   this.itemLoading = true;
       // }
       //查询全部项目
       this.$get(this.API.getProjects, {
-        curPage: this.curPage,
+        curPage: this.currentPage,
         pageSize: 20,
         keyword: this.keyword,
         xmzt: "",
@@ -304,7 +309,7 @@ export default {
       }).then(res => {
         if (res.state == "success") {
           this.$store.dispatch("chnageLoing", false);
-          if (this.curPage == 1) {
+          if (this.currentPage == 1) {
             this.allItems = res.data.rows;
           } else {
             this.allItems = this.allItems.concat(res.data.rows);
@@ -312,12 +317,12 @@ export default {
           // 加载状态结束
           this.loading = false;
           this.isLoading = false;
-          if (this.curPage >= res.data.total) {
+          if (this.currentPage >= res.data.total) {
             this.finished = true;
           } else {
             this.finished = false;
           }
-          this.curPage += 1;
+          this.currentPage += 1;
         }else{
            this.$store.dispatch("chnageLoing", false);
            this.$toast(res.msg);
@@ -330,7 +335,7 @@ export default {
     //获取项目
     queryXMofType(pl) {
       this.$get(this.API.getMyProjects, {
-        curPage: this.curPage,
+        curPage: this.currentPage,
         pageSize: 20,
         keyword: this.keyword,
         xmzt: "",
@@ -341,7 +346,7 @@ export default {
         if (res.state == "success") {
           //   this.total = res.data[pl].total;
           this.$store.dispatch("chnageLoing", false);
-          if (this.curPage == 1) {
+          if (this.currentPage == 1) {
             this.allItems = res.data[pl].rows;
           } else {
             this.allItems = this.allItems.concat(res.data[pl].rows);
@@ -349,12 +354,12 @@ export default {
           // 加载状态结束
           this.loading = false;
           this.isLoading = false;
-          if (this.curPage >= res.data[pl].total) {
+          if (this.currentPage >= res.data[pl].total) {
             this.finished = true;
           } else {
             this.finished = false;
           }
-          this.curPage += 1;
+          this.currentPage += 1;
         } else {
           this.$store.dispatch("chnageLoing", false);
           this.$toast(res.msg);

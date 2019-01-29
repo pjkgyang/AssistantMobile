@@ -7,9 +7,9 @@
                     <div col="2">
                         <van-tag round color="#F0871E">{{projectData.xmzt}}</van-tag>
                     </div>
-                    <div col="6" flex-col-center>
-                        <span col="2">付款进度：</span>
-                        <div col="4">
+                    <div col="7" flex-col-center>
+                        <span col="3">付款进度：</span>
+                        <div col="6">
                             <progressBar :percentage="projectData.dkl"></progressBar>
                         </div>
                     </div>
@@ -53,20 +53,22 @@
                     <a href="javaScrip:;;">查看里程碑明细></a>
                 </div> -->
             </div>
-            <div slot="detail">
-                <div flex-col-center class="font12">
-                    <span col="2">进度：</span>
-                    <div col="14">
-                        <progressBar :percentage="projectData.p_xmjd"></progressBar>
-                    </div>
-                </div>
-                <div flex class="project-lcb">
+            <div slot="detail" flex>
+                <div col="1" flex-column flex-col-center class="font12 project-lcb">
+                    <section flex col="1">
+                        <span col="4">进度：</span>
+                        <div col="12">
+                            <progressBar :percentage="projectData.p_xmjd"></progressBar>
+                        </div>
+                    </section>
                     <section col="1" >
                         <steps :list="projectData.jdList"></steps>
                     </section>
-                    <section col="1" class="font12 project-lcb-sort" flex-column spacearound>
+                </div>
+                <div col="1">
+                    <section class="font12 project-lcb-sort" flex-column spacearound>
                         <div flex-center>
-                            <van-circle v-model="currentRate" :rate="projectData.p_lcbqrl" :speed="100" layer-color="#ebedf0" color="#F0871E" size="76px" :stroke-width="60" >
+                            <van-circle v-model="projectData.p_lcbqrl" :rate="100"  :speed="100" layer-color="#ebedf0" color="#F0871E" size="76px" :stroke-width="60" >
                                 <div class="detail-circle" flex-column flex-row-center>
                                  <span class="fontColorOrange">{{projectData.p_lcbqrl}}%</span>
                                  <span>确认率</span>
@@ -75,11 +77,11 @@
                         </div>
                         <div flex>
                             <p col="1">
-                                <span>{{projectData.dqrlcbzs}}</span><br>
+                                <span>{{projectData.dqrlcbzs}}</span><br><br>
                                 <span class="color999">待确认数</span>
                             </p>
                             <p col="1">
-                                <span>{{projectData.yqrlcbzs}}</span><br>
+                                <span>{{projectData.yqrlcbzs}}</span><br><br>
                                 <span class="color999">已确认数</span>
                             </p>
                         </div>
@@ -88,14 +90,14 @@
             </div>
         </layoutCard>
 
-        <!-- <layoutCard>
+        <layoutCard>
             <div slot="caption">
                 <h4>问题</h4>
             </div>
             <div slot="detail">
                 <section flex>
                     <div col="1" flex-center>
-                        <van-circle v-model="currentRate" :rate="projectData.p_wtyql" :speed="100" layer-color="#ebedf0" color="#F0871E" size="76px" :stroke-width="60" >
+                        <van-circle v-model="projectData.p_wtyql" :rate="100" :speed="100" layer-color="#ebedf0" color="#F0871E" size="76px" :stroke-width="60" >
                             <div class="detail-circle" flex-column flex-row-center>
                                  <span class="fontColorOrange">{{projectData.p_wtyql}}%</span>
                                  <span>延期率</span>
@@ -103,7 +105,7 @@
                         </van-circle>
                     </div>
                     <div col="1" flex-center>
-                        <van-circle v-model="currentRate" :rate="projectData.p_wtmyd" :speed="100" layer-color="#ebedf0" color="#29BE1E" size="76px" :stroke-width="60" >
+                        <van-circle v-model="projectData.p_wtmyd" :rate="100" :speed="100" layer-color="#ebedf0" color="#29BE1E" size="76px" :stroke-width="60" >
                              <div class="detail-circle" flex-column flex-row-center>
                                  <span class="fontColorRreen">{{projectData.p_wtmyd}}%</span>
                                  <span>满意度</span>
@@ -121,19 +123,19 @@
                 </section>
                 <section flex-center  class="font12 project-wt-sort">
                     <p col="1">
-                        <span>{{projectData.wtwhfzs}}</span><br>
+                        <span>{{projectData.wtwhfzs}}</span><br><br>
                         <span class="color999">未回复</span>
                     </p>
                     <p col="1">
-                        <span>{{projectData.wtyqwhfzs}}</span><br>
+                        <span>{{projectData.wtyqwhfzs}}</span><br><br>
                         <span class="color999">逾期未响应</span>
                     </p>
                     <p col="1">
-                        <span>{{projectData.wtyqwwczs}}</span><br>
+                        <span>{{projectData.wtyqwwczs}}</span><br><br>
                         <span class="color999">逾期未完成</span>
                     </p>
                     <p col="1">
-                        <span>{{projectData.wtwjjsjzs}}</span><br>
+                        <span>{{projectData.wtwjjsjzs}}</span><br><br>
                         <span class="color999">无解决时间</span>
                     </p>
                 </section>
@@ -144,52 +146,52 @@
             <div slot="caption" flex-col-center spacebetween>
                 <h4>实施任务</h4>
                 <p class="font12 color999">
-                   个人任务 0 条 &#x3000;未完成个人任务 0 条   
+                   个人任务 {{projectData.ssgrrwzs}} 条 &#x3000;未完成个人任务 {{projectData.ssgrwwcrwzs}} 条   
                 </p>
             </div>
             <div slot="detail" flex class="font12 project-ssrw-sort">
                 <p col="1">
-                    <span>123</span><br>
-                    <span class="color999">已完成数</span>
+                    <span>{{projectData.ssrwcqs}}</span><br><br>
+                    <span class="color999">已超期</span>
                 </p>
                 <p col="1">
-                    <span>123</span><br>
-                    <span class="color999">未完成数</span>
+                    <span>{{projectData.ssdqrrws}}</span><br><br>
+                    <span class="color999">待确认任务数</span>
                 </p>
                 <p col="1">
-                    <span>123</span><br>
-                    <span class="color999">待关闭数</span>
+                    <span>{{projectData.ssyqrrws}}</span><br><br>
+                    <span class="color999">已确认任务数</span>
                 </p>
                 <p col="1">
-                    <span>123</span><br>
-                    <span class="color999">已超期数</span>
+                    <span>{{projectData.ssrwzs}}</span><br><br>
+                    <span class="color999">总数</span>
                 </p> 
             </div>
         </layoutCard>
 
         <layoutCard>
             <div slot="caption" flex-col-center spacebetween>
-                <h4>甲方任务</h4>
+                <h4>用户任务</h4>
                 <p class="font12 color999">
-                   个人任务 0 条 &#x3000;未完成个人任务 0 条   
+                   个人任务 {{projectData.yhgrrwzs}} 条 &#x3000;未完成个人任务 {{projectData.yhgrwwcrwzs}} 条   
                 </p>
             </div>
             <div slot="detail" flex class="font12 project-ssrw-sort">
-                 <p col="1">
-                    <span>123</span><br>
-                    <span class="color999">已完成数</span>
+                <p col="1">
+                    <span>{{projectData.yhrwcqs}}</span><br><br>
+                    <span class="color999">已超期</span>
                 </p>
                 <p col="1">
-                    <span>123</span><br>
-                    <span class="color999">未完成数</span>
+                    <span>{{projectData.yhdqrrws}}</span><br><br>
+                    <span class="color999">待确认任务数</span>
                 </p>
                 <p col="1">
-                    <span>123</span><br>
-                    <span class="color999">待关闭数</span>
+                    <span>{{projectData.yhyqrrws}}</span><br><br>
+                    <span class="color999">已确认任务数</span>
                 </p>
                 <p col="1">
-                    <span>123</span><br>
-                    <span class="color999">已超期数</span>
+                    <span>{{projectData.yhrwzs}}</span><br><br>
+                    <span class="color999">总数</span>
                 </p> 
             </div>
         </layoutCard>
@@ -200,19 +202,19 @@
             </div>
             <div slot="detail" flex class="font12 project-ssrw-sort">
                  <p col="1">
-                    <span>123</span><br>
+                    <span>{{!projectData.rbdt?0:projectData.rbdt}}</span><br><br>
                     <span class="color999">日报动态</span>
                 </p>
                 <p col="1">
-                    <span>123</span><br>
+                    <span>{{!projectData.zbdt?0:projectData.zbdt}}</span><br><br>
                     <span class="color999">周报动态</span>
                 </p>
                 <p col="1">
-                    <span>123</span><br>
+                    <span>{{!projectData.ybdt?0:projectData.ybdt}}</span><br><br>
                     <span class="color999">月报动态</span>
                 </p>
             </div>
-        </layoutCard> -->
+        </layoutCard>
     </div>
 </template>
 
@@ -296,7 +298,9 @@ export default {
   }
   // 里程碑
   .project-lcb {
-    padding: 0.85rem 0 0 0;
+    section:nth-child(1){
+        width: 100%;
+    }
   }
   .project-lcb-sort,
   .project-wt-sort ,

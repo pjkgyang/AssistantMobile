@@ -191,10 +191,11 @@ export default {
     },
     // 上啦刷新
     refresh() {
-      // this.isLoading = true;
+      this.isLoading = true;
       // this.$refs.container.scrollTop = 0;
       setTimeout(() => {
-        this.init();
+        this.currentPage = 1;
+        this.getProject();
       }, 500);
     },
     // 异步更新数据

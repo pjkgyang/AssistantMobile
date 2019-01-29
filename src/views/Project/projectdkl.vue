@@ -77,6 +77,7 @@ export default {
     text-align: center;
     p {
       font-size: @fontSize12;
+      margin-bottom: 0.5rem;
     }
   }
   .project-dkl-bottom {

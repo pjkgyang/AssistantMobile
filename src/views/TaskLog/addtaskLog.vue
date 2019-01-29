@@ -148,7 +148,6 @@ export default {
     handletaskClick(name,data){
         this.xmInfo = data;
         this.taskName = name;
-        console.log(this.xmInfo)
     },
     handleFocus() {
       this.datePickerShow = true;
@@ -157,16 +156,7 @@ export default {
       this.gcrq = getMyDate(date);
       this.datePickerShow = !this.datePickerShow;
     },
-    handleSearchKeyword(val) {
-      //关键字查询
-      this.keyword = val;
-      this.curPage = 1;
-      if (!this.tabValue) {
-        this.queryAllitems();
-      } else {
-        this.queryXMofType(this.tabValue);
-      }
-    },
+    
     // 选择任务
     onClick() {
       this.show = !this.show
@@ -209,119 +199,6 @@ export default {
         }
       });
     },
-    queryItem() {
-      switch (this.active) {
-        case 0:
-          this.tabValue = "";
-          break;
-        case 1:
-          this.tabValue = "1";
-          break;
-        case 2:
-          this.tabValue = "4";
-          break;
-        case 3:
-          this.tabValue = "3";
-          break;
-        case 4:
-          this.tabValue = "5";
-          break;
-        case 5:
-          this.tabValue = "6";
-          break;
-        default:
-          break;
-      }
-      this.curPage = 1;
-      if (!this.tabValue) {
-        this.queryAllitems();
-      } else {
-        this.queryXMofType(this.tabValue);
-      }
-    },
-    // 上啦刷新
-    onRefresh() {
-      setTimeout(() => {
-        this.init();
-      }, 800);
-    },
-    onLoad() {
-      // 异步更新数据
-      setTimeout(() => {
-        if (!this.tabValue) {
-          this.queryAllitems();
-        } else {
-          this.queryXMofType(this.tabValue);
-        }
-      }, 800);
-    },
-    init() {
-      this.curPage = 1;
-      if (!this.tabValue) {
-        this.queryAllitems();
-      } else {
-        this.queryXMofType(this.tabValue);
-      }
-    },
-
-    queryAllitems() {
-      //查询全部项目
-      this.$get(this.API.getProjects, {
-        curPage: this.curPage,
-        pageSize: 20,
-        keyword: this.keyword,
-        xmzt: "",
-        xmlb: "",
-        sfgx: "",
-        pl: ""
-      }).then(res => {
-        if (res.state == "success") {
-          this.total = res.data.total;
-          if (this.curPage == 1) {
-            this.allItems = res.data.rows;
-          } else {
-            this.allItems = this.allItems.concat(res.data.rows);
-          }
-          // 加载状态结束
-          this.loading = false;
-          this.isLoading = false;
-          this.curPage += 1;
-          if (this.curPage >= this.total) {
-            this.finished = true;
-          }
-        }
-      });
-    },
-    //获取项目
-    queryXMofType(pl) {
-      this.$get(this.API.getMyProjects, {
-        curPage: this.curPage,
-        pageSize: 20,
-        keyword: this.keyword,
-        xmzt: "",
-        xmlb: "",
-        sfgx: "",
-        pl: pl
-      }).then(res => {
-        if (res.state == "success") {
-          this.total = res.data[pl].total;
-          if (this.curPage == 1) {
-            this.allItems = res.data[pl].rows;
-          } else {
-            this.allItems = this.allItems.concat(res.data[pl].rows);
-          }
-          // 加载状态结束
-          this.loading = false;
-          this.isLoading = false;
-          this.curPage += 1;
-          if (this.curPage >= this.total) {
-            this.finished = true;
-          }
-        } else {
-          this.$toast(res.msg);
-        }
-      });
-    }
   },
   components: {
     Cinput,
