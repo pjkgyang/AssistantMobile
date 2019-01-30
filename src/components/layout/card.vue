@@ -29,10 +29,10 @@
   .layout_top{
       margin-left: 1.333rem;
       border-bottom: 1px solid  #E8E8E8;
-      padding:0.75rem 1.333rem 0.75rem 0; 
+      padding:0.55rem 1.333rem 0.55rem 0; 
   }  
   .layout_bottom{
-    padding:1rem 1.333rem;  
+    padding:0.5rem 1.333rem ;  
   }
 }
  

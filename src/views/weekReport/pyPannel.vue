@@ -34,19 +34,7 @@ export default {
   data() {
     return {
       Popshow:false,
-      recordList:[{
-        yhxm:'张三',
-        ydsj:'2018-08-08 12:00:00',
-        bz:'批批批批批批批批'
-      },{
-        yhxm:'张三疯',
-        ydsj:'2018-08-08 12:00:00',
-        bz:'批批批批批批批批阅批阅批阅批阅批阅批阅批阅'
-      },{
-        yhxm:'张四',
-        ydsj:'2018-08-08 12:00:00',
-        bz:'批批批批批批批批'
-      }]
+      recordList:[]
     };
   },
   methods: {

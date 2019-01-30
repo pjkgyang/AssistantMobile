@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div >
     <div class="assistant-project">
       <div class="project-top-filter">
         <div class="project-filter--input">
@@ -71,7 +71,7 @@
 <script>
 import searchInput from "@/components/public/SearchInput.vue";
 import projectList from "@/components/project/projectList.vue";
-import emptyContent from "@/components/public/empty-content.vue"
+import emptyContent from "@/components/public/empty-content.vue";
 export default {
   data() {
     return {

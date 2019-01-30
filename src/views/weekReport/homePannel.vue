@@ -81,32 +81,7 @@ export default {
       currentPage: 1,
       pageSize:16,
       ydztText: "状态",
-      weekList: [
-        {
-          cjrxm: "张三",
-          gcrq: "2018-10",
-          zs: 2,
-          cjsj: "2018-08-08 12:00:00",
-          ydzt: 1,
-          cjrbh:123
-        },
-        {
-          cjrxm: "张四期",
-          gcrq: "2018-10",
-          zs: 2,
-          cjsj: "2018-08-08 12:00:00",
-          ydzt: 0,
-          cjrbh:123
-        },
-        {
-          cjrxm: "张五个倍",
-          gcrq: "2018-10",
-          zs: 2,
-          cjsj: "2018-08-08 12:00:00",
-          ydzt: 3,
-          cjrbh:123
-        }
-      ],
+      weekList: [],
       isRead: "",
       month:'',
       year:'',

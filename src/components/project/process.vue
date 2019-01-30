@@ -5,7 +5,7 @@
             :class="{'active-dkl':type == 'dkl','active':process.completed == true && type == 'process'}">
                 <div v-if="type == 'process'">{{process.jdmc}}</div>
                 <div v-else class="crowd">
-                     <p><span>{{process.sj}}</span>&#x3000;<van-tag type="primary" round>{{process.sm}}</van-tag></p>
+                     <p><span>{{process.sj}}</span>&#x3000;<van-tag :type="process.sm=='已开票'?'primary':'success'" round>{{process.sm}}</van-tag></p>
                      <p><span class="color999">金额：</span>{{process.je}}</p>  
                 </div>
             </li>
@@ -44,7 +44,7 @@ export default {
 @import "../../index.less";
   ul {
     position: relative;
-    margin-bottom: 30px;
+    // margin-bottom: 30px;
     li {
       list-style-type: none;
       font-size: 0.9rem;

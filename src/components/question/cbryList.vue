@@ -24,16 +24,7 @@
  export default {
    data () {
      return {
-       ryList:[
-           {name:'张三',tel:'132123'},
-           {name:'张三feng',tel:'1321321'},
-           {name:'张三xia3',tel:'132'},
-           {name:'张三xia2',tel:'131232'},
-           {name:'张三xia1',tel:'13sad2'},
-           {name:'张三xia5',tel:'1fsd32'},
-           {name:'张三xia4',tel:'13aad2'},
-           
-       ],
+       ryList:[],
        result:[],
        keyword:''
      }

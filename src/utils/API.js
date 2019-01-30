@@ -82,5 +82,6 @@ export default {
     // 项目
     getProjectsForMobile:WINDOW_CONFIG__BASEURL +'project/getProjectsForMobile.do',//获取项目列表
     getXmTjRT:WINDOW_CONFIG__BASEURL +'stat/getXmTjRT.do',//获取项目详情
-    getPaymentStat:WINDOW_CONFIG__BASEURL +'stat/getPaymentStat.do'//获取到款率
+    getPaymentStat:WINDOW_CONFIG__BASEURL +'stat/getPaymentStat.do',//获取到款率
+    pageHomePageTaskDetail:WINDOW_CONFIG__BASEURL +'task/pageHomePageTaskDetail.do',//任务
 }

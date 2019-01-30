@@ -12,7 +12,7 @@
                         <div col="6">
                             <progressBar :percentage="projectData.dkl"></progressBar>
                         </div>
-                    </div>
+                    </div>&nbsp;&nbsp;
                     <div col="3" text-right>
                         <a href="javaScrip:;;" @click="handleCheckDk">查看付款明细></a>
                     </div>
@@ -55,17 +55,19 @@
             </div>
             <div slot="detail" flex>
                 <div col="1" flex-column flex-col-center class="font12 project-lcb">
-                    <section flex col="1">
-                        <span col="4">进度：</span>
-                        <div col="12">
-                            <progressBar :percentage="projectData.p_xmjd"></progressBar>
+                    <section>
+                        <div flex>
+                            <span col="4">进度：</span>
+                            <div col="12">
+                                <progressBar :percentage="projectData.p_xmjd"></progressBar>
+                            </div>
                         </div>
                     </section>
-                    <section col="1" >
+                    <section col="1" style="padding-top:10px">
                         <steps :list="projectData.jdList"></steps>
                     </section>
                 </div>
-                <div col="1">
+                <div col="1" >
                     <section class="font12 project-lcb-sort" flex-column spacearound>
                         <div flex-center>
                             <van-circle v-model="projectData.p_lcbqrl" :rate="100"  :speed="100" layer-color="#ebedf0" color="#F0871E" size="76px" :stroke-width="60" >
@@ -146,23 +148,24 @@
             <div slot="caption" flex-col-center spacebetween>
                 <h4>实施任务</h4>
                 <p class="font12 color999">
-                   个人任务 {{projectData.ssgrrwzs}} 条 &#x3000;未完成个人任务 {{projectData.ssgrwwcrwzs}} 条   
+                   个人任务 <span @click="handleCheckdetial('1','5')">{{projectData.ssgrrwzs}}</span> 条 &#x3000;
+                   未完成个人任务 <span @click="handleCheckdetial('1','6')">{{projectData.ssgrwwcrwzs}}</span> 条   
                 </p>
             </div>
             <div slot="detail" flex class="font12 project-ssrw-sort">
-                <p col="1">
+                <p col="1" @click="handleCheckdetial('1','2')">
                     <span>{{projectData.ssrwcqs}}</span><br><br>
                     <span class="color999">已超期</span>
                 </p>
-                <p col="1">
+                <p col="1" @click="handleCheckdetial('1','7')">
                     <span>{{projectData.ssdqrrws}}</span><br><br>
                     <span class="color999">待确认任务数</span>
                 </p>
-                <p col="1">
+                <p col="1" @click="handleCheckdetial('1','8')">
                     <span>{{projectData.ssyqrrws}}</span><br><br>
                     <span class="color999">已确认任务数</span>
                 </p>
-                <p col="1">
+                <p col="1" @click="handleCheckdetial('1','0')">
                     <span>{{projectData.ssrwzs}}</span><br><br>
                     <span class="color999">总数</span>
                 </p> 
@@ -173,23 +176,24 @@
             <div slot="caption" flex-col-center spacebetween>
                 <h4>用户任务</h4>
                 <p class="font12 color999">
-                   个人任务 {{projectData.yhgrrwzs}} 条 &#x3000;未完成个人任务 {{projectData.yhgrwwcrwzs}} 条   
+                   个人任务 <span @click="handleCheckdetial('2','5')">{{projectData.yhgrrwzs}}</span> 条 &#x3000;
+                   未完成个人任务 <span @click="handleCheckdetial('2','6')">{{projectData.yhgrwwcrwzs}}</span> 条   
                 </p>
             </div>
             <div slot="detail" flex class="font12 project-ssrw-sort">
                 <p col="1">
-                    <span>{{projectData.yhrwcqs}}</span><br><br>
+                    <span @click="handleCheckdetial('2','2')">{{projectData.yhrwcqs}}</span><br><br>
                     <span class="color999">已超期</span>
                 </p>
                 <p col="1">
-                    <span>{{projectData.yhdqrrws}}</span><br><br>
+                    <span @click="handleCheckdetial('2','7')">{{projectData.yhdqrrws}}</span><br><br>
                     <span class="color999">待确认任务数</span>
                 </p>
                 <p col="1">
-                    <span>{{projectData.yhyqrrws}}</span><br><br>
+                    <span @click="handleCheckdetial('2','8')">{{projectData.yhyqrrws}}</span><br><br>
                     <span class="color999">已确认任务数</span>
                 </p>
-                <p col="1">
+                <p col="1" @click="handleCheckdetial('2','0')">
                     <span>{{projectData.yhrwzs}}</span><br><br>
                     <span class="color999">总数</span>
                 </p> 
@@ -231,6 +235,17 @@ export default {
     };
   },
   methods:{
+      //  查看任务详情
+      handleCheckdetial(personType,filterType){
+          this.$router.push({
+                name:'projectTask',
+                query:{xmbh:this.$route.query.xmbh,type:personType,lx:filterType},
+                params:{xmmc:this.projectData.xmmc}
+              }
+            )
+      },
+
+      //   查看到款率
       handleCheckDk(){
           this.$router.push({name:'projectDkl',query:{xmbh:this.$route.query.xmbh},params:{data:this.projectData}})
       },
@@ -275,18 +290,18 @@ export default {
 .assistant-projectDetail {
   h4 {
       position: relative;
-    &::before {
-      content: "";
-      display:table;
-      margin-right: 4px;
-      border-radius: 4px;
-      background: #007aff;
-      height: 18px;
-      width: 3px;
-      position: absolute;
-      left: -6px;
-      top: 2px;
-    }
+    // &::before {
+    //   content: "";
+    //   display:table;
+    //   margin-right: 4px;
+    //   border-radius: 4px;
+    //   background: #007aff;
+    //   height: 18px;
+    //   width: 3px;
+    //   position: absolute;
+    //   left: -6px;
+    //   top: 2px;
+    // }
   }
   .project-xm {
     margin: 0.5rem 0;
@@ -314,6 +329,7 @@ export default {
       }
     }
   }
+
 
   // 问题
   .project-wt-myd {

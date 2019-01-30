@@ -5,7 +5,7 @@
         <section class="project-card_info">
           <div flex-col-center spacebetween class="card_info-top">
             <section class="project-card_avatar" flex-center>
-              <img :src="!project.logo?errorImg:project.logo" :onerror="errorImg" >
+              <img :src="!project.logo?'static/img/unit.png':project.logo" >
             </section>
             <section >
               <h4>{{project.xmmc}}</h4>
@@ -62,7 +62,7 @@ import progressBar from '@/components/public/progress'
 export default {
   data() {
     return {
-      errorImg: 'this.src="' + require("../../../static/img/unit2.png") + '"',
+      // errorImg: 'this.src="' + require("../../../static/img/unit.png") + '"',
     };
   },
   methods: {

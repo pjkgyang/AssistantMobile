@@ -2,14 +2,14 @@
     <div class="project-dkl">
         <section class="project-dkl-top" flex-column flex-row-center>
             <p flex spacebetween>
-                <span col="1">合同金额（元）</span>
-                <span col="1">已付款（元）</span>
-                <span col="1">已开票（元）</span>
+                <span col="1">合同金额（万元）</span>
+                <span col="1">已付款（万元）</span>
+                <span col="1">已开票（万元）</span>
             </p>
             <p flex spacebetween>
-                <span col="1">{{stepsData.htje}}</span>
-                <span col="1">{{stepsData.dkje}}</span>
-                <span col="1">{{stepsData.ykpje}}</span>
+                <span col="1">{{(stepsData.htje/10000).toFixed(2)}}</span>
+                <span col="1">{{(stepsData.dkje/10000).toFixed(2)}}</span>
+                <span col="1">{{(stepsData.ykpje/10000).toFixed(2)}}</span>
             </p>
         </section>
 
@@ -78,6 +78,10 @@ export default {
     p {
       font-size: @fontSize12;
       margin-bottom: 0.5rem;
+    }
+    p:nth-child(2){
+       font-size:@fontSize18;
+       color: #f00;
     }
   }
   .project-dkl-bottom {

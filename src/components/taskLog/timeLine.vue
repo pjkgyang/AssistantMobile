@@ -24,23 +24,7 @@ export default {
      list:{
         type:Array,
         default:function(){
-            return [
-        {
-          yhxm: "xxx",
-          ydsj: 2011 - 10 - 10,
-          bz: "asdasdasd"
-        },
-        {
-          yhxm: "xxx",
-          ydsj: 2011 - 10 - 10,
-          bz: "asdasdasd"
-        },
-        {
-          yhxm: "xxx",
-          ydsj: 2011 - 10 - 10,
-          bz: "asdasdasd"
-        }
-      ]
+            return []
         }
      }  
   },
