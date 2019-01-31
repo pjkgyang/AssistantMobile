@@ -84,4 +84,5 @@ export default {
     getXmTjRT:WINDOW_CONFIG__BASEURL +'stat/getXmTjRT.do',//获取项目详情
     getPaymentStat:WINDOW_CONFIG__BASEURL +'stat/getPaymentStat.do',//获取到款率
     pageHomePageTaskDetail:WINDOW_CONFIG__BASEURL +'task/pageHomePageTaskDetail.do',//任务
+    pageProjectPanelMilestoneDetail:WINDOW_CONFIG__BASEURL +'milestone/pageProjectPanelMilestoneDetail.do',//里程碑详情 
 }

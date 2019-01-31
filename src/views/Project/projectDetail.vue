@@ -78,11 +78,11 @@
                             </van-circle>
                         </div>
                         <div flex>
-                            <p col="1">
+                            <p col="1" @click="handleCheckLcbdetial('0')">
                                 <span>{{projectData.dqrlcbzs}}</span><br><br>
                                 <span class="color999">待确认数</span>
                             </p>
-                            <p col="1">
+                            <p col="1" @click="handleCheckLcbdetial('1')">
                                 <span>{{projectData.yqrlcbzs}}</span><br><br>
                                 <span class="color999">已确认数</span>
                             </p>
@@ -242,7 +242,16 @@ export default {
                 query:{xmbh:this.$route.query.xmbh,type:personType,lx:filterType},
                 params:{xmmc:this.projectData.xmmc}
               }
-            )
+          )
+      },
+     // 里程碑确认
+      handleCheckLcbdetial(params){
+         this.$router.push({
+                name:'projectTask',
+                query:{xmbh:this.$route.query.xmbh,sfqr:params},
+                params:{xmmc:this.projectData.xmmc}
+              }
+         ) 
       },
 
       //   查看到款率

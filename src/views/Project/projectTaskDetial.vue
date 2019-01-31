@@ -6,16 +6,20 @@
             </div>
             <searchInput @handleSearchKeyword="handleSearchKeyword" :place="'搜索学校/项目编号/项目名称/合同编号/项目经理'"></searchInput>
         </div>
-        <div class="projectTask-list" :style="{'height':$store.state.clienHeight - 82+'px'}">
+        <div class="projectTask-list" :style="{'height':$store.state.clienHeight - 98+'px'}">
             <mu-container ref="container" class="demo-loadmore-content">
                 <mu-load-more @refresh="refresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
                         <layoutCard v-for="(task,index) in taskList" :key="index">
                             <div slot="caption">
                                 <h4>{{task.rwmc}}</h4>
                                 <section spacebetween flex-col-center>
-                                    <p>
+                                    <p v-if="$route.query.lx">
                                         <span>责任人：</span>{{task.ssrxm}}&#x3000;
                                         <span class="color999">创建人：</span>{{!task.cjrxm?'无':task.cjrxm}}
+                                    </p>
+                                    <p v-else>
+                                        <span>确认人：</span>{{!task.qrrxm?'无':task.qrrxm}}&#x3000;
+                                        <span class="color999">是否确认：</span>{{!task.sfqr?'无':'已确认'}}
                                     </p>
                                     <div>
                                         <van-tag :type="task.zt==1?'success':'danger'">{{task.zt_display}}</van-tag>
@@ -24,15 +28,10 @@
                             </div>
                             <div slot="detail">
                                 <section>
-                                    <p>
-                                        <span>创建时间：</span>{{task.cjsj}}
-                                    </p>
-                                    <p>
-                                        <span>产品名称：</span>{{task.cpmc_display}}
-                                    </p>
-                                    <p>
-                                        <span>里程碑：</span>{{task.lcbms_display}}
-                                    </p>
+                                    <p v-if="$route.query.lx"><span>创建时间：</span>{{task.cjsj}}</p>
+                                    <p v-else><span>确认时间：</span>{{!task.qrsj?'无':task.qrsj}}</p>
+                                    <p><span>产品名称：</span>{{task.cpmc_display}}</p>
+                                    <p><span>里程碑：</span>{{task.lcbms_display}}</p>
                                 </section>
                                 </div>
                         </layoutCard>
@@ -61,7 +60,10 @@ export default {
       currentPage: 1,
       pageSize: 10,
       personType:'',
-      filterType:''
+      filterType:'',
+      sfqr:'',
+      
+      params:{}
     };
   },
   methods: {
@@ -89,14 +91,23 @@ export default {
       this.pageHomePageTaskDetail();
     },
     pageHomePageTaskDetail() {
-      this.$get(this.API.pageHomePageTaskDetail, {
+       let params = {
         curPage: this.currentPage,
         pageSize: this.pageSize,
         xmbh: this.$route.query.xmbh,
         isAll: true,
         personType: this.$route.query.type,
-        filterType: this.$route.query.lx
-      }).then(res => {
+        filterType: this.$route.query.lx,
+        sfqr:this.$route.query.sfqr
+       }
+
+      if(this.$route.query.lx){
+        delete params.sfqr;
+      }else{
+        delete params.isAll;delete params.personType;delete params.filterType;
+      }
+
+      this.$get(this.$route.query.lx?this.API.pageHomePageTaskDetail:this.API.pageProjectPanelMilestoneDetail, params).then(res => {
         if (res.state == "success") {
           this.$store.dispatch("chnageLoing", false);
           this.total = res.data.total;
@@ -125,11 +136,19 @@ export default {
     }
   },
   activated() {
+    if(this.$route.query.type){
       if(this.personType != this.$route.query.type || this.filterType != this.$route.query.lx){
          this.init();
       }
+    }else if(this.$route.query.sfqr){
+      if(this.sfqr != this.$route.query.sfqr){
+         this.init();
+      } 
+    }
+      
       this.personType = this.$route.query.type;
       this.filterType = this.$route.query.lx;
+      this.sfqr = this.$route.query.sfqr;
   },
   components: { searchInput, layoutCard,emptyContent }
 };
