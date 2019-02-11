@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <div class="assistant-project">
       <div class="project-top-filter">
         <div class="project-filter--input">
@@ -91,7 +91,6 @@ export default {
       xmflList: [
         "全部",
         "收藏项目",
-        "高风险项目",
         "我拥有的项目",
         "我参与的项目",
         "已关闭的项目"
@@ -118,22 +117,26 @@ export default {
   mounted() {
     this.init();
   },
-  activated(){
+  activated() {
     this.$store.dispatch("chnageMark", false);
-    var p = document.getElementsByClassName('layout-scroll')[0];
-    this.$nextTick(function(){
-       p.scrollTop = this.scrollTop;
-    })
+    var p = document.getElementsByClassName("layout-scroll")[0];
+    this.$nextTick(function() {
+      p.scrollTop = this.scrollTop;
+    });
   },
   methods: {
-    handleCheckDetail(params){
-      this.$router.push({path:'/project/projectDetail',query:{xmbh:params.xmbh}});
+    handleCheckDetail(params) {
+      this.$router.push({
+        path: "/project/projectDetail",
+        query: { xmbh: params.xmbh }
+      });
     },
 
     // 项目分类
     hadnleXmflConfirm(picker, values) {
       this.xmflText = values == 0 ? "项目分类" : picker;
-      this.filter.xmfl = values == 0 ? "" : values;
+      this.filter.xmfl = values == 0 ? "" : values > 1 ?values+1 : values;
+
       this.xmflPopshow = false;
       this.init();
     },
@@ -249,7 +252,7 @@ export default {
       });
     }
   },
-  components: { searchInput, projectList,emptyContent }
+  components: { searchInput, projectList, emptyContent }
 };
 </script>
 

@@ -1,24 +1,24 @@
 <template>
-    <div class="project-dkl">
-        <section class="project-dkl-top" flex-column flex-row-center>
-            <p flex spacebetween>
-                <span col="1">合同金额（万元）</span>
-                <span col="1">已付款（万元）</span>
-                <span col="1">已开票（万元）</span>
-            </p>
-            <p flex spacebetween>
-                <span col="1">{{(stepsData.htje/10000).toFixed(2)}}</span>
-                <span col="1">{{(stepsData.dkje/10000).toFixed(2)}}</span>
-                <span col="1">{{(stepsData.ykpje/10000).toFixed(2)}}</span>
-            </p>
-        </section>
+  <div class="project-dkl">
+    <section class="project-dkl-top" flex-column flex-row-center>
+      <p flex spacebetween>
+        <span col="1">合同金额（万元）</span>
+        <span col="1">已付款（万元）</span>
+        <span col="1">已开票（万元）</span>
+      </p>
+      <p flex spacebetween>
+        <span col="1">{{(stepsData.htje/10000).toFixed(2)}}</span>
+        <span col="1">{{(stepsData.dkje/10000).toFixed(2)}}</span>
+        <span col="1">{{(stepsData.ykpje/10000).toFixed(2)}}</span>
+      </p>
+    </section>
 
-        <section class="project-dkl-bottom" :style="{'height':$store.state.clienHeight - 120+'px'}">
-            <div>
-                <steps :type="'dkl'"  :list="stepsList"></steps>
-            </div>
-        </section>
-    </div>
+    <section class="project-dkl-bottom" :style="{'height':$store.state.clienHeight - 120+'px'}">
+      <div>
+        <steps :type="'dkl'" :list="stepsList"></steps>
+      </div>
+    </section>
+  </div>
 </template>
 
 <script>
@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       stepsData: {},
-      stepsList:[],
+      stepsList: [],
       xmbh: ""
     };
   },
@@ -44,10 +44,10 @@ export default {
       }).then(res => {
         if (res.state == "success") {
           this.stepsData = res.data;
-          if(!res.data.fkList){
-              this.stepsList = [];
-          }else{
-              this.stepsList = res.data.fkList
+          if (!res.data.fkList) {
+            this.stepsList = [];
+          } else {
+            this.stepsList = res.data.fkList;
           }
           this.$toast.clear();
         } else {
@@ -79,9 +79,9 @@ export default {
       font-size: @fontSize12;
       margin-bottom: 0.5rem;
     }
-    p:nth-child(2){
-       font-size:@fontSize18;
-       color: #f00;
+    p:nth-child(2) {
+      font-size: @fontSize18;
+      color: #f00;
     }
   }
   .project-dkl-bottom {

@@ -16,6 +16,7 @@ import projectDkl from "@/views/project/projectdkl.vue";
 import projectTaskDetial from "@/views/project/projectTaskDetial.vue";
 // project
 import projectDetail from "@/views/project/projectDetail.vue";
+import projectProduct from "@/views/project/projectProduct.vue";
 
 
 export default new Router({
@@ -226,6 +227,11 @@ export default new Router({
       name: 'projectTask',
       meta:{title:'任务详情'},
       component:projectTaskDetial
+    },{
+      path: '/project/projectProduct',
+      name: 'projectProduct',
+      meta:{title:'产品列表'},
+      component:projectProduct
     }
   ]
 })

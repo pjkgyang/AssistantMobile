@@ -14,7 +14,7 @@
                         </div>
                     </div>&nbsp;&nbsp;
                     <div col="3" text-right>
-                        <a href="javaScrip:;;" @click="handleCheckDk">查看付款明细></a>
+                        <a  href="javaScrip:;;" @click="handleCheckDetail('dk')">查看付款明细</a>
                     </div>
                 </div>
             </div>
@@ -49,9 +49,9 @@
         <layoutCard>
             <div slot="caption" flex-col-center spacebetween>
                 <h4>里程碑</h4>
-                <!-- <div class="font12">
-                    <a href="javaScrip:;;">查看里程碑明细></a>
-                </div> -->
+                <div class="font12">
+                    <a href="javaScrip:;;" @click="handleCheckDetail('lcb')">查看里程碑明细</a>
+                </div>
             </div>
             <div slot="detail" flex>
                 <div col="1" flex-column flex-col-center class="font12 project-lcb">
@@ -67,23 +67,23 @@
                         <steps :list="projectData.jdList"></steps>
                     </section>
                 </div>
-                <div col="1" >
+                <div col="1">
                     <section class="font12 project-lcb-sort" flex-column spacearound>
                         <div flex-center>
-                            <van-circle v-model="projectData.p_lcbqrl" :rate="100"  :speed="100" layer-color="#ebedf0" color="#F0871E" size="76px" :stroke-width="60" >
+                            <van-circle v-model="projectData.p_lcbqrl" :rate="100" :speed="100" layer-color="#ebedf0" color="#F0871E" size="76px" :stroke-width="60">
                                 <div class="detail-circle" flex-column flex-row-center>
-                                 <span class="fontColorOrange">{{projectData.p_lcbqrl}}%</span>
-                                 <span>确认率</span>
+                                    <span class="fontColorOrange">{{projectData.p_lcbqrl}}%</span>
+                                    <span>确认率</span>
                                 </div>
                             </van-circle>
                         </div>
                         <div flex>
                             <p col="1" @click="handleCheckLcbdetial('0')">
-                                <span>{{projectData.dqrlcbzs}}</span><br><br>
+                                <span class="colorBlue">{{projectData.dqrlcbzs}}</span><br><br>
                                 <span class="color999">待确认数</span>
                             </p>
                             <p col="1" @click="handleCheckLcbdetial('1')">
-                                <span>{{projectData.yqrlcbzs}}</span><br><br>
+                                <span class="colorBlue">{{projectData.yqrlcbzs}}</span><br><br>
                                 <span class="color999">已确认数</span>
                             </p>
                         </div>
@@ -99,18 +99,18 @@
             <div slot="detail">
                 <section flex>
                     <div col="1" flex-center>
-                        <van-circle v-model="projectData.p_wtyql" :rate="100" :speed="100" layer-color="#ebedf0" color="#F0871E" size="76px" :stroke-width="60" >
+                        <van-circle v-model="projectData.p_wtyql" :rate="100" :speed="100" layer-color="#ebedf0" color="#F0871E" size="76px" :stroke-width="60">
                             <div class="detail-circle" flex-column flex-row-center>
-                                 <span class="fontColorOrange">{{projectData.p_wtyql}}%</span>
-                                 <span>延期率</span>
+                                <span class="fontColorOrange">{{projectData.p_wtyql}}%</span>
+                                <span>延期率</span>
                             </div>
                         </van-circle>
                     </div>
                     <div col="1" flex-center>
-                        <van-circle v-model="projectData.p_wtmyd" :rate="100" :speed="100" layer-color="#ebedf0" color="#29BE1E" size="76px" :stroke-width="60" >
-                             <div class="detail-circle" flex-column flex-row-center>
-                                 <span class="fontColorRreen">{{projectData.p_wtmyd}}%</span>
-                                 <span>满意度</span>
+                        <van-circle v-model="projectData.p_wtmyd" :rate="100" :speed="100" layer-color="#ebedf0" color="#29BE1E" size="76px" :stroke-width="60">
+                            <div class="detail-circle" flex-column flex-row-center>
+                                <span class="fontColorRreen">{{projectData.p_wtmyd}}%</span>
+                                <span>满意度</span>
                             </div>
                         </van-circle>
                     </div>
@@ -123,7 +123,7 @@
                         </div>
                     </div>
                 </section>
-                <section flex-center  class="font12 project-wt-sort">
+                <section flex-center class="font12 project-wt-sort">
                     <p col="1">
                         <span>{{projectData.wtwhfzs}}</span><br><br>
                         <span class="color999">未回复</span>
@@ -148,27 +148,28 @@
             <div slot="caption" flex-col-center spacebetween>
                 <h4>实施任务</h4>
                 <p class="font12 color999">
-                   个人任务 <span @click="handleCheckdetial('1','5')">{{projectData.ssgrrwzs}}</span> 条 &#x3000;
-                   未完成个人任务 <span @click="handleCheckdetial('1','6')">{{projectData.ssgrwwcrwzs}}</span> 条   
+                    个人任务
+                    <span @click="handleCheckdetial('1','5')">{{projectData.ssgrrwzs}}</span> 条 &#x3000; 未完成个人任务
+                    <span @click="handleCheckdetial('1','6')">{{projectData.ssgrwwcrwzs}}</span> 条
                 </p>
             </div>
             <div slot="detail" flex class="font12 project-ssrw-sort">
                 <p col="1" @click="handleCheckdetial('1','2')">
-                    <span>{{projectData.ssrwcqs}}</span><br><br>
+                    <span class="colorBlue">{{projectData.ssrwcqs}}</span><br><br>
                     <span class="color999">已超期</span>
                 </p>
                 <p col="1" @click="handleCheckdetial('1','7')">
-                    <span>{{projectData.ssdqrrws}}</span><br><br>
+                    <span class="colorBlue">{{projectData.ssdqrrws}}</span><br><br>
                     <span class="color999">待确认任务数</span>
                 </p>
                 <p col="1" @click="handleCheckdetial('1','8')">
-                    <span>{{projectData.ssyqrrws}}</span><br><br>
+                    <span class="colorBlue">{{projectData.ssyqrrws}}</span><br><br>
                     <span class="color999">已确认任务数</span>
                 </p>
                 <p col="1" @click="handleCheckdetial('1','0')">
-                    <span>{{projectData.ssrwzs}}</span><br><br>
+                    <span class="colorBlue">{{projectData.ssrwzs}}</span><br><br>
                     <span class="color999">总数</span>
-                </p> 
+                </p>
             </div>
         </layoutCard>
 
@@ -176,36 +177,37 @@
             <div slot="caption" flex-col-center spacebetween>
                 <h4>用户任务</h4>
                 <p class="font12 color999">
-                   个人任务 <span @click="handleCheckdetial('2','5')">{{projectData.yhgrrwzs}}</span> 条 &#x3000;
-                   未完成个人任务 <span @click="handleCheckdetial('2','6')">{{projectData.yhgrwwcrwzs}}</span> 条   
+                    个人任务
+                    <span @click="handleCheckdetial('2','5')" class="colorBlue">{{projectData.yhgrrwzs}}</span> 条 &#x3000; 未完成个人任务
+                    <span @click="handleCheckdetial('2','6')" class="colorBlue">{{projectData.yhgrwwcrwzs}}</span> 条
                 </p>
             </div>
             <div slot="detail" flex class="font12 project-ssrw-sort">
                 <p col="1">
-                    <span @click="handleCheckdetial('2','2')">{{projectData.yhrwcqs}}</span><br><br>
+                    <span class="colorBlue" @click="handleCheckdetial('2','2')">{{projectData.yhrwcqs}}</span><br><br>
                     <span class="color999">已超期</span>
                 </p>
                 <p col="1">
-                    <span @click="handleCheckdetial('2','7')">{{projectData.yhdqrrws}}</span><br><br>
+                    <span class="colorBlue" @click="handleCheckdetial('2','7')">{{projectData.yhdqrrws}}</span><br><br>
                     <span class="color999">待确认任务数</span>
                 </p>
                 <p col="1">
-                    <span @click="handleCheckdetial('2','8')">{{projectData.yhyqrrws}}</span><br><br>
+                    <span class="colorBlue" @click="handleCheckdetial('2','8')">{{projectData.yhyqrrws}}</span><br><br>
                     <span class="color999">已确认任务数</span>
                 </p>
-                <p col="1" @click="handleCheckdetial('2','0')">
+                <p col="1" class="colorBlue" @click="handleCheckdetial('2','0')">
                     <span>{{projectData.yhrwzs}}</span><br><br>
                     <span class="color999">总数</span>
-                </p> 
+                </p>
             </div>
         </layoutCard>
 
         <layoutCard>
-            <div slot="caption" >
+            <div slot="caption">
                 <h4>进度汇报</h4>
             </div>
             <div slot="detail" flex class="font12 project-ssrw-sort">
-                 <p col="1">
+                <p col="1">
                     <span>{{!projectData.rbdt?0:projectData.rbdt}}</span><br><br>
                     <span class="color999">日报动态</span>
                 </p>
@@ -230,60 +232,75 @@ export default {
   data() {
     return {
       currentRate: 0,
-      projectData:{},
-      xmbh:''
+      projectData: {},
+      xmbh: ""
     };
   },
-  methods:{
-      //  查看任务详情
-      handleCheckdetial(personType,filterType){
-          this.$router.push({
-                name:'projectTask',
-                query:{xmbh:this.$route.query.xmbh,type:personType,lx:filterType},
-                params:{xmmc:this.projectData.xmmc}
-              }
-          )
-      },
-     // 里程碑确认
-      handleCheckLcbdetial(params){
-         this.$router.push({
-                name:'projectTask',
-                query:{xmbh:this.$route.query.xmbh,sfqr:params},
-                params:{xmmc:this.projectData.xmmc}
-              }
-         ) 
-      },
+  methods: {
+    //  查看任务详情
+    handleCheckdetial(personType, filterType) {
+      this.$router.push({
+        name: "projectTask",
+        query: {
+          xmbh: this.$route.query.xmbh,
+          type: personType,
+          lx: filterType
+        },
+        params: { xmmc: this.projectData.xmmc }
+      });
+    },
+    // 里程碑确认
+    handleCheckLcbdetial(params) {
+      this.$router.push({
+        name: "projectTask",
+        query: { xmbh: this.$route.query.xmbh, sfqr: params },
+        params: { xmmc: this.projectData.xmmc }
+      });
+    },
 
-      //   查看到款率
-      handleCheckDk(){
-          this.$router.push({name:'projectDkl',query:{xmbh:this.$route.query.xmbh},params:{data:this.projectData}})
-      },
-      getProjectDetail(){
-          this.$toast.loading({
-            mask: true,
-            message: '加载中...',
-            duration:0
-           });
-          this.$get(this.API.getXmTjRT,{
-              xmbh:this.$route.query.xmbh,
-              isAll:true
-          }).then(res=>{
-              if(res.state == 'success'){
-                  if(!res.data){
-                     this.projectData = {};     
-                  }else{
-                     this.projectData = res.data;
-                     this.projectData.dkl = res.data.dkl.split('%')[0];
-                  }
-                  this.$toast.clear();
-              }else{
-                  this.$toast.clear();
-                  this.$toast(!res.msg?'请求超时，请稍后再试~':res.msg)
-              }
-          })
+    //   查看到款率
+    handleCheckDetail(params) {
+      
+      if(params == 'dk'){
+        this.$router.push({
+            name: "projectDkl",
+            query: { xmbh: this.$route.query.xmbh },
+            params: { data: this.projectData }
+        }); 
+      }else{
+        this.$router.push({
+            name: "projectProduct",
+            query: { xmbh: this.$route.query.xmbh },
+            params: { data: ''}
+        });   
       }
+    },
+    getProjectDetail() {
+      this.$toast.loading({
+        mask: true,
+        message: "加载中...",
+        duration: 0
+      });
+      this.$get(this.API.getXmTjRT, {
+        xmbh: this.$route.query.xmbh,
+        isAll: true
+      }).then(res => {
+        if (res.state == "success") {
+          if (!res.data) {
+            this.projectData = {};
+          } else {
+            this.projectData = res.data;
+            this.projectData.dkl = res.data.dkl.split("%")[0];
+          }
+          this.$toast.clear();
+        } else {
+          this.$toast.clear();
+          this.$toast(!res.msg ? "请求超时，请稍后再试~" : res.msg);
+        }
+      });
+    }
   },
-  activated(){
+  activated() {
     if (this.xmbh != this.$route.query.xmbh) {
       this.getProjectDetail();
     }
@@ -297,8 +314,9 @@ export default {
 <style lang="less" scoped>
 @import "../../index.less";
 .assistant-projectDetail {
+
   h4 {
-      position: relative;
+    position: relative;
     // &::before {
     //   content: "";
     //   display:table;
@@ -322,13 +340,13 @@ export default {
   }
   // 里程碑
   .project-lcb {
-    section:nth-child(1){
-        width: 100%;
+    section:nth-child(1) {
+      width: 100%;
     }
   }
   .project-lcb-sort,
-  .project-wt-sort ,
-  .project-ssrw-sort{
+  .project-wt-sort,
+  .project-ssrw-sort {
     p {
       text-align: center;
       margin-bottom: 0.75rem;
@@ -338,7 +356,6 @@ export default {
       }
     }
   }
-
 
   // 问题
   .project-wt-myd {
@@ -351,28 +368,26 @@ export default {
       }
     }
   }
-  .project-wt-sort{
-      margin-top: 1rem;
+  .project-wt-sort {
+    margin-top: 1rem;
   }
 
-  .font12 {
-    font-size: @fontSize12;
-  }
+
   .fontColorRreen {
     color: #29be1e;
   }
   .fontColorRed {
     color: #e93546;
   }
-  .fontColorOrange{
-      color:#F0871E;
+  .fontColorOrange {
+    color: #f0871e;
   }
 
-  .detail-circle{
-    height:100%;  
+  .detail-circle {
+    height: 100%;
     font-size: 1rem;
-    span:nth-child(2){
-        font-size:@fontSize14;
+    span:nth-child(2) {
+      font-size: @fontSize14;
     }
   }
 }
