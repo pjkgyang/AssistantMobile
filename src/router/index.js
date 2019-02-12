@@ -17,7 +17,7 @@ import projectTaskDetial from "@/views/project/projectTaskDetial.vue";
 // project
 import projectDetail from "@/views/project/projectDetail.vue";
 import projectProduct from "@/views/project/projectProduct.vue";
-
+import projectMilestone from "@/views/project/mileStone.vue";
 
 export default new Router({
   // mode: 'history',
@@ -232,6 +232,11 @@ export default new Router({
       name: 'projectProduct',
       meta:{title:'产品列表'},
       component:projectProduct
+    },{
+      path: '/project/milestone',
+      name: 'projectMilestone',
+      meta:{title:'产品列表'},
+      component:projectMilestone
     }
   ]
 })

@@ -1,5 +1,5 @@
 <template>
-    <div class="assistant-projectDetail">
+    <div class="assistant-projectDetail" :style="{'height':$store.state.clienHeight+'px'}">
         <layoutCard>
             <div slot="caption">
                 <h4>{{projectData.xmmc}}</h4>
@@ -14,7 +14,7 @@
                         </div>
                     </div>&nbsp;&nbsp;
                     <div col="3" text-right>
-                        <a  href="javaScrip:;;" @click="handleCheckDetail('dk')">查看付款明细</a>
+                        <a  href="javascript:void(0)" @click="handleCheckDetail('dk')">查看付款明细</a>
                     </div>
                 </div>
             </div>
@@ -50,7 +50,7 @@
             <div slot="caption" flex-col-center spacebetween>
                 <h4>里程碑</h4>
                 <div class="font12">
-                    <a href="javaScrip:;;" @click="handleCheckDetail('lcb')">查看里程碑明细</a>
+                    <a href="javascript:void(0)" @click="handleCheckDetail('lcb')">查看里程碑明细</a>
                 </div>
             </div>
             <div slot="detail" flex>
@@ -314,7 +314,7 @@ export default {
 <style lang="less" scoped>
 @import "../../index.less";
 .assistant-projectDetail {
-
+  overflow-y: auto;
   h4 {
     position: relative;
     // &::before {
