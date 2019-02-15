@@ -30,7 +30,7 @@
       </div>
 
       <!-- 问题列表 -->
-      <div class="layout-scroll" ref="layoutScroll" @scroll="handleScroll" :scroll-top.prop="scrollTop">
+      <div class="layout-scroll" ref="layoutScroll" @scroll="handleScroll">
         <mu-container ref="container" class="demo-loadmore-content">
           <mu-load-more @refresh="refresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
             <div class="layout-scroll-center">
@@ -117,17 +117,14 @@ export default {
       this.init();
     }
     this.$store.dispatch("chnageMark", false);
-    var p = document.getElementsByClassName("layout-scroll")[0];
     this.$nextTick(function() {
-      p.scrollTop = this.scrollTop;
+      this.$refs.layoutScroll.scrollTop = this.scrollTop;
     });
   },
 
   methods: {
     handleScroll() {
-      this.$nextTick(() => {
         this.scrollTop = this.$refs.layoutScroll.scrollTop;
-      });
     },
     // 监听返回
     historyChange() {
@@ -226,7 +223,6 @@ export default {
     // 上啦刷新
     refresh() {
       this.isLoading = true;
-      // this.$refs.container.scrollTop = 0;
       setTimeout(() => {
         this.currentPage = 1;
         this.getQuestionList();
@@ -248,6 +244,7 @@ export default {
     },
     //  获取问题列表
     getQuestionList() {
+      this.$refs.layoutScroll.scrollTop = this.scrollTop;
       this.$get(this.API.queryAllQuestions, {
         curPage: this.currentPage,
         pageSize: this.pageSize,

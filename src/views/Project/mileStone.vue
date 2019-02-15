@@ -13,7 +13,10 @@
         <mu-load-more @refresh="refresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
           <div class="project-milestone-list">
              <section v-for="item in milestoneList">
-                 <h5>{{item.xmnr}}&#x3000;{{item.lcbms}}</h5>
+                 <div>
+                   <div><h5><span class="color999 font12 fontW400">项目内容：</span>{{item.xmnr}}</h5></div>
+                   <div flex><span class="color999 font12">里程碑：</span><h5>{{item.lcbms}}</h5></div>
+                 </div>
                  <div class="font12">
                      <p>
                          <span class="color999">里程碑状态：</span>
@@ -161,7 +164,7 @@ export default {
   .project-milestone-list{
     section{
         background: #fff;
-        padding: 0.3rem;
+        padding: 0.5rem;
         border-bottom: 1px solid rgb(230, 227, 227);
         p{
             margin: 0.2rem;

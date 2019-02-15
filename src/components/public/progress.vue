@@ -3,7 +3,7 @@
         <div class="progress">
             <span class="progress_activebar" :style="{'width':percentage+'%'}"> </span>
         </div>&#x3000;
-        <div>
+        <div class="num">
             {{percentage}}%
         </div>
     </div>
@@ -46,6 +46,9 @@ export default {
       text-align: center;
       background: #29be1e;
     }
+  }
+  .num{
+    min-width: 2rem;
   }
 }
 </style>

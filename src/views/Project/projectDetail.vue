@@ -116,9 +116,9 @@
                     </div>
                     <div col="1" flex-center>
                         <div class="project-wt-myd">
-                            <p class="fontColorRreen">
+                            <p class="fontColorRreen" @click="handleClickmyl(true)">
                                 <span>满意</span>&#x3000;{{projectData.wtmyzs}}</p>
-                            <p class="fontColorRed">
+                            <p class="fontColorRed" @click="handleClickmyl(false)">
                                 <span>不满意</span>&#x3000;{{projectData.wtbmyzs}}</p>
                         </div>
                     </div>
@@ -237,6 +237,9 @@ export default {
     };
   },
   methods: {
+    handleClickmyl(params){
+      this.$router.push({path:'/project/questionSatisfy',query:{xmbh:this.$route.query.xmbh,sfmy:params}})
+    },
     //  查看任务详情
     handleCheckdetial(personType, filterType) {
       this.$router.push({

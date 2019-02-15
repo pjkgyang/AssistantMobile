@@ -383,7 +383,6 @@ export default {
 
     // 获取单个问题
     queryQuestion() {
-      this.$store.dispatch("chnageLoing", true);
       this.$get(this.API.queryQuestion, {
         wid: this.$route.query.wid
       }).then(res => {
@@ -393,9 +392,7 @@ export default {
           if (!!res.data.wtlb) {
             this.getCode(res.data.wtlb);
           }
-          this.$store.dispatch("chnageLoing", false);
         } else {
-          this.$store.dispatch("chnageLoing", false);
           this.$toast(!res.msg ? "系统超时，请稍后再试~" : res.msg);
         }
       });
@@ -404,20 +401,25 @@ export default {
     // 获取回复列表
     queryAnswers() {
       this.replyData = [];
-      this.$store.dispatch("chnageLoing", true);
+      this.$toast.loading({
+        mask: true,
+        message: "加载中...",
+        duration: 0
+      });
       this.$get(this.API.queryAnswers, {
         wid: this.$route.query.wid,
         isSolution: ""
       }).then(res => {
         if (res.state == "success") {
           this.replyData = res.data;
-          this.$store.dispatch("chnageLoing", false);
+          this.$toast.clear();
         } else {
+          this.$toast.clear();
           this.$toast(!res.msg ? "系统超时，请稍后再试~" : res.msg);
-          this.$store.dispatch("chnageLoing", false);
         }
       });
     },
+
     // 是否项目团队
     isgcXmtdbyWt() {
       this.$get(this.API.isgcXmtdbyWt, {

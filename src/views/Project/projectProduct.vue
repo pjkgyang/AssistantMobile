@@ -2,7 +2,7 @@
  <div class="project-product">
      <ul>
          <li v-for="item in cpList"  flex-col-center @click="handleCheckMilestone(item)">
-             <div col="4" flex-column>
+             <div col="7" flex-column>
                  <div>
                      <h5>{{item.cpmc}}</h5>
                      <p class="font12">

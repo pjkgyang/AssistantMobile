@@ -33,20 +33,21 @@
         </div>
       </div>
     </div>
+    
+    <!-- :scroll-top.prop="scrollTop" -->
+    <div class="layout-scroll" ref="layoutScroll"  @scroll="handleScroll">
+        <mu-container ref="container" class="demo-loadmore-content"  >
+          <mu-load-more @refresh="refresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
+            <div class="layout-scroll-center">
+              <projectList :projectList="projectList" @handleCheckDetail="handleCheckDetail"></projectList>
+            </div>
+          </mu-load-more>
+          <p v-if="finished && !!projectList.length" class="empty-content-tip">没有更多数据了</p>
+        </mu-container>
 
-    <div class="layout-scroll" ref="layoutScroll" @scroll="handleScroll" :scroll-top.prop="scrollTop">
-      <mu-container ref="container" class="demo-loadmore-content">
-        <mu-load-more @refresh="refresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
-          <div class="layout-scroll-center">
-            <projectList :projectList="projectList" @handleCheckDetail="handleCheckDetail"></projectList>
-          </div>
-        </mu-load-more>
-        <p v-if="finished && !!projectList.length" class="empty-content-tip">没有更多数据了</p>
-      </mu-container>
-
-      <div v-if="!projectList.length && !$store.state.loadingShow">
-        <emptyContent></emptyContent>
-      </div>
+        <div v-if="!projectList.length && !$store.state.loadingShow">
+          <emptyContent></emptyContent>
+        </div>
     </div>
 
     <van-popup v-model="xmflPopshow" position='bottom'>
@@ -111,7 +112,7 @@ export default {
       total: 0,
       projectList: [],
 
-      scrollTop: ""
+      scrollTop: 0
     };
   },
   mounted() {
@@ -119,9 +120,8 @@ export default {
   },
   activated() {
     this.$store.dispatch("chnageMark", false);
-    var p = document.getElementsByClassName("layout-scroll")[0];
     this.$nextTick(function() {
-      p.scrollTop = this.scrollTop;
+      this.$refs.layoutScroll.scrollTop = this.scrollTop;
     });
   },
   methods: {
@@ -188,10 +188,9 @@ export default {
       }
     },
     handleScroll() {
-      this.$nextTick(() => {
         this.scrollTop = this.$refs.layoutScroll.scrollTop;
-      });
     },
+
     // 上啦刷新
     refresh() {
       this.isLoading = true;
@@ -206,7 +205,7 @@ export default {
       this.loading = true;
       setTimeout(() => {
         this.getProject();
-      }, 300);
+      }, 500);
     },
 
     init() {
@@ -216,6 +215,7 @@ export default {
       this.getProject();
     },
     getProject() {
+      this.$refs.layoutScroll.scrollTop = this.scrollTop;
       this.$get(this.API.getProjectsForMobile, {
         curPage: this.currentPage,
         pageSize: this.pageSize,
@@ -295,4 +295,5 @@ h1 {
   text-align: center;
   line-height: 40vh;
 }
+
 </style>

@@ -4,38 +4,42 @@
       <div class="projectTask-xm">
         <p>所属项目：[{{$route.query.xmbh}}] {{!!$route.params.xmmc?$route.params.xmmc:taskList.length?taskList[0].xmmc:''}}</p>
       </div>
-      <searchInput @handleSearchKeyword="handleSearchKeyword" :place="'搜索合同编号/项目经理'"></searchInput>
+      <!-- <searchInput @handleSearchKeyword="handleSearchKeyword" :place="'搜索合同编号/项目经理'"></searchInput> -->
     </div>
-    <div class="projectTask-list" :style="{'height':$store.state.clienHeight - 98+'px'}">
+    <div class="projectTask-list" :style="{'height':$store.state.clienHeight - 42+'px'}">
       <mu-container ref="container" class="demo-loadmore-content">
         <mu-load-more @refresh="refresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
           <layoutCard v-for="(task,index) in taskList" :key="index">
             <div slot="caption">
               <h4>{{task.rwmc}}</h4>
-              <section spacebetween flex-col-center>
+              <section>
                 <p v-if="$route.query.lx">
                   <span>责任人：</span>{{task.ssrxm}}&#x3000;
                   <span class="color999">创建人：</span>{{!task.cjrxm?'无':task.cjrxm}}
                 </p>
-                <p v-else>
-                  <span>确认人：</span>{{!task.qrrxm?'无':task.qrrxm}}&#x3000;
-                  <span class="color999">是否确认：</span>{{!task.sfqr?'无':'已确认'}}
-                </p>
-                <div>
-                  <van-tag round :type="task.zt==1?'success':'danger'">{{task.zt_display}}</van-tag>
+                <div v-else>
+                  <div><h5><span class="color999 fontW400">项目内容：</span>{{task.cpmc_display}}</h5></div>
+                  <div flex><span class="color999">里程碑：</span><h5>{{task.lcbms_display}}</h5></div>
                 </div>
+                <!-- <div>
+                  <van-tag round :type="task.zt==1?'success':'danger'">{{task.zt_display}}</van-tag>
+                </div> -->
               </section>
             </div>
             <div slot="detail">
               <section>
-                <p v-if="$route.query.lx">
-                  <span>创建时间：</span>{{task.cjsj}}</p>
-                <p v-else>
-                  <span>确认时间：</span>{{!task.qrsj?'无':task.qrsj}}</p>
-                <p>
-                  <span>产品名称：</span>{{task.cpmc_display}}</p>
-                <p>
-                  <span>里程碑：</span>{{task.lcbms_display}}</p>
+                <p><span>{{$route.query.lx?'任务状态：':'里程碑状态：'}}</span><van-tag round :type="task.zt==1?'success':'danger'">{{task.zt_display}}</van-tag></p>
+                <p v-if="!$route.query.lx">
+                  <span class="color999">责任人：</span>{{!task.zrrxm?'无':task.zrrxm}}
+                </p>
+                <p v-if="$route.query.lx"> <span>创建时间：</span>{{task.cjsj}}</p>
+                <p v-if="!$route.query.lx">
+                  <span class="color999">确认人：</span>{{!task.qrrxm?'无':task.qrrxm}}&#x3000;
+                  <span class="color999">是否确认：</span>{{!task.sfqr?'无':'已确认'}}<br>
+                  <span class="color999">确认时间：</span>{{!task.qrsj?'无':task.qrsj}}
+                </p>
+                <p v-if="$route.query.lx"><span>产品名称：</span>{{task.cpmc_display}}</p>
+                <p v-if="$route.query.lx"><span>里程碑：</span>{{task.lcbms_display}}</p>
               </section>
             </div>
           </layoutCard>
@@ -71,7 +75,9 @@ export default {
     };
   },
   methods: {
-    handleSearchKeyword() {},
+    handleSearchKeyword(val) {
+
+    },
     // 上啦刷新
     refresh() {
       this.isLoading = true;

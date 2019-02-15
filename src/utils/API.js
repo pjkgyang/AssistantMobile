@@ -86,5 +86,7 @@ export default {
     pageHomePageTaskDetail:WINDOW_CONFIG__BASEURL +'task/pageHomePageTaskDetail.do',//任务
     pageProjectPanelMilestoneDetail:WINDOW_CONFIG__BASEURL +'milestone/pageProjectPanelMilestoneDetail.do',//里程碑详情 
     listMilestoneProduct:WINDOW_CONFIG__BASEURL +'milestone/listMilestoneProduct.do',//里程碑产品列表
-    pageMilestoneVO:WINDOW_CONFIG__BASEURL +'milestone/pageMilestoneVO.do' //里程碑分页列表
+    pageMilestoneVO:WINDOW_CONFIG__BASEURL +'milestone/pageMilestoneVO.do', //里程碑分页列表
+    queryReportQuestionLst:WINDOW_CONFIG__BASEURL +'report/queryReportQuestionLst.do', //问题满意/不满意列表
+
 }

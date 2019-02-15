@@ -72,23 +72,7 @@ export default {
       pzListVisible: false,
       commitloanind:false,
       logDetail: {},
-      pzList: [
-        {
-          yhxm: "xxx",
-          ydsj: 2011 - 10 - 10,
-          bz: "asdasdasd"
-        },
-        {
-          yhxm: "xxx",
-          ydsj: 2011 - 10 - 10,
-          bz: "asdasdasd"
-        },
-        {
-          yhxm: "xxx",
-          ydsj: 2011 - 10 - 10,
-          bz: "asdasdasd"
-        }
-      ],
+      pzList: [],
       SPvalue: "",
       unitType: "",
     };

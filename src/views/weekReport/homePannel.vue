@@ -95,7 +95,10 @@ export default {
       weekEnd:'',//第一周周日日期(记录)
       weekNum:'1',
       columns:[],
-      weekDay:'' //开始结束日期
+      weekDay:'', //开始结束日期
+
+
+      scrollTop:0
     };
   },
   methods: {
@@ -182,6 +185,7 @@ export default {
 
     // 获取人员周报列表
     getPageWeekPlanPerson(){
+      this.$refs.weekScrollcontent.scrollTop = this.scrollTop;
       this.$get(this.API.pageWeekPlanPerson,{
         curPage:this.currentPage,
         pageSize:this.pageSize,
@@ -266,7 +270,7 @@ export default {
        this.weekDay  = this.WeekStartdate+' 至 '+ this.WeekEnddate;
     },
     handleScroll(){
-      var scrollTop = this.$refs.weekScrollcontent.scrollTop
+      this.scrollTop = this.$refs.weekScrollcontent.scrollTop
     }
   },
   computed: {
@@ -280,7 +284,11 @@ export default {
     this.init();
   },
 
-  activated() {},
+  activated() {
+     this.$nextTick(function() {
+      this.$refs.weekScrollcontent.scrollTop = this.scrollTop;
+    });
+  },
   watch: {},
   components: {
     listcard,

@@ -169,7 +169,7 @@ export default {
       if (!/^\d+(\.\d+)?$/.test(this.gs)) {
         this.$toast("请填写正确工时~");
         return;
-      } else if (!this.content) {
+      } else if (/^[\s]*$/.test(this.content)) {
         this.$toast("请填写内容~");
         return;
       } else if (this.taskName == "请选择") {

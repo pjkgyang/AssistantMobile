@@ -19,7 +19,7 @@
       </div>
     </div>
     <!-- load more -->
-    <div class="taskLog-center-content">
+    <div class="taskLog-center-content" ref="layoutScroll" @scroll="handleScroll">
       <mu-container ref="container" class="demo-loadmore-content">
         <mu-load-more @refresh="onRefresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
           <div class="taskLog-center-filter">
@@ -129,10 +129,15 @@ export default {
       ProcessList: [],
       isRead: "",
       fwValue: "",
-      fwOrstate: ""
+      fwOrstate: "",
+
+      scrollTop:0
     };
   },
   methods: {
+    handleScroll(){
+      this.scrollTop = this.$refs.layoutScroll.scrollTop;
+    },
     // 阅读状态pop关闭
     hadnleStateCancel(){
       this.statePopshow = false;
@@ -145,14 +150,14 @@ export default {
       this.currentPage = 1;
       this.isRead = values==0?'':values==1?'0':'1';
       this.ydztText = picker;
-      this.queryTaskProcess(this.startDate, this.endDate);
+      this.init();
       this.statePopshow = false;
     },
     hadnleFwConfirm(picker,values){
       this.currentPage = 1;
       this.fwValue = values-1<0?'':values-1;
       this.fwText = picker;
-      this.queryTaskProcess(this.startDate, this.endDate);
+       this.init();
       this.fwPopshow = false;
     },
     handleChooseKsrq() {
@@ -355,6 +360,9 @@ export default {
     if(this.$route.params.bid == 1){
       this.init();
     }
+    this.$nextTick(function() {
+      this.$refs.layoutScroll.scrollTop = this.scrollTop;
+    });
   },
   watch: {
     $route: function(from, to) {

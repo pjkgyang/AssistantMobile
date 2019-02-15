@@ -40,9 +40,9 @@
                   <progressBar :percentage="!project.p_xmjd?0:project.p_xmjd"></progressBar>
                 </div> 
               </div>
-              <!-- <div col="1" text-right>
+              <div col="1" text-right>
                <van-tag round :type="project.xmjd=='已完成'?'danger':'success'">{{project.xmjd}}</van-tag>
-              </div> -->
+              </div>
             </div>
           </div>
         </section>
