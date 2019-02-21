@@ -87,7 +87,7 @@ export default {
         curPage: this.currentPage,
         pageSize: this.pageSize,
         xmbh: this.$route.query.xmbh,
-        sfwsl: false,
+        sfwsl: true,
         sfmy: this.$route.query.sfmy
       }).then(res => {
         if (res.state == "success") {

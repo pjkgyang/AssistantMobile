@@ -286,7 +286,7 @@ export default {
       });
       this.$get(this.API.getXmTjRT, {
         xmbh: this.$route.query.xmbh,
-        isAll: true
+        isAll: false
       }).then(res => {
         if (res.state == "success") {
           if (!res.data) {
