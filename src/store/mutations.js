@@ -18,6 +18,10 @@ export default {
     changeState(state, n) {
         state.stateComplete = n;
     },
+    changeIosVersion(state, n) {
+        state.ios = n;
+    },
+    
     
 
     saveMonthValue(state, n) {

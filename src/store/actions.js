@@ -26,6 +26,9 @@ export default {
     changeState({commit},n){
         commit('changeState',n);
     },
+    changeIosVersion({commit},n){
+        commit('changeIosVersion',n);
+    },
 
     // saveMonthValue({commit},n){
     //     commit('saveMonthValue',n);

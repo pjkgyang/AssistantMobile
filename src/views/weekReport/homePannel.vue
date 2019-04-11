@@ -61,7 +61,7 @@ import listcard from "@/components/weekReport/listCard.vue";
 import emptyContent from "@/components/public/empty-content.vue";
 import DatePickerMonth from "@/components/public/DatePickerMonth.vue";
 import { getMyDate,getLastMonth,getLastMonthDay,getNextMonth,getPreMonth,weekIndexInMonth,GetNextDate,getWeeks,
-getNowFormatDate } from "../../utils/util.js";
+getNowFormatDate ,GetDateStr} from "../../utils/util.js";
 import addButton from '@/components/public/addButton';
 import searchInput from "@/components/public/SearchInput.vue";
 
@@ -239,7 +239,7 @@ export default {
        let NowDate = getNowFormatDate();
        if(new Date(NowDate).getTime() >= new Date(weekStartDate).getTime() && 
           new Date(NowDate).getTime() <= new Date(weekEndDate).getTime() && 
-          this.weekValue == week &&
+          // this.weekValue == week &&
           new Date(GetDateStr(0)).getDay() >= 4){
             this.weekValue =  this.weekNum =  getWeeks(Year,Month+1);
             this.weekDay  = weekStartDate+' 至 '+weekEndDate;

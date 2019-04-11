@@ -23,93 +23,88 @@
 </template>
 
 <script>
- import { getMenu,getSession} from '@/utils/util.js';
- export default {
-   data () {
-     return {
-         filterList:[
-             {
-                 name:'产品',
-                 cplist:{},
-                 cpbh:''
-             }
-         ],
-     }
-   },
-   props:{
-       show:{
-         type:Boolean,
-         default:false
-       }
-   },
-   methods:{
+import { getMenu, getSession } from "@/utils/util.js";
+export default {
+  data() {
+    return {
+      filterList: [
+        {
+          name: "产品",
+          cplist: {},
+          cpbh: ""
+        }
+      ]
+    };
+  },
+  props: {
+    show: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
     //  选择筛选
-   hanleChoosefilter(params,index){
-       this.filterList[index].cpbh = params;
-       this.$emit('hanleChoosefilter',params);
-   },
-   handleClose(){
-       this.$emit('handleClose','')
-   },
-//    // 筛选
-//    handleCommitFilter(){
-     
-//    },
+    hanleChoosefilter(params, index) {
+      this.filterList[index].cpbh = params;
+      this.$emit("hanleChoosefilter", params);
+    },
+    handleClose() {
+      this.$emit("handleClose", "");
+    },
     // 获取枚举
-   getDictEnum(){
-    if(!getSession('cp')){
-      getMenu('cp',true).then(data=>{
+    getDictEnum() {
+      if (!getSession("cp")) {
+        getMenu("cp", true).then(data => {
           this.filterList[0].cplist = data;
         });
-      }else{
-        this.filterList[0].cplist = getSession('cp');
-      } 
+      } else {
+        this.filterList[0].cplist = getSession("cp");
+      }
     }
-   },
-   mounted(){
-     //获取产品枚举     
-     this.getDictEnum(); 
-   },
-   components: {}
- }
+  },
+  mounted() {
+    //获取产品枚举
+    this.getDictEnum();
+  },
+  components: {}
+};
 </script>
 
 <style lang="less" scoped>
-@import '../../index.less';
-.filter-pop{
-    background: #F2F3F5;
-    height: 100vh;
+@import "../../index.less";
+.filter-pop {
+  background: #f2f3f5;
+  height: 100vh;
 }
-.assistant-filtercondition{
-    height:calc(100vh - 60px);
-    width: 93vw;
-    overflow-y: auto;
-    background: #fff;
-    h5{
-        font-size: @fontSize14;
-        border-bottom: 1.5px solid rgb(236, 235, 235);
-        padding:0.5rem 0.3rem ;
-        margin-bottom: 0.3rem;
-        span{
-            color: @baseColor;
-        }
+.assistant-filtercondition {
+  height: calc(100vh - 60px);
+  width: 93vw;
+  overflow-y: auto;
+  background: #fff;
+  h5 {
+    font-size: @fontSize14;
+    border-bottom: 1.5px solid rgb(236, 235, 235);
+    padding: 0.5rem 0.3rem;
+    margin-bottom: 0.3rem;
+    span {
+      color: @baseColor;
     }
-    .assistant-filtercondition-list{
-        .flex();
-        flex-wrap: wrap;
-        .van-tag{
-            margin: 0.2rem 0 0.2rem 0.2rem ;
-            padding: 0.2rem 0.4rem !important;
-            width: 32%;
-            text-align: center;
-            height: 2.2rem;
-            background: rgba(182, 181, 181, 0.2);
-            .flex(center,center);
-            .van-hairline--surround::after{
-               border: none !important;
-            }
-        }
+  }
+  .assistant-filtercondition-list {
+    .flex();
+    flex-wrap: wrap;
+    .van-tag {
+      margin: 0.2rem 0 0.2rem 0.2rem;
+      padding: 0.2rem 0.4rem !important;
+      width: 32%;
+      text-align: center;
+      height: 2.2rem;
+      background: rgba(182, 181, 181, 0.2);
+      .flex(center,center);
+      .van-hairline--surround::after {
+        border: none !important;
+      }
     }
+  }
 }
-
 </style>

@@ -2,7 +2,6 @@
   <div>
     <div class="question-reply-btngroup">
       <van-button v-for="(btn,index) in btngroupArr" :key="index" :type="btn.type" @click="handleClick(btn.en)" :class="{'btnClasshf':!btn.type && btn.name=='回复','btnClassqt':!btn.type && btn.name!='回复'}">{{btn.name}}</van-button>
-
       <van-button type="warning" v-if="btnArrs.length > 2" @click.stop="handleCheckMore">更多</van-button>
     </div>
     <mu-expand-transition>
@@ -92,7 +91,7 @@ export default {
             !res.data["xgcrowId"] &&
             !res.data["sqjs"]
           ) {
-            this.$emit("BtnAuthFalse",res.data.qwjjrq, false);
+            this.$emit("BtnAuthFalse", res.data.qwjjrq, false);
           } else {
             this.btnArr.forEach(ele => {
               ele.show = res.data[ele.en];
@@ -108,7 +107,7 @@ export default {
             } else {
               this.btngroupArr = this.btngroup;
             }
-            this.$emit("BtnAuthFalse", res.data.qwjjrq,true); 
+            this.$emit("BtnAuthFalse", res.data.qwjjrq, true);
           }
         } else {
           this.$toast(!res.msg ? "系统超时，请稍后再试~" : res.msg);
@@ -133,6 +132,7 @@ export default {
   position: fixed;
   bottom: 44px;
   width: 100vw;
+  z-index: 11100;
   ul {
     width: 33.33333%;
     float: right;

@@ -148,13 +148,13 @@ export default {
               window.userId = res.data.uid;
               localStorage.setItem("userInfo", JSON.stringify(res.data));
               this.$toast.clear();
-              
+              this.$router.push({ path: "/" });
               // 临时增加权限
-              if(res.data.userGroupTag.includes('JYGL')){
-                  this.$router.push({ path: "/" });
-              }else{
-                  this.$router.push({ path: "/taskLog" });
-              }
+              // if(res.data.userGroupTag.includes('JYGL')){
+              //     this.$router.push({ path: "/" });
+              // }else{
+              //     this.$router.push({ path: "/taskLog" });
+              // }
             }else{
               this.$toast.clear();
               this.$toast(res.msg);

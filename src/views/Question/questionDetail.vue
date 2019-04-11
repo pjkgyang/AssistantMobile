@@ -1,6 +1,6 @@
 <template>
   <div class="questionDetail" @click="handleCloseBtnshow">
-    <div :style="{'height':$store.state.clienHeight - 50+'px'}" :class="{'questionDetail-top':true,'no-btn-height':!btnShow}" @scroll="handleScroll" ref="questionDetail" >
+    <div  :class="{'questionDetail-top':true,'no-btn-height':!btnShow}" @scroll="handleScroll" ref="questionDetail" >
       <section class="questionDetail-desc">
         <div class="questionDetail-detail">
           <h4>{{questionData.bt}}</h4>
@@ -61,7 +61,13 @@
 
     <!-- 操作按钮 -->
     <div class="questionDetail-bottom">
-      <btnGroup   :wid="$route.query.wid" @handleClick="handleClick" @BtnAuthFalse="BtnAuthFalse"></btnGroup>
+       <btnGroup  :wid="$route.query.wid" @handleClick="handleClick" @BtnAuthFalse="BtnAuthFalse"></btnGroup>
+    </div>
+
+    <div class="questionDetail-back" v-if="!!$route.query.frommsg">
+        <mu-button fab color="red" @click="handleBackList" style="background:rgba(255,0,0,0.5)">
+            <span>返回<br><hr>列表</span>
+          </mu-button>
     </div>
 
     <van-actionsheet v-model="operateShow" :title="operateTitle">
@@ -175,6 +181,7 @@ export default {
     }
     this.$store.dispatch("chnageMark", false);
   },
+
   updated:function(){
     this.$nextTick(function(){
        let oDiv = document.getElementsByClassName('questionDetail-top')[0];
@@ -184,6 +191,11 @@ export default {
     })
   },
   methods: {
+    // 返回列表
+    handleBackList(){
+      this.$store.dispatch("chnageMark", false);
+      this.$router.push({path:'/question'});
+    },
     handleCloseBtnshow(){
       this.$store.dispatch('changeBtnshow',false);
     },
@@ -578,9 +590,13 @@ export default {
 
 <style lang="less" scoped>
 @import "../../index.less";
-
+.questionDetail{
+  height: 100vh;
+  position: relative;
+}
 .questionDetail-top {
   overflow-y: auto;
+  height:calc(100vh - 52px);
   .questionDetail-desc {
     background: #fff;
     .questionDetail-detail {
@@ -614,10 +630,16 @@ export default {
     }
   }
 }
-
+.questionDetail-back{
+  position: fixed;
+  bottom: 60px;
+  right: 0;
+  font-size: 12px;
+}
 .questionDetail-bottom {
-  position: absolute;
+  position: fixed;
   bottom: 0;
+  z-index:1100;
 }
 .questionDetail-reply {
   margin: 0.5rem 0 0 0;

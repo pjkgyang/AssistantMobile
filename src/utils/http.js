@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Qs from 'qs';
+import 'babel-polyfill';
 // let _this = this;
 
 // axios.defaults.timeout = 5000;

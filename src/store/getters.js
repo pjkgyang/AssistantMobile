@@ -31,3 +31,8 @@ export const btnShow = (state) => {
     return state.btnShow
 }
 
+export const iosVersion = (state) => {
+    return state.ios
+}
+
+
