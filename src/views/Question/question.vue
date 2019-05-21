@@ -186,6 +186,8 @@ export default {
 
     // 添加问题(判断是否有申请关闭)；
     handleAddQuestion() {
+			 this.$router.push({ path: "/addquestion" });
+			 return;
       this.$post(this.API.canSubmitQuestion, {}).then(res => {
         if (res.state == "success") {
           if (res.data >= 1) {
@@ -198,11 +200,9 @@ export default {
                   "您有" +
                   res.data +
                   "个问题申请关闭，请根据问题处理情况驳回或者关闭，处理之后可以继续提问，谢谢支持"
-              })
-              .then(() => {
+              }).then(() => {
                 this.$router.push({ name: "sqgbList" });
-              })
-              .catch(() => {});
+              }).catch(() => {});
           } else {
             this.$router.push({ path: "/addquestion" });
           }

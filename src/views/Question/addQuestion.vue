@@ -3,8 +3,10 @@
       <div>
         <van-cell-group>
           <!--query.sl == 1 （受理）userInfo.unitType == 1（学校用户） -->
-            <van-field required v-model="questionData.xmmc" type="textarea" label="项目名称" placeholder="请选择" is-link rows="1" autosize @click="onClick('xm')" />
-            <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionmcData.wtlb" type="textarea" label="问题类型" placeholder="请选择" is-link rows="1" autosize @click="onClick('wtlb')" />
+            <van-field required v-model="questionData.xmmc" type="textarea" label="项目名称" placeholder="请选择项目" is-link rows="1" autosize @click="onClick('xm')" />
+            <van-field  v-model="xmzt" type="textarea" label="项目状态" placeholder="请选择项目" rows="1" autosize  readonly/>
+						<van-field required v-model="questionmcData.wtly" type="textarea" label="问题来源" placeholder="请选择" is-link rows="1" autosize @click="onClick('wtly')" />
+						<van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionmcData.wtlb" type="textarea" label="问题类型" placeholder="请选择" is-link rows="1" autosize @click="onClick('wtlb')" />
             <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionData.wtjb" type="textarea" label="问题级别" placeholder="请选择" is-link rows="1" autosize @click="onClick('wtjb')" />
             <van-field required v-model="questionmcData.sfjj" type="textarea" label="是否紧急" placeholder="请选择" is-link rows="1" autosize @click="onClick('sfjj')" />
             <van-field v-if="$store.state.userInfo.unitType != 1" required v-model="questionmcData.sfbug" type="textarea" label="是否bug" placeholder="请选择" is-link rows="1" autosize @click="onClick('sfbug')" />
@@ -42,7 +44,6 @@
             <datePicker @handleChangeDatePicker="handleChangeDate" :dateDisable="dateDisable" :beforeDisabled="beforeDisabled" :cphs="cphs"></datePicker>
           </van-popup>
         </div>
-
         <!-- <van-actionsheet v-model="wtlxShow" :actions="actions" @select="onSelect"/> -->
         <van-actionsheet v-model="wtlxShow" :title="'选择'+actionSheetTitle" >
            <ul :class="{'actionsheet_list':true,'height40':type=='wtlb'||type=='cp','height20':type!='wtlb'&&type!='cp'}" > 
@@ -92,13 +93,15 @@ export default {
         cnjsrq:'',
         nr:'',
         bt:'',
+				wtly:''//问题来源
       },
       questionmcData:{},//显示字段
-
+			xmzt:'',//项目状态
       type:'',//记录选择cell
       optionList:{},//列表数据
       cpList:{},//产品
       wtlxList:{},//问题类型
+			wtlyList:{},//问题来源
       wtjbList:{0:'不严重',1:'一般',2:'严重'},//问题级别
       sfjjList:{0:'否',1:'是'},//是否紧急
       yxfwList:{0:'影响局部',1:'影响整体'},//影响范围
@@ -136,11 +139,15 @@ export default {
       this.questionmcData = {};
     }
      this.imgStr = '';
+		 this.xmzt = '';
+		 this.questionData.wtly = this.$store.state.userInfo.unitType == 0 ? '2' : '1';
+		 this.questionmcData.wtly = this.$store.state.userInfo.unitType == 0 ? '项目团队' : '用户';
   },  
   methods:{
    handleCommit(){
      let wtnr ='<p>'+this.questionData.nr+'</p>'+this.imgStr;
      let paramsData = {
+			wtly:!this.questionData.wtly?'':this.questionData.wtly, //问题来源
       wtlb:!this.questionData.wtlb?'':this.questionData.wtlb,
       wtjb:!this.questionData.wtjb?'':this.questionData.wtjb,
       jjyf:this.questionData.sfjj,
@@ -151,8 +158,9 @@ export default {
       bt:this.questionData.bt,
       qwjjrq:this.questionData.qwjjrq,
       cnjsrq:this.questionData.cnjsrq,
-      xmmc:this.questionData.xmmc,
-      xmbh:this.questionData.xmbh,
+      xmmc:!this.xmInfo?"":this.questionData.xmmc,
+      xmbh:!this.xmInfo?"":this.questionData.xmbh,
+			internalProject: !this.xmInfo ? true : "",
       nr:wtnr
      };
      if(this.$store.state.userInfo.unitType == 1){  // 老师
@@ -161,9 +169,11 @@ export default {
         delete paramsData.yxfw;
         delete paramsData.bbh;
         delete paramsData.sfbg;
+				delete paramsData.internalProject;
      }else if(this.$route.query.sl){  // 受理
         delete paramsData.nr;
         delete paramsData.bt;
+				delete paramsData.internalProject;
         paramsData.wid = this.$route.params.data.wid;
      }else{    
         delete paramsData.cnjsrq; 
@@ -217,16 +227,24 @@ export default {
    },
    //  选择项目
    handleChooseItem(data){
-     this.xmInfo = data;
-     this.questionData.xmmc = data.xmmc;
-     this.questionData.xmbh = data.xmbh;
-     this.projectlistShow = false;
-     this.queryResponsibleProduct(data.xmbh);
+		 this.xmInfo = data;
+		 if(!!data){
+				this.xmzt = data.xmzt;
+				this.questionData.xmmc = data.xmmc;
+				this.questionData.xmbh = data.xmbh;
+				this.queryResponsibleProduct(data.xmbh);
+		 }else{
+			  this.queryResponsibleProduct('',true); 
+				this.xmzt = '在建';
+				this.questionData.xmmc = '内部项目';
+	  }
+		this.projectlistShow = false;
    },
-   queryResponsibleProduct(xmbh){ 
+   queryResponsibleProduct(xmbh,inter){ 
       this.cpList = [];
       this.$get(this.API.queryResponsibleProduct,{
-        xmbh: xmbh
+        xmbh: xmbh,
+				internalProject:!inter?"":inter
       }).then(res => {
         if (res.state == "success") {
           // 2018.12.18 修改
@@ -259,6 +277,10 @@ export default {
           this.questionmcData.wtlb = value;
           this.questionData.wtlb = key;
           break;
+				case 'wtly':
+				  this.questionmcData.wtly = value;
+				  this.questionData.wtly = key;
+				  break;
         case 'wtjb':
           this.questionData.wtjb = value;
           break;
@@ -285,26 +307,27 @@ export default {
 
   // 获取枚举
    getDictEnum(){
-    // if(!getSession('kycp')){
-    //   getMenu('kycp',true).then(data=>{
-    //       this.cpList = data;
-    //     });
-    //   }else{
-    //     this.cpList = getSession('kycp');
-    //   } 
-
       if(!getSession('ProblemType')){
-      getMenu('ProblemType','').then(data=>{
-        this.wtlxList = data;
+         getMenu('ProblemType','').then(data=>{
+           this.wtlxList = data;
         });
       }else{
         this.wtlxList = getSession('ProblemType');
       } 
+			
+			if(!getSession('ProblemSource')){
+			   getMenu('ProblemSource','').then(data=>{
+			     this.wtlyList = data;
+			  });
+			}else{
+			  this.wtlyList = getSession('ProblemSource');
+			} 
+			
    },
 
        // 提交校验
    validDate(){
-     if(!this.questionData.xmbh){
+     if(!this.questionData.xmbh && !!this.xmInfo){
        this.$toast('请选择项目名称');
        return false;
      }
@@ -363,6 +386,10 @@ export default {
           this.actionSheetTitle = '问题类型';
           this.optionList = this.wtlxList;
           break;
+				case 'wtly':
+				  this.actionSheetTitle = '问题来源';
+				  this.optionList = this.wtlyList;
+				  break;
         case 'wtjb':
           this.actionSheetTitle = '问题级别';
           this.optionList = this.wtjbList;

@@ -40,6 +40,8 @@ Vue.component('swipeout-item', SwipeoutItem);
 Vue.component('swipeout-button', SwipeoutButton);
 Vue.component('previewer', Previewer);
 
+import dateTime from 'vue-date-time-m';
+Vue.component('data-time', dateTime);
 
 router.beforeEach((to, from, next) => {
   if(to.name == 'More'){

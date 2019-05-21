@@ -5,24 +5,24 @@ let baseUrl = 'http://careful.wisedu.com/emap/sys/etender/api/';
 
 
 if (!sessionStorage.getItem('sign')) {
-    localStorage.setItem('lx','');
+    localStorage.setItem('lx', '');
 
     window.openId = getQueryStringByName("openId");
-    
-    if(localStorage.getItem('lx') === '' || localStorage.getItem('lx') === null || localStorage.getItem('lx') === undefined){
+
+    if (localStorage.getItem('lx') === '' || localStorage.getItem('lx') === null || localStorage.getItem('lx') === undefined) {
         let tempLx = getQueryStringByName("lx");
-        if(tempLx === ''){
+        if (tempLx === '') {
             window.lx = '3';
-        }else{
+        } else {
             window.lx = tempLx;
         }
-    }else{
+    } else {
         window.lx = localStorage.getItem('lx');
     }
 
 
     window.gh = getQueryStringByName("gh");
-    
+
 
     if (window.openId) {
         sessionStorage.setItem('openId', window.openId);
@@ -73,6 +73,7 @@ function wxLogin(openId, lx, gh) {
         }
     });
 }
+
 // 获取用户信息
 function getLoginUser() {
     $.ajax({
@@ -86,7 +87,12 @@ function getLoginUser() {
                 window.userId = data.data.uid;
                 localStorage.setItem("userInfo", JSON.stringify(data.data));
                 sessionStorage.setItem("sign", 1);
-                window.location.href = 'http://careful.wisedu.com/emap/sys/etender/wx/index.html'
+
+                if (!getQueryStringByName("ym")) {
+                    window.location.href = 'http://careful.wisedu.com/emap/sys/etender/wx/index.html'
+                } else {
+                    window.location.href = 'http://careful.wisedu.com/emap/sys/etender/wx/index.html#/' + getQueryStringByName("ym") + '?wid=' + getQueryStringByName("wid")+'&frommsg=1'
+                }
             } else {
                 if (window.lx == 3) {  //web登录
                     wxLogin();

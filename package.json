@@ -12,10 +12,13 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "babel-polyfill": "^6.26.0",
+    "es6-promise": "^4.2.6",
     "less": "^3.0.4",
     "muse-ui": "^3.0.1",
     "vant": "^1.4.3",
     "vue": "^2.5.11",
+    "vue-date-time-m": "^1.0.30",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
     "vux": "^2.9.1"

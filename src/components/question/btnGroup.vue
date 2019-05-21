@@ -30,7 +30,8 @@ export default {
         { name: "申请关闭", type: "", en: "sqjs" },
         { name: "转发问题", type: "", en: "zf" },
         { name: "修改承诺时间", type: "", en: "cnsj" },
-        { name: "关联开发任务", type: "", en: "xgcrowId" }
+        { name: "关联开发任务", type: "", en: "xgcrowId" },
+				{ name: "驳回申请关闭", type: "", en: "bh" }
       ],
       btngroup: [], //记录btn
       btngroupArr: [],
@@ -41,7 +42,11 @@ export default {
     wid: {
       type: String,
       default: ""
-    }
+    },
+		update:{
+			type:Boolean,
+			default:false
+		}
   },
   activated() {
     if (!this.$store.state.mark) {
@@ -61,7 +66,10 @@ export default {
     },
     queryBtn(n, o) {
       this.queryBtnAuth();
-    }
+    },
+		update(n,o){
+			this.queryBtnAuth();
+		}
   },
   methods: {
     handleCheckMore() {

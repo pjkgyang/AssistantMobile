@@ -23,7 +23,6 @@
             </div>
         </van-actionsheet>
     </div>
-
 </template>
 
 <script>
@@ -39,9 +38,7 @@ export default {
       isLoading: false,
       loading: false,
       finished: false,
-      questionList: [
-
-      ],
+      questionList: [],
       sm: ""
     };
   },

@@ -1,7 +1,7 @@
 <template>
     <div>
-       <form >
-        <van-search   v-model="keyword" :background="'#fff'" :placeholder="place"   @search="handleSearchKeyword" />
+       <form class="search-input">
+        <van-search v-model="keyword" :background="'#fff'" :placeholder="place"   @search="handleSearchKeyword" />
        </form>
     </div>
 </template>

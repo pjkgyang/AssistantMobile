@@ -18,7 +18,12 @@
      return {
        flags: false,
        position: { x: 0, y: 0 },
-       nx: '', ny: '', dx: '', dy: '', xPum: '', yPum: '',
+       nx: '', 
+			 ny: '', 
+			 dx: '', 
+			 dy: '', 
+			 xPum: '', 
+			 yPum: '',
      }
    },
    props:{

@@ -130,7 +130,7 @@ export default {
             this.$toast("请选择质量评分"); 
             return false;
         }
-        if(this.closeData.zlpf <= 3 && /^[\s]*$/.test(this.questionData.sm)){
+        if(this.closeData.zlpf <= 3 && /^[\s]*$/.test(this.closeData.sm)){
             this.$toast("请填写评价说明"); 
             return false;
         }

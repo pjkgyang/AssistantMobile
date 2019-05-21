@@ -2,19 +2,22 @@ var path = require('path');
 var webpack = require('webpack');
 const vuxLoader = require('vux-loader');
 
+
 function resolve(dir) {
   return path.join(__dirname, '.', dir);
 }
 
 const webpackConfig = {
-  entry: './src/main.js',
+  // entry: './src/main.js',
+  entry: {
+    app: ['babel-polyfill', './src/main.js'],
+  },
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
     // publicPath:'/emap/sys/etender/wx/beta/',
     filename: 'build.js'
   },
-
   module: {
     rules: [
       {
@@ -68,10 +71,25 @@ const webpackConfig = {
           // other vue-loader options go here
         }
       },
+      // {
+      //   test: /vux.src.*?js$/,
+      //   loader: 'babel-loader',
+      //   query: {
+      //     presets: ['es2015']
+      //   }
+      // },
+      // {
+      //   test: /\.js$/,
+      //   loader: 'babel-loader',
+      //   query: {
+      //     presets: ['es2015']
+      //   },
+      //   include: [resolve('src'), resolve('test'), resolve('node_modules/_vue-date-time-m@1.0.30@vue-date-time-m/dist/vue-date-time-m.js')]
+      // },
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        include: [resolve('src'), resolve('test'),resolve('node_modules/_vue-date-time-m@1.0.30@vue-date-time-m')]
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
@@ -140,13 +158,14 @@ if (process.env.NODE_ENV === 'production') {
     })
   ])
 }
-if(process.env.NODE_ENV === 'development'){
+if (process.env.NODE_ENV === 'development') {
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"'
       },
-      "WINDOW_CONFIG__BASEURL": '"http://172.16.121.166:8080/emap/sys/etender/api/"'
+      // 180.44
+      "WINDOW_CONFIG__BASEURL": '"http://172.16.180.53:8080/emap/sys/etender/api/"'
     })
   ])
 }

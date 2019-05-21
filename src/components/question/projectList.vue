@@ -7,6 +7,14 @@
             <div class="question-projectlist_content">
                 <mu-container ref="container" class="demo-loadmore-content">
                     <mu-load-more @refresh="refresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
+											<section v-if="$store.state.userInfo.unitType == 0" @click="handleChooseItem('')">
+												<div class="question-projectlist_detail">
+												    <h5>内部项目</h5>
+												</div>
+												<div class="question-projectlist_link">
+												    <van-icon name="arrow" />
+												</div>
+											</section>
                         <section v-for="item in listArr" @click="handleChooseItem(item)">
                             <div class="question-projectlist_detail">
                                 <h5>{{item.xmmc}}</h5>
@@ -131,7 +139,8 @@ export default {
     }
   },
   mounted() {
-    this.init()
+    this.init();
+			
   },
   components: { searchInput,emptyContent }
 };
@@ -174,9 +183,9 @@ export default {
 footer {
   text-align: center;
   button {
-    width: 95%;
+    width: 98%;
     border: none;
-    margin: 0.5rem 0;
+    margin: 0.5rem 0 0 0;
   }
 }
 </style>

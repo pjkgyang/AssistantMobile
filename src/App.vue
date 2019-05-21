@@ -31,9 +31,7 @@ export default {
   },
   beforeCreate() {
     this.$nextTick(()=>{
-    console.log(navigator.userAgent.toLowerCase());
-
-          if ((!!this.getIosVersion() && this.getIosVersion() < 10) || (!!this.getAndroidVersion() && this.getAndroidVersion() < 6)) {
+         if ((!!this.getIosVersion() && this.getIosVersion() < 10) || (!!this.getAndroidVersion() && this.getAndroidVersion() < 6)) {
          this.$store.dispatch("changeIosVersion", this.getIosVersion());
          this.$dialog.alert({
             message:

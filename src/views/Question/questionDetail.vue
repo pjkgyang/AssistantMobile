@@ -61,7 +61,7 @@
 
     <!-- 操作按钮 -->
     <div class="questionDetail-bottom">
-       <btnGroup  :wid="$route.query.wid" @handleClick="handleClick" @BtnAuthFalse="BtnAuthFalse"></btnGroup>
+       <btnGroup :update="update" :wid="$route.query.wid" @handleClick="handleClick" @BtnAuthFalse="BtnAuthFalse"></btnGroup>
     </div>
 
     <div class="questionDetail-back" v-if="!!$route.query.frommsg">
@@ -133,6 +133,7 @@ import { mapState, mapMutations, mapGetters } from "vuex";
 export default {
   data() {
     return {
+			update:false,
       operateShow: false,
       rejectShow:false, //驳回说明
       pickerKsrqShow: false, //承诺日期
@@ -220,8 +221,14 @@ export default {
             this.$toast.clear();
             this.$toast({ message: "驳回成功~", duration: 1500 });
             this.rejectShow = false;
-            this.replyData[this.replyDetail.index].sfbh = 1;
-            this.replyData[this.replyDetail.index].nr =  this.replyData[this.replyDetail.index].nr +  "<br>驳回说明 : " + this.rejectsm;
+						if(!!this.replyDetail.wid){
+							 this.replyData[this.replyDetail.index].sfbh = 1;
+							 this.replyData[this.replyDetail.index].nr =  this.replyData[this.replyDetail.index].nr +  "<br>驳回说明 : " + this.rejectsm;
+						}else{
+								this.update = !this.update
+							 this.queryQuestion();
+							 this.queryAnswers();
+						}
          }else{
             this.$toast.clear();
             this.$toast(!res.msg ? "系统超时，请稍后再试~" : res.msg);
@@ -334,7 +341,6 @@ export default {
            }
           }
         })
-        
       } else if (data == "sl") {
         this.isgcXmtdbyWt();
       } else if (data == "sqjs") {
@@ -346,9 +352,13 @@ export default {
         });
       } else if (data == "xgcrowId") {
         this.operateShow = true;
-      }
+      }else if(data == "bh"){
+				this.replyDetail.wid = '';
+				this.rejectShow = true;
+			}
       this.curOperate = data;
     },
+		
     // 按钮全部不显示
     BtnAuthFalse(params,data){
       this.qwjjrq = params;
@@ -626,6 +636,9 @@ export default {
       padding: 0.75rem 1.25rem;
       .question-content {
         font-size: 0.85rem;
+				img{
+					width: 100%;
+				}
       }
     }
   }

@@ -79,6 +79,7 @@ export default {
     getCrowdRwxx:WINDOW_CONFIG__BASEURL +'external/getCrowdRwxx.do',//获取crowd
 
 
+
     // 项目
     getProjectsForMobile:WINDOW_CONFIG__BASEURL +'project/getProjectsForMobile.do',//获取项目列表
     getXmTjRT:WINDOW_CONFIG__BASEURL +'stat/getXmTjRT.do',//获取项目详情

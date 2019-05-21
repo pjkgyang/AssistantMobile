@@ -54,7 +54,7 @@ export default {
       phoneNum:"", //手机号码
       code:"",//验证码
 
-      loginActive:2, //是否登录
+      loginActive:1, //是否登录
       count:60,
       isCoding:false,
 

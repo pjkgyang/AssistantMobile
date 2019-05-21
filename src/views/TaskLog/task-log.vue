@@ -201,6 +201,8 @@ export default {
       this.currentPage = 1;
       this.startDate = this.ksrqDate;
       this.endDate = this.jsrqDate;
+			this.ProcessList = [];
+			this.$store.dispatch("chnageLoing", true);
       this.queryTaskProcess(this.ksrqDate, this.jsrqDate);
       this.txsjText = this.ksrqDate + " - " + this.jsrqDate;
       this.DataPopshow = !this.DataPopshow
