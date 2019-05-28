@@ -253,8 +253,7 @@ export default {
         sqgb: this.sqgb,
         cp: !this.filterData.cp ? "" : this.filterData.cp,
         keyword: this.keyword
-      })
-        .then(res => {
+      }).then(res => {
           if (res.state == "success") {
             this.$store.dispatch("chnageLoing", false);
             this.total = res.data.total;

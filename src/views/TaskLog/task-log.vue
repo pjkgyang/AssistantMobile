@@ -70,14 +70,14 @@
       <van-picker show-toolbar title="范围" :columns="fwColumn" @cancel="hadnleFwCancel"  @confirm="hadnleFwConfirm" />
     </van-popup>
 
-    <div class="datePop">
-      <van-popup v-model="pickerKsrqShow">
-        <DatePicker @handleChangeDatePicker="handleChangeKsrqPicker"></DatePicker>
-      </van-popup>
-      <van-popup v-model="pickerJsrqShow">
-        <DatePicker @handleChangeDatePicker="handleChangeJsrqPicker"></DatePicker>
-      </van-popup>
-    </div>
+    <!-- <div class="datePop">
+      <van-popup v-model="pickerKsrqShow"> -->
+        <DatePicker :show.sync="pickerKsrqShow" @handleChangeDatePicker="handleChangeKsrqPicker"></DatePicker>
+      <!-- </van-popup>
+      <van-popup v-model="pickerJsrqShow"> -->
+        <DatePicker :show.sync="pickerJsrqShow" @handleChangeDatePicker="handleChangeJsrqPicker"></DatePicker>
+      <!-- </van-popup>
+    </div> -->
   </div>
 </template>
 <script>

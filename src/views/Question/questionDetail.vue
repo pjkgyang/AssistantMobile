@@ -88,11 +88,11 @@
       </div>
     </van-actionsheet>
 
-    <div class="datePop">
-      <van-popup v-model="pickerKsrqShow">
-        <datePicker @handleChangeDatePicker="handleChangeDate" :dateDisable="dateDisable" :cphs="cphs"></datePicker>
-      </van-popup>
-    </div>
+    <!-- <div class="datePop"> -->
+      <!-- <van-popup v-model="pickerKsrqShow"> -->
+        <datePicker :show.sync="pickerKsrqShow" @handleChangeDatePicker="handleChangeDate" :dateDisable="dateDisable" :cphs="cphs"></datePicker>
+      <!-- </van-popup> -->
+    <!-- </div> -->
 
     <div class="datePop">
       <van-popup v-model="cbryShow" position="right">

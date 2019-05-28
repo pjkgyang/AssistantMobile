@@ -23,11 +23,11 @@
            </ul>
         </van-actionsheet>
 
-        <div class="datePop">
-          <van-popup v-model="pickerDateShow">
-            <datePicker @handleChangeDatePicker="handleChangeDate" :dateDisable="dateDisable" :beforeDisabled="beforeDisabled"></datePicker>
-          </van-popup>
-        </div>
+        <!-- <div class="datePop">
+          <van-popup v-model="pickerDateShow"> -->
+            <datePicker :show.sync="pickerDateShow" @handleChangeDatePicker="handleChangeDate" :dateDisable="dateDisable" :beforeDisabled="beforeDisabled"></datePicker>
+   <!--       </van-popup>
+        </div> -->
     </div>
 </template>
 

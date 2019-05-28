@@ -39,11 +39,11 @@
           <projectList @handleClose="handleCloseXMPop" @handleChooseItem="handleChooseItem"></projectList>
         </van-popup>
 
-        <div class="datePop">
-          <van-popup v-model="pickerKsrqShow">
-            <datePicker @handleChangeDatePicker="handleChangeDate" :dateDisable="dateDisable" :beforeDisabled="beforeDisabled" :cphs="cphs"></datePicker>
-          </van-popup>
-        </div>
+        <!-- <div class="datePop"> -->
+          <!-- <van-popup v-model="show"> -->
+        <datePicker :show.sync="show" @handleChangeDatePicker="handleChangeDate" :dateDisable="dateDisable" :beforeDisabled="beforeDisabled" :cphs="cphs"></datePicker>
+          <!-- </van-popup> -->
+        <!-- </div> -->
         <!-- <van-actionsheet v-model="wtlxShow" :actions="actions" @select="onSelect"/> -->
         <van-actionsheet v-model="wtlxShow" :title="'选择'+actionSheetTitle" >
            <ul :class="{'actionsheet_list':true,'height40':type=='wtlb'||type=='cp','height20':type!='wtlb'&&type!='cp'}" > 
@@ -64,7 +64,7 @@ export default {
   data() {
     return {
       projectlistShow:false,
-      pickerKsrqShow:false,
+      show:false,
       wtlxShow:false,
       dateDisable:false,//日期选择范围禁用
       beforeDisabled:false,//期望解决日期小于当前不能用
@@ -214,7 +214,7 @@ export default {
        }else{
         this.beforeDisabled = false;
        }
-       this.pickerKsrqShow = true;
+       this.show = true;
      }else{
        this.wtlxShow = true;    
      }
@@ -263,7 +263,9 @@ export default {
      }else{
         this.questionData.cnjsrq = getMyDate(data);
      }
-     this.pickerKsrqShow = false;
+		 if((this.type == 'qwjjrq' &&  !!this.questionData.qwjjrq) || (this.type != 'qwjjrq' &&  !!this.questionData.cnjsrq)){
+			 this.show = false;
+		 }
    },
    // 返回
    handleClose(){

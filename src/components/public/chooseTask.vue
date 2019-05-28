@@ -305,7 +305,8 @@ export default {
         xmzt: "",
         xmlb: "",
         sfgx: "",
-        pl: ""
+        pl: "",
+				isAll:true
       }).then(res => {
         if (res.state == "success") {
           this.$store.dispatch("chnageLoing", false);

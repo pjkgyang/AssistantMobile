@@ -26,9 +26,9 @@
         <!-- 选择任务 -->
         <choose-task :parentShow="show" @handleClosePop="handleClosePop" @handletaskClick="handletaskClick"></choose-task>
 
-        <van-popup v-model="datePickerShow">
-            <DatePicker @handleChangeDatePicker="handleChangeDatePicker"></DatePicker>
-        </van-popup>
+        <!-- <van-popup v-model="datePickerShow"> -->
+            <DatePicker :show.sync="datePickerShow" @handleChangeDatePicker="handleChangeDatePicker"></DatePicker>
+        <!-- </van-popup> -->
     </div>
 </template>
 <script>
