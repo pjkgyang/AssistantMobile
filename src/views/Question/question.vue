@@ -186,8 +186,6 @@ export default {
 
     // 添加问题(判断是否有申请关闭)；
     handleAddQuestion() {
-			 this.$router.push({ path: "/addquestion" });
-			 return;
       this.$post(this.API.canSubmitQuestion, {}).then(res => {
         if (res.state == "success") {
           if (res.data >= 1) {

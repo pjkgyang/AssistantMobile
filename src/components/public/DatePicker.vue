@@ -1,9 +1,15 @@
 <template>
-	<div class="dete-pick">
-		 <van-popup v-model="show">
-				<!-- <div class="date-time-item"><date-time ref="dateTime" :min="minDates()" :max="maxDates()" :showTodayButton="false" @confirm="select"></date-time></div> -->
-				<mu-date-picker :should-disable-date="dateDisable?allowedDates:''" :date.sync="date" @change="handleChangeDatePicker"></mu-date-picker>
-		 </van-popup>
+	<div>
+		 <van-actionsheet v-model="show" title=""  :close-on-click-overlay="false">
+		 	<van-datetime-picker
+			  v-model="currentDate"
+			  type="date"
+			  :min-date="minDates()"
+			  :max-date="maxDates()"
+			  @cancel="handleClose"
+			  @confirm="handleConfirm"
+			/>
+		  </van-actionsheet>
 	</div>
 </template>
 
@@ -13,7 +19,10 @@ import { GetNextDate } from '@/utils/util';
 export default {
 	data() {
 		return {
-			date:undefined
+			date:undefined,
+			minDate:'',
+			maxDate:'',
+		    currentDate: new Date(),
 		};
 	},
 	props: {
@@ -35,43 +44,35 @@ export default {
 		}
 	},
 	mounted() {
-		// this.$refs.dateTime.show();
+		// let laterDate = GetNextDate(new Date(),this.cphs+1); 
+		// let beforeDate = GetNextDate(new Date(),0);
 	},
 	methods: {
-		// // 日期组件回调
-		// select(val) {
-		// 	this.$emit('handleChangeDatePicker', val);
-		// },
-		// minDates() {
-		// 	if (!!this.dateDisable) {
-		// 		return GetNextDate(new Date(), 0);
-		// 	} else {
-		// 		return '';
-		// 	}
-		// },
-		// maxDates() {
-		// 	let laterDate = GetNextDate(new Date(), this.cphs + 1);
-		// 	if (!!this.dateDisable) {
-		// 		if (!this.beforeDisabled) {
-		// 			return laterDate;
-		// 		} else {
-		// 			return '';
-		// 		}
-		// 	} else {
-		// 		return '';
-		// 	}
-		// }
-		handleChangeDatePicker(date) {
-		  this.$emit("handleChangeDatePicker", date);
+		minDates() {
+			if (!!this.dateDisable) {
+				return new Date(GetNextDate(new Date(), 0));
+			} else {
+				return new Date(GetNextDate(new Date(), -3650));
+			}
 		},
-		allowedDates(date){
-		      let laterDate = GetNextDate(new Date(),this.cphs+1);
-		      let beforeDate = GetNextDate(new Date(),0);
-		    if(!this.beforeDisabled){
-		       return new Date(date) < new Date(beforeDate) || new Date(date) >= new Date(laterDate);
-		    }else{
-		       return new Date(date) < new Date(beforeDate);
-		    }
+		maxDates() {
+			let laterDate = GetNextDate(new Date(), this.cphs + 1);
+			if (!!this.dateDisable) {
+				if (!this.beforeDisabled) {
+					return new Date(laterDate);
+				} else {
+					return new Date(GetNextDate(new Date(), 3650));
+				}
+			} else {
+				return new Date(GetNextDate(new Date(), 3650));
+			}
+		},
+
+		handleClose(){
+			this.$emit('handleClose','')
+		},
+		handleConfirm(val){
+			this.$emit("handleChangeDatePicker", GetNextDate(val, 0));
 		},
 	},
 	components: {  }

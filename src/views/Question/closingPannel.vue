@@ -39,7 +39,8 @@ export default {
       loading: false,
       finished: false,
       questionList: [],
-      sm: ""
+      sm: "",
+			wtData:{}//当前问题详情
     };
   },
   activated() {
@@ -56,6 +57,8 @@ export default {
 
     // 驳回或关闭
     handleCloseOrReject(type, params) {
+			 this.wtData = params;
+			 console.log(this.wtData)
       if (type == "reject") {
           this.operateShow = true;
       } else {
@@ -65,6 +68,7 @@ export default {
         });
       }
     },
+		
     // 提交
     handleCommit(){
       if(!this.validDate()) return;
@@ -72,14 +76,14 @@ export default {
             title: '提示',
             message: "您确定驳回吗?",
         }).then(() => {
-          this.$toast.loading({mask: true,message: '提交中...',duration:0});
           this.$post(this.API.applyDismiss,{
             wid:'',
-            zbwid: params.wid,
-            sm:sm
+            zbwid: this.wtData.wid,
+            sm:this.sm
           }).then(res=>{
               if(res.state == 'success'){
-                this.$toast.clear();
+								this.sm = '';
+								this.operateShow = false;
                 this.$toast('已驳回');   
                 this.init();
               }else{

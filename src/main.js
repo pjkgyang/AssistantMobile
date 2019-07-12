@@ -7,7 +7,7 @@ import App from './App.vue';
 import router from './router';
 import axios from 'axios';
 import './base.css';
-import {post,get} from './utils/http';
+import { post , get } from './utils/http';
 import api from './utils/API';
 import store from './store/index.js';
 Vue.prototype.$post = post;
@@ -18,8 +18,8 @@ import '../src/style.scss';
 import Vant from 'vant';
 import 'vant/lib/index.css';
 Vue.use(Vant);
-
-
+import { Toast } from 'vant';
+Vue.use(Toast);
 
 import Helpers from 'muse-ui/lib/Helpers';
 Vue.use(Helpers);

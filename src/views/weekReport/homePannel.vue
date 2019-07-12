@@ -49,11 +49,16 @@
       <van-picker show-toolbar title="选择周数" :columns="columns" @cancel="hadnleZsCancel"  @confirm="hadnleZsConfirm" />
     </van-popup>
 
-    <div class="datePop">
+    <!-- <div class="datePop">
       <van-popup v-model="pickerMonthShow">
         <DatePickerMonth @handleChangeDatePicker="handleChooseMonth"></DatePickerMonth>
       </van-popup>
-    </div>
+			
+    </div> -->
+		<van-actionsheet v-model="pickerMonthShow" title="" :close-on-click-overlay="false">
+		  <DatePickerMonth @handleChangeDatePicker="handleChooseMonth" @handleClose="handleClose"></DatePickerMonth>
+	  </van-actionsheet>
+		
   </div>
 </template>
 <script>
@@ -133,11 +138,17 @@ export default {
     hanldeSearchMonth() {
       this.pickerMonthShow = true;
     },
+		// 选择月
     handleChooseMonth(data) {
       this.pickerMonthShow = false;
       this.formatDate(data.getFullYear(),data.getMonth());
       this.init();
     },
+		// 关闭问题
+		handleClose(){
+			 this.pickerMonthShow = false;
+		},
+		
     handleChangeJsrqPicker(data) {
       this.jsrqDate = getMyDate(data);
       this.pickerJsrqShow = false;
@@ -240,7 +251,7 @@ export default {
        if(new Date(NowDate).getTime() >= new Date(weekStartDate).getTime() && 
           new Date(NowDate).getTime() <= new Date(weekEndDate).getTime() && 
           // this.weekValue == week &&
-          new Date(GetDateStr(0)).getDay() >= 4){
+          (new Date(GetDateStr(0)).getDay()==0?7:new Date(GetDateStr(0)).getDay()) <= 4){
             this.weekValue =  this.weekNum =  getWeeks(Year,Month+1);
             this.weekDay  = weekStartDate+' 至 '+weekEndDate;
             this.monthValue = lastMonth;

@@ -22,6 +22,7 @@ import 'babel-polyfill';
 //   }
 // );
 
+
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
@@ -32,7 +33,7 @@ axios.interceptors.response.use(
       switch (error.response.status) {
         case 401:
           sessionStorage.setItem("sign", '');
-          window.location.href = 'http://careful.wisedu.com:8887/emap/sys/etender/wx/index.html#/login';
+          window.location.href = 'http://careful.wisedu.com/emap/sys/etender/wx/index.html#/login';
       }
     }
     return Promise.reject(error);
@@ -62,17 +63,19 @@ export function get(url,params={}){
   })
 }
 
+
+
 /**
  * @param url
  * @param data
  * @returns {Promise}
  */
  export function post(url,data = {}){
-   if(url.includes('canSubmitQuestion')){
-      this.$toast.loading({mask: false,message: '请求中...',duration:0});
+   if(url.includes('wxLogin')){
+     this.$toast.loading({mask: false,message: '登录中...',duration:0});
    }else{
-      this.$toast.loading({mask: true,message: '提交中...',duration:0});
-   }
+		 this.$toast.loading({mask: true,message: '加载中...',duration:0});
+	 }
    return new Promise((resolve,reject) => {
      axios.post(url,data,{
       transformRequest: [function (data) {
@@ -80,8 +83,8 @@ export function get(url,params={}){
       return data;
     }]
   }).then(response => {
+						this.$toast.clear();
             resolve(response.data);
-            this.$toast.clear();
           },err => {
             reject(err);
             this.$toast.clear();

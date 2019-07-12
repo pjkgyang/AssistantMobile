@@ -48,7 +48,7 @@
           <div v-for="(task,i) in taskItems" class="task-catlog" v-if="!taskLoading">
             <p>{{task.catalog}}</p>
             <van-cell-group class="itemlist-group-cp">
-              <van-cell v-for="(item,i) in task.tasks.rows" :key="i" :title="item.rwmc" is-link @click="handletaskClick(item.rwmc,item.rwbh)" />
+              <van-cell v-for="(item,i) in task.tasks.rows" :key="i" :title="item.rwmc" is-link @click="handletaskClick(item,task.lcbjdmc)" />
             </van-cell-group>
           </div>
         </div>
@@ -242,18 +242,18 @@ export default {
       this.getMilestoneCatalog();
       this.taskPopShow = true;
     },
-
-    handletaskClick(rwmc, rwbh) {
-      // 获取 里程碑任务(选中任务)
-      this.xmInfo.rwmc = rwmc;
-      this.xmInfo.rwbh = rwbh;
+    // 获取 里程碑任务(选中任务)
+    handletaskClick(task,xmjd) {
+      this.xmInfo.rwmc = task.rwmc;
+      this.xmInfo.rwbh = task.rwbh;
+      this.xmInfo.gccpmc = task.cpmc;  //产品名称
       this.xmInfo.xmmc = this.backupsInfo.xmmc;
       this.xmInfo.xmbh = this.backupsInfo.xmbh;
       this.xmInfo.cp = this.backupsInfo.cp;
       this.xmInfo.cpbh = this.backupsInfo.cpbh;
+			this.xmInfo.jdmc = xmjd;//项目进度
       this.itemPopShow = this.cpPopShow = this.taskPopShow = false;
-      this.taskName =
-      this.xmInfo.xmmc + " — " + this.xmInfo.cp + " — " + this.xmInfo.rwmc;
+      this.taskName = this.xmInfo.xmmc + " — " + this.xmInfo.cp + " — " + this.xmInfo.rwmc;
       this.$emit("handletaskClick", this.taskName, this.xmInfo);
     },
     // 上啦刷新

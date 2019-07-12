@@ -106,9 +106,9 @@ export default {
   },
   mounted() {
     // capture="camera"
-     if(this.getIos()){
-        document.getElementById("upload_file").removeAttribute('capture');
-     }
+     // if(this.getIos()){
+     //    document.getElementById("upload_file").removeAttribute('capture');
+     // }
   },
   created() {},
   components: {}

@@ -126,11 +126,6 @@ export default {
         }
       }
 
-      this.$toast.loading({
-        mask: true,
-        message: "登陆中...",
-        duration: 0
-      });
       this.$post(this.API.wxLogin, {
         openId: window.openId,
         username:this.loginActive==1?this.userInfo.username:'',
@@ -148,6 +143,7 @@ export default {
               window.userId = res.data.uid;
               localStorage.setItem("userInfo", JSON.stringify(res.data));
               this.$toast.clear();
+							this.$toast({message:'登录成功~',duration:2000});
               this.$router.push({ path: "/" });
               // 临时增加权限
               // if(res.data.userGroupTag.includes('JYGL')){

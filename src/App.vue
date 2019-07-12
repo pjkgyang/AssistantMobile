@@ -39,16 +39,16 @@ export default {
           });
         }
     })
-    // this.$get(this.API.getLoginUser,{}).then(res=>{
-    //   if (res.state == "success") {
-    //     window.userName = res.data.nickName;
-    //     window.userId = res.data.uid;
-    //     localStorage.setItem("userInfo", JSON.stringify(res.data));
-    //     this.$store.dispatch("adduser", JSON.parse(localStorage.getItem("userInfo")));
-    //   }else{
-    //     this.$toast(res.msg);
-    //   }
-    // })
+    this.$get(this.API.getLoginUser,{}).then(res=>{
+      if (res.state == "success") {
+        window.userName = res.data.nickName;
+        window.userId = res.data.uid;
+        localStorage.setItem("userInfo", JSON.stringify(res.data));
+        this.$store.dispatch("adduser", JSON.parse(localStorage.getItem("userInfo")));
+      }else{
+        this.$toast(res.msg);
+      }
+    })
   },
   methods:{
     getAndroidVersion() {

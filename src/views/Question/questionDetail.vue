@@ -90,7 +90,8 @@
 
     <!-- <div class="datePop"> -->
       <!-- <van-popup v-model="pickerKsrqShow"> -->
-        <datePicker :show.sync="pickerKsrqShow" @handleChangeDatePicker="handleChangeDate" :dateDisable="dateDisable" :cphs="cphs"></datePicker>
+        <datePicker :show.sync="pickerKsrqShow" @handleChangeDatePicker="handleChangeDate" :dateDisable="dateDisable" 
+				:cphs="cphs" @handleClose="handleCloseDatePicker"></datePicker>
       <!-- </van-popup> -->
     <!-- </div> -->
 
@@ -384,6 +385,10 @@ export default {
       } 
       this.pickerKsrqShow = !this.pickerKsrqShow;
     },
+		// 关闭日期选择
+		handleCloseDatePicker(){
+			this.pickerKsrqShow = false;
+		},
 
     // 关闭选择人员pop
     handleClose() {
@@ -453,7 +458,7 @@ export default {
             this.formData.qwjjrq = !this.qwjjrq?'':this.qwjjrq;
             this.operateShow = !this.operateShow;
           } else {
-            this.$router.push({ name: "addQuestion", query: { sl: 1 },params: { data: this.questionData } });
+            this.$router.push({ name: "addQuestion", query: { wid: this.$route.query.wid },params: { data: this.questionData } });
           }
         } else {
           this.$toast(!res.msg ? "系统超时，请稍后再试~" : res.msg);
