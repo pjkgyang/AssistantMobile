@@ -20,6 +20,10 @@ import projectProduct from "@/views/project/projectProduct.vue";
 import projectMilestone from "@/views/project/mileStone.vue";
 import questionSatisfy from "@/views/project/projectWtmy.vue";
 
+// demand
+import demandIndex from "@/views/demand/index.vue";
+import demandDetail from "@/views/demand/detail.vue";
+
 
 
 
@@ -246,6 +250,18 @@ export default new Router({
       name: 'questionSatisfy',
       meta:{title:'产品列表'},
       component:questionSatisfy
+    },
+    {
+      path: '/demand/index',
+      name: 'demandIndex',
+      meta:{title:'需求交付'},
+      component:demandIndex
+    },
+    {
+      path: '/demand/detail',
+      name: 'demandDetail',
+      meta:{title:'需求交付详情'},
+      component:demandDetail
     }
   ]
 })

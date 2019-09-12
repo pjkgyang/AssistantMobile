@@ -11,7 +11,7 @@
         <div class="itemlist-group">
           <mu-container ref="container" class="demo-loadmore-content">
             <mu-load-more @refresh="onRefresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
-              <van-cell v-for="(item,index) in allItems" :key="item" :title="item.xmmc" is-link @click="handleItemClick(item.xmbh,item.xmmc)" />
+              <van-cell v-for="(item,index) in allItems" :key="item" :title="'【'+item.xmbh+'】'+ item.xmmc" is-link @click="handleItemClick(item.xmbh,item.xmmc)" />
             </mu-load-more>
           </mu-container>  
           <div v-if="!allItems.length && !$store.state.loadingShow">
@@ -48,7 +48,7 @@
           <div v-for="(task,i) in taskItems" class="task-catlog" v-if="!taskLoading">
             <p>{{task.catalog}}</p>
             <van-cell-group class="itemlist-group-cp">
-              <van-cell v-for="(item,i) in task.tasks.rows" :key="i" :title="item.rwmc" is-link @click="handletaskClick(item,task.lcbjdmc)" />
+              <van-cell v-for="(item,i) in task.tasks.rows" :key="i" :title="'【'+item.zt_display+'】'+ item.rwmc"  is-link @click="handletaskClick(item,task.lcbjdmc)" />
             </van-cell-group>
           </div>
         </div>
@@ -237,6 +237,7 @@ export default {
     },
     handleCpClick(cp, cpbh) {
       // 获取 里程碑任务
+      this.$store.dispatch("chnageLoing", true);
       this.backupsInfo.cp = cp;
       this.backupsInfo.cpbh = cpbh;
       this.getMilestoneCatalog();
@@ -244,6 +245,10 @@ export default {
     },
     // 获取 里程碑任务(选中任务)
     handletaskClick(task,xmjd) {
+      if(task.zt == 5 && !task.rwmc.includes('售后服务期满')){
+         this.$toast('该任务已关闭，请重新选择');
+         return;
+      }
       this.xmInfo.rwmc = task.rwmc;
       this.xmInfo.rwbh = task.rwbh;
       this.xmInfo.gccpmc = task.cpmc;  //产品名称
@@ -373,7 +378,6 @@ export default {
     // 获取任务
     getMilestoneCatalog(){
       this.taskItems = [];
-      this.$store.dispatch("chnageLoing", true);
       this.$get(this.API.getMilestoneCatalog, {
         xmbh: this.backupsInfo.xmbh,
         cpbh: this.backupsInfo.cpbh,

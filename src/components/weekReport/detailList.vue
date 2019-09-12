@@ -64,7 +64,7 @@
                         <p>
                             <span>问题标题：</span>{{item.wtbt}}</p>
                         <p>
-                            <span>问题类别：</span>{{item.wtlb}}</p>
+                            <span>问题类别：</span>{{item.wtlb_display}}</p>
                         <p>
                             <span>期望解决日期：</span>{{item.qwjjrq}}</p>
                         <p>
@@ -78,9 +78,11 @@
                         <p>
                             <span>未完成原因：</span>{{item.wwcyy}}</p>
                         <p>
-                            <span>后续措施：</span>{{item.hxcs}}</p>
+                            <span>后续措施：</span>{{item.hxcs}}
+                        </p>
                         <p>
-                            <span>处理计划：</span>{{item.cljh}}</p>
+                            <span>处理计划：</span>{{item.cljh}}
+                        </p>
                     </div>
                 </van-panel>
             </div>

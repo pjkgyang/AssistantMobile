@@ -113,6 +113,7 @@ export default {
     window.removeEventListener("popstate", this.historyChange);
   },
   activated() {
+    console.log(this.$store.state.mark)
     if (!this.$store.state.mark) {
       this.init();
     }
@@ -123,6 +124,7 @@ export default {
   },
 
   methods: {
+    //  记录滚动位置
     handleScroll() {
         this.scrollTop = this.$refs.layoutScroll.scrollTop;
     },
@@ -243,6 +245,7 @@ export default {
     //  获取问题列表
     getQuestionList() {
       this.$refs.layoutScroll.scrollTop = this.scrollTop;
+      console.log(this.scrollTop);
       this.$get(this.API.queryAllQuestions, {
         curPage: this.currentPage,
         pageSize: this.pageSize,

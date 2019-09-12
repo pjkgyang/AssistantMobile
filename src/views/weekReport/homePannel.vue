@@ -9,7 +9,7 @@
           <span >{{monthValue}}</span>
         </span>
         <span @click="hanldeSearchZs" class="weekReport-filter-week">
-          <span >第{{weekValue==1?'一':weekValue==2?'二':weekValue==3?'三':weekValue==4?'四':'五'}}周 
+          <span >第{{weekValue==1?'一':weekValue==2?'二':weekValue==3?'三':weekValue==4?'四':'五'}}周
           <span class="week-date">
             {{weekDay}}
             </span>
@@ -53,19 +53,19 @@
       <van-popup v-model="pickerMonthShow">
         <DatePickerMonth @handleChangeDatePicker="handleChooseMonth"></DatePickerMonth>
       </van-popup>
-			
+
     </div> -->
 		<van-actionsheet v-model="pickerMonthShow" title="" :close-on-click-overlay="false">
 		  <DatePickerMonth @handleChangeDatePicker="handleChooseMonth" @handleClose="handleClose"></DatePickerMonth>
 	  </van-actionsheet>
-		
+
   </div>
 </template>
 <script>
 import listcard from "@/components/weekReport/listCard.vue";
 import emptyContent from "@/components/public/empty-content.vue";
 import DatePickerMonth from "@/components/public/DatePickerMonth.vue";
-import { getMyDate,getLastMonth,getLastMonthDay,getNextMonth,getPreMonth,weekIndexInMonth,GetNextDate,getWeeks,
+import { getMyDate,getLastMonth,getLastMonthDay,getNextMonth,getPreMonth,weekNumInMonth,GetNextDate,getWeeks,
 getNowFormatDate ,GetDateStr} from "../../utils/util.js";
 import addButton from '@/components/public/addButton';
 import searchInput from "@/components/public/SearchInput.vue";
@@ -148,7 +148,7 @@ export default {
 		handleClose(){
 			 this.pickerMonthShow = false;
 		},
-		
+
     handleChangeJsrqPicker(data) {
       this.jsrqDate = getMyDate(data);
       this.pickerJsrqShow = false;
@@ -237,36 +237,91 @@ export default {
        this.weekEndDate = GetNextDate(this.weekStartDate,6);
        return this.weekStartDate+' 至 '+this.weekEndDate
     },
+
     InitDate(){
        this.columns = [];
        this.year = new Date().getFullYear();
-       this.month = new Date().getMonth(); 
-       let lastMonth = getPreMonth(this.year+'-'+(this.month+1)) //获取上个月日期
-       let Year = lastMonth.split('-')[0];
-       let Month = lastMonth.split('-')[1]-1;
-       let week = getWeeks(Year,Month+1);  //获取本月周数
-       let weekStartDate = this.weekStart = GetNextDate(getLastMonth(Year,Month),(week)*7);
-       let weekEndDate = this.weekEnd = GetNextDate(weekStartDate,6);
-       let NowDate = getNowFormatDate();
-       if(new Date(NowDate).getTime() >= new Date(weekStartDate).getTime() && 
-          new Date(NowDate).getTime() <= new Date(weekEndDate).getTime() && 
-          // this.weekValue == week &&
-          (new Date(GetDateStr(0)).getDay()==0?7:new Date(GetDateStr(0)).getDay()) <= 4){
-            this.weekValue =  this.weekNum =  getWeeks(Year,Month+1);
-            this.weekDay  = weekStartDate+' 至 '+weekEndDate;
-            this.monthValue = lastMonth;
-       }else{
-            this.weekValue = weekIndexInMonth(getLastMonth(this.year,this.month));
-            this.weekNum =  getWeeks(this.year,this.month+1);    //周数
-            this.weekDay  = this.getWeekDate(this.year,this.month,this.weekValue);
-            this.monthValue = this.year+'-'+((this.month+1)<10?'0'+(this.month+1):this.month+1);  
-       } 
+       this.month = new Date().getMonth();
+       let lastWeek = getWeeks(this.year, this.month); //获取上月周数
+       let week = getWeeks(this.year, this.month + 1); //获取本月周数
+       let lastDay = getLastMonthDay(this.year, this.month + 1); //获取本月最后一天
+       let nextYear = getNextMonth(GetDateStr(0)).split('-')[0]; //下月年份
+       let nextMonth = Number(getNextMonth(GetDateStr(0)).split('-')[1]); //下月月份
+
+       let nextWeek = getWeeks(nextYear, nextMonth); //获取下月周数
+
+       let weekStartDate = GetNextDate(getLastMonth(this.year, this.month), (week - 1) * 7); //当月最后一周日期（开始日期）
+       let weekEndDate = GetNextDate(weekStartDate, 6); //当月最后一周日期（结束日期）
+
+       let weekFirstStartDate = GetNextDate(getLastMonth(this.year, this.month), 0); //当月第一周日期（开始日期）
+       let weekFirstEndDate = GetNextDate(weekFirstStartDate, 6); //当月第一周日期（结束日期）
+       this.weekStart = weekFirstStartDate;
+       this.weekEnd = weekFirstEndDate;
+
+
+       let lastMonthStartDate = GetNextDate(getLastMonth(this.year, this.month-1), (lastWeek - 1) * 7); //上月最后一周日期（开始日期）
+       let lastMonthEndDate = GetNextDate(lastMonthStartDate, 6);//上月最后一周日期（结束日期）
+
+       let nextStartDate = GetNextDate(weekStartDate, 7); //下月第一周日期（开始日期）
+       let nextEndDate = GetNextDate(weekEndDate, 7); //下月第一周日期（结束日期）
+
+       if (new Date(lastDay).getTime() >= new Date(GetDateStr(0)).getTime() && new Date(GetDateStr(0)).getTime() > new Date( weekEndDate).getTime()) {
+         this.weekNum = nextWeek; //周数
+         this.weekValue =  1;
+         this.weekDay = nextStartDate + ' 至 ' + nextEndDate;
+         this.monthValue = getNextMonth(GetDateStr(0));
+
+       } else if ((new Date(GetDateStr(0)).getDay() == 0 ? 7 : new Date(GetDateStr(0)).getDay()) <= 4 && new Date(
+           GetDateStr(0)).getTime() < new Date(weekFirstEndDate).getTime() && new Date(GetDateStr(0)).getTime() > new Date(weekFirstStartDate).getTime()) {
+         this.weekNum = week; //周数
+         this.weekValue =  1;
+         this.weekDay = weekFirstStartDate + ' 至 ' + weekFirstEndDate;
+         this.monthValue = this.year + '-' + ((this.month + 1) < 10 ? '0' + (this.month + 1) : this.month + 1);
+
+         //当天等于上月最后一天
+       } else if(new Date(GetDateStr(0)).getTime() == new Date(lastMonthEndDate).getTime()){
+          this.weekNum = this.weekValue =  lastWeek; //上月周数
+          this.weekDay = lastMonthStartDate +' 至 ' + lastMonthEndDate;
+          this.monthValue = this.year + '-' + (this.month  < 10 ? '0' + this.month  : this.month);
+       } else {
+         this.weekNum = week; //周数
+         this.weekValue =  weekNumInMonth(this.year + '/' + ((this.month + 1) < 10 ? '0' + (this.month + 1) : this.month + 1));
+         this.weekDay = GetNextDate(weekFirstStartDate, (this.weekValue - 1) * 7) + ' 至 ' + GetNextDate(GetNextDate(
+           weekFirstStartDate, (this.weekValue - 1) * 7), 6);
+         this.monthValue = this.year + '-' + ((this.month + 1) < 10 ? '0' + (this.month + 1) : this.month + 1);
+       }
+
+//        this.year = new Date().getFullYear();
+//        this.month = new Date().getMonth();
+//        let lastMonth = getPreMonth(this.year+'-'+(this.month+1)) //获取上个月日期
+//        let Year = lastMonth.split('-')[0];
+//        let Month = lastMonth.split('-')[1]-1;
+//        let week = getWeeks(Year,Month+1);  //获取本月周数
+//        let weekStartDate = this.weekStart = GetNextDate(getLastMonth(Year,Month),(week)*7);
+//        let weekEndDate = this.weekEnd = GetNextDate(weekStartDate,6);
+//        let NowDate = getNowFormatDate();
+//
+//        if(new Date(NowDate).getTime() >= new Date(weekStartDate).getTime() &&
+//           new Date(NowDate).getTime() <= new Date(weekEndDate).getTime() &&
+//           // this.weekValue == week &&
+//           (new Date(GetDateStr(0)).getDay()==0?7:new Date(GetDateStr(0)).getDay()) <= 4){
+//             this.weekValue =  this.weekNum =  getWeeks(Year,Month+1);
+//             this.weekDay  = weekStartDate+' 至 '+weekEndDate;
+//             this.monthValue = lastMonth;
+//        }else{
+//             this.weekValue = weekIndexInMonth(getLastMonth(this.year,this.month));
+//             this.weekNum =  getWeeks(this.year,this.month+1);    //周数
+//             this.weekDay  = this.getWeekDate(this.year,this.month,this.weekValue);
+//             this.monthValue = this.year+'-'+((this.month+1)<10?'0'+(this.month+1):this.month+1);
+//        }
+
        for(var i =1;i<=this.weekNum;i++){
               let index = i==1?'一':i==2?'二':i==3?'三':i==4?'四':'五';
               this.columns.push('第'+index+'周');
        }
+
     },
-    
+
     formatDate(year,month){
        this.columns = [];
        this.weekValue = '1';
@@ -285,7 +340,7 @@ export default {
     }
   },
   computed: {
-   
+
   },
   mounted() {
     // this.$nextTick(() => {

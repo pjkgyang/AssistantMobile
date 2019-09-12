@@ -27,7 +27,7 @@
     top:50%;
     margin-top: -5vh;
    .flex(@row:center,@col:center);
-   z-index:2019;
+     z-index:3333;
    p{
      font-size: @fontSize14;
      color: #c9c9c9

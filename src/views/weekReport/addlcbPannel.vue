@@ -4,7 +4,6 @@
       <van-search v-model="keyword" :background="'#fff'" placeholder="搜索项目编号/项目名称" @search="handleSearchKeyword" />
     </header>
     <main>
-
         <mu-container ref="container" class="demo-loadmore-content">
          <mu-load-more @refresh="onRefresh" :loaded-all="finished" :refreshing="isLoading" :loading="loading" @load="onLoad">
           <van-checkbox-group v-model="result" @change="handleChangeCheckbox">

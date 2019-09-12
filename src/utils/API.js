@@ -2,10 +2,13 @@
 
 export default {
     // 系统
+    downloadFile: WINDOW_CONFIG__BASEURL + 'attachment/downloadFile.do', //下载附件
+    getDictEnum:WINDOW_CONFIG__BASEURL +'dict/getDictEnum.do',
     sendCode:WINDOW_CONFIG__BASEURL +'verify/sendCode.do',//发送验证码
     verifyCode:WINDOW_CONFIG__BASEURL +'verify/verifyCode.do',//校验验证码
     getDictEnum:WINDOW_CONFIG__BASEURL +'dict/getDictEnum.do',//获取枚举
     uploadBase64:WINDOW_CONFIG__BASEURL +'attachment/uploadBase64.do',//图片base64换地址
+    getUsers: WINDOW_CONFIG__BASEURL + 'personnel/getUsers.do', // 获取学校成员
 
     getLoginUser:WINDOW_CONFIG__BASEURL +'sys/getLoginUser.do',
     wxLogin:WINDOW_CONFIG__BASEURL +'wx/wxLogin.do',  //微信登录
@@ -89,5 +92,28 @@ export default {
     listMilestoneProduct:WINDOW_CONFIG__BASEURL +'milestone/listMilestoneProduct.do',//里程碑产品列表
     pageMilestoneVO:WINDOW_CONFIG__BASEURL +'milestone/pageMilestoneVO.do', //里程碑分页列表
     queryReportQuestionLst:WINDOW_CONFIG__BASEURL +'report/queryReportQuestionLst.do', //问题满意/不满意列表
+
+    // 需求交付
+    queryDemand:WINDOW_CONFIG__BASEURL + 'demandDvpt/queryDemand.do', // 获取详情
+    demandProcessTemplate: WINDOW_CONFIG__BASEURL + 'demandDvpt/demandProcessTemplate.do', //  需求流程模板
+    demandProductTree: WINDOW_CONFIG__BASEURL + 'demandDvpt/demandProductTree.do', //  产品树
+    submitDemand: WINDOW_CONFIG__BASEURL + 'demandDvpt/submitDemand.do', //  提报需求
+    demandReplys: WINDOW_CONFIG__BASEURL + 'demandDvpt/demandReplys.do', //  获取需求回复
+    demandBtns: WINDOW_CONFIG__BASEURL + 'demandDvpt/demandBtns.do', //  获取需求按钮
+    reply: WINDOW_CONFIG__BASEURL + 'demandDvpt/reply.do', //  需求回复
+    accept: WINDOW_CONFIG__BASEURL + 'demandDvpt/accept.do', //  受理
+    reject: WINDOW_CONFIG__BASEURL + 'demandDvpt/reject.do', //  驳回
+    remind: WINDOW_CONFIG__BASEURL + 'demandDvpt/remind.do', //  催办
+    distributionDvpt: WINDOW_CONFIG__BASEURL + 'demandDvpt/distributionDvpt.do', //  分配开发工程师
+    openGreenChannel: WINDOW_CONFIG__BASEURL + 'demandDvpt/openGreenChannel.do', //  开通绿色通道
+    projectTeamSubmitDvpt: WINDOW_CONFIG__BASEURL + 'demandDvpt/projectTeamSubmitDvpt.do', //  需求开发
+    queryPageDemands: WINDOW_CONFIG__BASEURL + 'demandDvpt/queryPageDemands.do', //  获取需求列表
+    exportDemands: WINDOW_CONFIG__BASEURL + 'demandDvpt/exportDemands.do' ,//  导出需求列表
+    candidateConfirmPersons: WINDOW_CONFIG__BASEURL + 'demandDvpt/candidateConfirmPersons.do', //  获取确认老师数据
+    submitDetailDesign: WINDOW_CONFIG__BASEURL + 'demandDvpt/submitDetailDesign.do', //  项目团队提交（需求提报）
+    confirmRequirement: WINDOW_CONFIG__BASEURL + 'demandDvpt/confirmRequirement.do', //  用户需求确认（需求确认）
+    projectTeamVerifyDvpt: WINDOW_CONFIG__BASEURL + 'demandDvpt/projectTeamVerifyDvpt.do', //  项目团队验证（完成验证）
+    confirmDvpt: WINDOW_CONFIG__BASEURL + 'demandDvpt/confirmDvpt.do', //   关闭需求
+    submitDemandFile: WINDOW_CONFIG__BASEURL + 'demandDvpt/submitDemandFile.do', //   提交开发包
 
 }

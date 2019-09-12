@@ -39,7 +39,9 @@
     display: flex;
     flex-direction: column;
   }
-  
+  [flex-wrap] {
+    flex-wrap: wrap;
+  }
  @for $i from 1 to 15 {
     [col='#{$i}'] {
       flex: $i 0 0 !important;

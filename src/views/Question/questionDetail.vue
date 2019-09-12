@@ -182,6 +182,7 @@ export default {
       }) 
     }
     this.$store.dispatch("chnageMark", false);
+    console.log(this.$store.state.mark)
   },
 
   updated:function(){

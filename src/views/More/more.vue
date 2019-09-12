@@ -17,7 +17,7 @@
               <!-- <div :style="{ backgroundImage:'url('+iconImg+')',backgroundSize:'600%',backgroundPosition:'-600px -15px'}"></div> -->
               <div :style="{background:option.bgColor}">
                 <mu-icon size="30" :value="option.icon" :color="option.color" v-if="option.icon"></mu-icon>
-                <span>{{option.name=='周报'?'周':'日'}}</span>
+                <span v-if="option.name=='周报'||option.name=='日报'">{{option.name=='周报'?'周':'日'}}</span>
               </div>
               <p>{{option.name}}</p>
             </li>
@@ -37,6 +37,7 @@
           {title:'工作汇报',list:[
             {icon:'',name:'日报',route:'/tasklog',color:'#fff',bgColor:'#007AFF'},
             {icon:'',name:'周报',route:'/weekreport',color:'#fff',bgColor:'#007AFF'},
+            {icon:'event_note',name:'需求交付',route:'/demand/index',color:'#fff',bgColor:'#007AFF'},
             ]
           }
         ],
