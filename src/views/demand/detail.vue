@@ -113,7 +113,7 @@
       </mu-button>
     </div>
 
-    <datePicker :show.sync="pickerKsrqShow" @handleChangeDatePicker="handleChangeDate" :dateDisable="dateDisable" 
+    <datePicker :show.sync="pickerKsrqShow" @handleChangeDatePicker="handleChangeDate" :dateDisable="dateDisable"
 		:cphs="9999" @handleClose="pickerKsrqShow = false"></datePicker>
 
     <userPop :show="userPopShow" :xmbh="demandData.xmbh" @handleClosePop="handleClosePop" @handleCheckUser="handleCheckUser"></userPop>
@@ -148,13 +148,13 @@
              <p>提报老师：</p>
              <div flex flex-wrap>
                <samp v-for="(item,index) in lsNames">
-                <span>{{item}}</span> 
-                <span class="delete-tag" @click="handleDeleteLs(index)"><van-icon name="clear" size="13px"/></span>   
+                <span>{{item}}</span>
+                <span class="delete-tag" @click="handleDeleteLs(index)"><van-icon name="clear" size="13px"/></span>
                </samp>
                <samp style="color:#f00;border-color:rgba(255, 0, 0,0.4)" @click="handleAddUser">+</samp>
              </div>
-          </div>  
-          
+          </div>
+
           <div class="cell-title">
             <p>是否会签：</p>
             <van-radio-group v-model="tbOryzData.sfhq" flex icon-size="16px">
@@ -244,7 +244,7 @@ export default {
         pf: 5,
         qwkfjfrq: ""
       },
-      // 提报 验证 
+      // 提报 验证
       lsNames:[],
       qrlsList:[],
       tbOryzData:{
@@ -281,8 +281,8 @@ export default {
   },
 
   updated: function() {
-    
- 
+
+
   },
   methods: {
     handleAddUser(){
@@ -347,6 +347,8 @@ export default {
         if(this.btnid == 8){
           obj = this.xqqrOrgbData;
           url = this.API.confirmRequirement;
+          this.$router.push({name:'signTure',params:{data:obj}});
+          return;
         }
         if(this.btnid == 12){
            obj = {
@@ -391,14 +393,14 @@ export default {
             this.formData.hfsm = "";
             if(this.btnid == '2'||this.btnid == '3'){
                 this.update = !this.update
-            }   
+            }
              this.queryDemandReplys();
              this.replyOrRejectShow = false;
              this.$toast(this.btnid == "1"? "回复成功": this.btnid == "4"? "催办成功":this.btnid == "3"?'驳回成功':'受理成功');
           } else {
             this.$message({message: res.msg,type: "error" });
           }
-        });  
+        });
     },
     //  滚动监听（待用）
     handleScroll() {
@@ -419,14 +421,14 @@ export default {
         this.title = data=='1'?'回复':'驳回';
         this.replyOrRejectShow = !this.replyOrRejectShow;
       } else if (data == "2" || data == "4") { //受理 催办
-        this.clickBtnslhfcb(); 
+        this.clickBtnslhfcb();
       } else if(data == "8" || data == "12"){ //需求确认,关闭
         this.xqqrOrgbShow = !this.xqqrOrgbShow;
       }else if(data == "7" || data == "11"){ //需求提报，验证
         this.yzOrtbShow = !this.yzOrtbShow;
-      }  
-    },  
-    // 选择老师 
+      }
+    },
+    // 选择老师
     handleCheckUser(names,val){
       this.lsNames = names;
       this.qrlsList = val;
@@ -441,7 +443,7 @@ export default {
     // 验证，提报
     handleCommitTbyz(){
        if(!this.validDateTbYz()) return;
-       this.tbOryzData.qrls = this.qrlsList.join('|');   
+       this.tbOryzData.qrls = this.qrlsList.join('|');
        this.tbOryzData.btnbh = this.btnid;
        this.tbOryzData.zbwid = this.demandData.wid;
        this.$post(this.btnid=='11'?this.API.projectTeamVerifyDvpt:this.API.submitDetailDesign, this.tbOryzData).then(res => {
@@ -467,7 +469,7 @@ export default {
     handleClosePop(){
       this.userPopShow = false;
     },
-    
+
     // 获取单个问题
     queryDemand() {
       this.$get(this.API.queryDemand, {
@@ -531,7 +533,7 @@ export default {
         }
         return true;
     }
-    
+
   },
   computed: {
     //监听state mark的变化 做页面处理
@@ -592,7 +594,7 @@ export default {
       .demand-content {
         font-size: 0.85rem;
         img {
-          width: 100% !important;
+         max-width: 100% !important;
         }
       }
     }
@@ -634,7 +636,7 @@ export default {
         font-size: 14px;
         font-weight:700;
         color: #333;
-    }    
+    }
 
     samp{
       width: 3rem;
@@ -644,7 +646,7 @@ export default {
       padding: 3px 0;margin-right: 10px;
       border-radius: 4px;
       position: relative;
-      .delete-tag{  
+      .delete-tag{
         position: absolute;
         right: -5px;
         top: -5px;

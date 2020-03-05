@@ -262,6 +262,12 @@ export default new Router({
       name: 'demandDetail',
       meta:{title:'需求交付详情'},
       component:demandDetail
+    },
+    {
+      path: '/sign',
+      name: 'signTure',
+      meta:{title:'确认签名'},
+      component: resolve => require(['@/views/sign/index.vue'], resolve),
     }
   ]
 })
