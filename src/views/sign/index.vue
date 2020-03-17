@@ -30,9 +30,7 @@
         this.$router.back(-1);
         return;
       }
-      let _this = this;//赋值vue的this
       this.canvas = document.getElementById('signature-canvas');
-      // this.canvas.fillStyle = "#fff";
       this.signaturePad = new SignaturePad(this.canvas, { backgroundColor: 'rgba(255, 255, 255, 1)', penColor: 'rgb(0, 0, 0)' });
       this.resizeCanvas();
     },

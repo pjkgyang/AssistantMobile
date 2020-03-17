@@ -165,7 +165,7 @@ if (process.env.NODE_ENV === 'development') {
         NODE_ENV: '"production"'
       },
       // 180.44
-      "WINDOW_CONFIG__BASEURL": '"http://172.16.180.53:8080/emap/sys/etender/api/"'
+      "WINDOW_CONFIG__BASEURL": '"http://172.16.120.158:8080/emap/sys/etender/api/"'
     })
   ])
 }

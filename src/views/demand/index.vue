@@ -51,6 +51,7 @@
       <!-- <addButton  :bottom="'18vw'"></addButton> -->
       <van-popup v-model="xqflPopshow" position="bottom">
         <van-picker
+          :default-index="1"
           show-toolbar
           title="需求分类"
           :columns="xqflList"
@@ -99,11 +100,11 @@ export default {
       xqflList: [],
       xqztList: [],
       xqlxList: [],
-      xqfl: "", //问题分类
+      xqfl: "1", //问题分类
       cxzt: "", //问题状态
       xqlx: "", //申请关闭
       keyword: "",
-      xqflText: "需求分类",
+      xqflText: "待我处理的需求",
       cxztText: "查询状态",
       xqlxText: "需求类型",
       currentPage: 1,

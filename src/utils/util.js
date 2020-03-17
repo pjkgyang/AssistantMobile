@@ -1,6 +1,6 @@
 import Vue from "vue";
 let _this = new Vue();
-
+import CryptoJS from 'crypto-js';
 
 
 // Unix 时间戳 转换当前时间
@@ -53,14 +53,14 @@ export function getMenuByCode(type, code, isInterface) {
 }
 
 // // DES 加密
-// export function encryptByDES(message, key){
-//     const keyHex = CryptoJS.enc.Utf8.parse(key);
-//     const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
-//         mode: CryptoJS.mode.ECB,
-//         padding: CryptoJS.pad.Pkcs7
-//      });
-//     return encrypted.toString();
-// }
+export function encryptByDES(message, key){
+    const keyHex = CryptoJS.enc.Utf8.parse(key);
+    const encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7
+     });
+    return encrypted.toString();
+}
 
 export function GetDateStr(DayCount) {
 	var dd = new Date();

@@ -13,7 +13,7 @@
               <van-tag round color="#29BE1E">{{demandData.dqlcmc}}</van-tag>
             </div>
             <p>
-                {{demandData.tcsj}} &#x3000; {{demandData.tcrxm}}
+                {{demandData.tcsj}} &#x3000; {{demandData.tcrxm}}&#x3000;预计交付日期：{{demandData.yjjfrq}}
             </p>
             <p>
               需求编号：
@@ -25,7 +25,7 @@
             </p>
             <p>
               设计编号：
-              <span>{{demandData.sjbh}}</span>&#x3000;
+              <span><a :href="'#/crowd?crowdid='+demandData.sjbh">{{demandData.sjbh}}</a></span>&#x3000;
               开发编号：
               <span>{{demandData.sjbh}}</span>
             </p>
@@ -33,7 +33,7 @@
               提出老师：
               <span>{{demandData.tcls}}</span>&#x3000;
               提出老师单位：
-              <span>{{demandData.tcls}}</span>
+              <span>{{demandData.lsdw}}</span>
             </p>
             <p>
               需求类型：
@@ -68,13 +68,27 @@
               target="_blank"
              >{{demandData.xqfjmc}}</a>
             </p>
-            <p>
+             <p>
+              原型设计：
+               <a
+                v-if="!demandData.yxfjwid"
+                :href="demandData.yxfjurl + '&USERID='+ $store.state.userInfo.userName +'&SIGN='+ encodeURIComponent(des)"
+                target="_blank"
+              >{{demandData.yxfjmc}}</a>
+              <a
+                v-if="!!demandData.yxfjwid"
+                :href="API.downloadFile+'?fjId='+demandData.yxfjwid+'&isfbpt=1'"
+                target="_blank"
+              >{{demandData.yxfjmc}}</a>
+            </p>
+
+            <!-- <p>
               详细需求设计：
                <a
                 :href="API.downloadFile+'?fjId='+demandData.xxyxfjwid"
                 target="_blank"
               >{{demandData.xxyxfjmc}}</a>
-            </p>
+            </p> -->
           </div>
         </div>
         <div class="demandDetail-desc-nr">
@@ -273,18 +287,16 @@ export default {
 
   activated() {
     this.imgList = [];
-    // this.des = encryptByDES("assistant" + this.$store.state.userInfo.userName, "WISEDUUSER");
+    this.des = encryptByDES("assistant" + this.$store.state.userInfo.userName, "WISEDUUSER");
     this.queryDemand();
     this.queryDemandReplys();
     this.scroll = 0;
     this.$store.dispatch("chnageMark", false);
   },
 
-  updated: function() {
-
-
-  },
+  updated: function() {},
   methods: {
+
     handleAddUser(){
       this.userPopShow = !this.userPopShow;
     },
@@ -593,8 +605,8 @@ export default {
       padding: 0.75rem 1.25rem;
       .demand-content {
         font-size: 0.85rem;
-        img {
-         max-width: 100% !important;
+       /deep/  img {
+          max-width: 100% !important;
         }
       }
     }

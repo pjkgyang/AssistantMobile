@@ -13,6 +13,10 @@
             </div>
             <div>
                <div @click="previewImage"  class="reply-content" v-html="reply.nr" ></div>
+               <div v-if="!!reply.crowdrwbh" font12>
+                  <span>任务编号：{{reply.crowdrwbh}}</span>&#x3000;
+                  <a  :href="'#/crowd?crowdid='+reply.crowdrwbh" >查看任务详情</a>
+              </div>
             </div>
         </section>
             <!-- 图片预览 -->

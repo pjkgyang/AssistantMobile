@@ -1,6 +1,9 @@
 <template>
     <div class="assistant-crowd">
         <section class="assistant-crowd_top" >
+           <p>任务名称：
+                <span>{{!CrowdRwxx.rwmc?'无':CrowdRwxx.rwmc}}</span>
+            </p>
             <p>任务编号：
                 <span>{{!CrowdRwxx.rwbh?'无':CrowdRwxx.rwbh}}</span>
             </p>
