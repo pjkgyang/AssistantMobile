@@ -43,7 +43,7 @@
     "file-loader": "^1.1.4",
     "less": "^3.8.1",
     "less-loader": "^4.1.0",
-    "node-sass": "^4.5.3",
+    "node-sass": "^4.13.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.21.0",
     "vue-loader": "^13.0.5",
